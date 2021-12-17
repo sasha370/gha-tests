@@ -1,5 +1,5 @@
 name: PR Comments
-
+#test
 on:
   issue_comment:
     types: [created]
@@ -29,7 +29,7 @@ jobs:
         with:
           workflow: Features
           token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
-          inputs: "talent_portal_branch: ${{ steps.prData.outputs.ref }}"
+          inputs: '{ "talent_portal_branch": "${{ steps.prData.outputs.ref }}" }'
 
       - name: React to comment - success or failure
         if: ${{ always() }}
