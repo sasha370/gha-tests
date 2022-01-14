@@ -1,6 +1,9 @@
 name: Features
 
 on:
+  push:
+    branches:
+      - '*-features*'
   workflow_dispatch:
     inputs:
       platform_branch:
