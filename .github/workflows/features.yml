@@ -3,7 +3,7 @@ name: Features
 on:
   push:
     branches:
-      - '*-features-*'
+      - '*-features*'
 
   workflow_dispatch:
     inputs:
