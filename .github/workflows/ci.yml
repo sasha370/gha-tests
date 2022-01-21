@@ -36,9 +36,6 @@ jobs:
     runs-on: ubuntu-latest
     name: "Run testbox features on GHA"
     if: github.ref == 'refs/heads/master'
-    steps:
-      - name: "Run testbox features on GHA"
-        uses: benc-uk/workflow-dispatch@v1.1
-        with:
-          workflow: Features
-          token: ${{ secrets.PERSONAL_TOKEN }}
+    uses: sasha370/gha-tests/.github/workflows/features.yml@v1
+    with:
+      token: ${{ secrets.PERSONAL_TOKEN }}
