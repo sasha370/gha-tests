@@ -28,17 +28,17 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Features
-          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
+          token: ${{ secrets.PERSONAL_TOKEN }}
           inputs: '{ "talent_portal_branch": "${{ steps.prData.outputs.ref }}" }'
 
       - name: React to comment - success or failure
         if: ${{ always() }}
         env:
           JOB_STATUS: ${{ job.status }}
-        uses: actions/github-script@v4
+        uses: actions/github-script@v5
         with:
-          github-token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
+          github-token: ${{ secrets.PERSONAL_TOKEN }}
           script: |
             const { owner, repo } = context.issue;
             const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
-            await github.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
+            await github.rest.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
