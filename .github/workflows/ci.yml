@@ -12,7 +12,27 @@ on:
     ]
 
 jobs:
+  first_job:
+    runs-on: ubuntu-latest
+    name: "Echo 1"
+    steps:
+      - name: "Echo 1"
+        run: |
+          echo "Hello"
+  second_job:
+    runs-on: ubuntu-latest
+    name: "Echo 2"
+    steps:
+      - name: "Echo 2"
+        run: |
+          echo "Hello 2"
+
   feature_test_testbox_GHA:
+    needs:
+      [
+        first_job,
+        second_job
+      ]
     runs-on: ubuntu-latest
     name: "Run testbox features on GHA"
     if: github.ref == 'refs/heads/master'
