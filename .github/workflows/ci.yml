@@ -37,6 +37,7 @@ jobs:
     name: "Run testbox features on GHA"
     if: github.ref == 'refs/heads/master'
     steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/workflows/features.yml
         with:
           platform_branch: master
