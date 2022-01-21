@@ -12,13 +12,15 @@ on:
     ]
 
 jobs:
-#  first_job:
-#    runs-on: ubuntu-latest
-#    name: "Echo 1"
-#    steps:
-#      - name: "Echo 1"
-#        run: |
-#          echo "Hello"
+  first_job:
+    runs-on: ubuntu-latest
+    name: "Echo 1"
+    steps:
+      - name: "Echo 1"
+        run: |
+          echo "${{ github.sha }}"
+          echo "${{ github.sha1 }}"
+          echo "${{ github.event.pull_request.head.sha }}"
 
   feature_test_testbox_GHA:
 #    needs:
@@ -29,5 +31,5 @@ jobs:
     if: github.ref == 'refs/heads/master'
     uses: sasha370/gha-tests/.github/workflows/features.yml@master
     with:
-      platform_branch: mas1111111111111111ter
-      talent_portal_branch: mast111111111111er
+      platform_branch: master
+      talent_portal_branch: master
