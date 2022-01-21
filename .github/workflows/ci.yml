@@ -17,14 +17,8 @@ jobs:
     name: "Run testbox features on GHA"
     if: github.ref == 'refs/heads/master'
     steps:
-
-      - name: "Echo var"
-        run: |
-          echo "TESTBOX_BRANCH_TALENT_PORTAL=${{ github.head_ref}}"
-
       - name: "Run testbox features on GHA"
         uses: benc-uk/workflow-dispatch@v1.1
         with:
           workflow: Features
           token: ${{ secrets.PERSONAL_TOKEN }}
-          inputs: '{ "talent_portal_branch": "${{ github.head_ref }}" }'
