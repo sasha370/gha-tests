@@ -21,16 +21,13 @@ jobs:
 #          echo "Hello"
 
   feature_test_testbox_GHA:
-    runs-on: ubuntu-latest
 #    needs:
 #      [
 #        first_job
 #      ]
     name: "Run testbox features on GHA"
     if: github.ref == 'refs/heads/master'
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/features
-        with:
-          platform_branch: master
-          talent_portal_branch: master
+    uses: sasha370/gha-tests/.github/workflows/features.yml@master
+    with:
+      platform_branch: master
+      talent_portal_branch: master
