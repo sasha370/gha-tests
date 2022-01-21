@@ -33,9 +33,6 @@ jobs:
         first_job,
         second_job
       ]
-    runs-on: ubuntu-latest
     name: "Run testbox features on GHA"
     if: github.ref == 'refs/heads/master'
-    uses: sasha370/gha-tests/.github/workflows/features.yml@v1
-    with:
-      token: ${{ secrets.PERSONAL_TOKEN }}
+    uses: sasha370/gha-tests/.github/workflows/features.yml@master

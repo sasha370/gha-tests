@@ -20,12 +20,12 @@ on:
       platform_branch:
         type: string
         description: 'Input Platform branch (default master)'
-        required: true
+        required: false
         default: master
       talent_portal_branch:
         type: string
         description: 'Input Talent Portal branch (default master)'
-        required: true
+        required: false
         default: master
 
 
@@ -43,6 +43,3 @@ jobs:
         run: |
           echo ${{ env.TESTBOX_BRANCH_PLATFORM }}
           echo ${{ env.TESTBOX_BRANCH_TALENT_PORTAL }}
-
-
-#test
