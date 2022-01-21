@@ -9,10 +9,12 @@ on:
     inputs:
       platform_branch:
         description: 'Input Platform branch (default master)'
-        required: false
+        required: true
+        default: master
       talent_portal_branch:
         description: 'Input Talent Portal branch (default master)'
-        required: false
+        required: true
+        default: master
 
 
 jobs:
