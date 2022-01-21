@@ -4,7 +4,18 @@ on:
   push:
     branches:
       - '*features*'
-  workflow_dispatch: &inputs
+  workflow_dispatch:
+    inputs:
+      platform_branch:
+        description: 'Input Platform branch (default master)'
+        required: true
+        default: master
+      talent_portal_branch:
+        description: 'Input Talent Portal branch (default master)'
+        required: true
+        default: master
+        
+  workflow_call:
     inputs:
       platform_branch:
         type: string
@@ -16,8 +27,7 @@ on:
         description: 'Input Talent Portal branch (default master)'
         required: true
         default: master
-  workflow_call:
-    <<: *inputs
+
 
 jobs:
   features:
