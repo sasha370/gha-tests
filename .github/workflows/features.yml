@@ -35,6 +35,11 @@ jobs:
     steps:
       - name: Set Branches
         run: |
+          echo "${{ inputs.platform_branch}}"
+          echo "${{ inputs.talent_portal_branch}}"
+          echo "${{ github.event.inputs.platform_branch }}"
+          echo "${{ github.event.inputs.platform_branch }}"
+          
           echo "TESTBOX_BRANCH_PLATFORM=${{ inputs.platform_branch || github.event.inputs.platform_branch }}" >> $GITHUB_ENV
           echo "TESTBOX_BRANCH_TALENT_PORTAL=${{ inputs.talent_portal_branch|| github.event.inputs.talent_portal_branch }}" >> $GITHUB_ENV
       - name: Show Branch
