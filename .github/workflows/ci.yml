@@ -31,5 +31,5 @@ jobs:
     if: github.ref == 'refs/heads/master'
     uses: sasha370/gha-tests/.github/workflows/features.yml@master
     with:
-      platform_branch: master
-      talent_portal_branch: master
+      platform_branch: master123
+      talent_portal_branch: master123

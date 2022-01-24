@@ -35,8 +35,10 @@ jobs:
     steps:
       - name: Set Branches
         run: |
-          echo "TESTBOX_BRANCH_PLATFORM=${{ github.event_name == 'workflow_call' && inputs.platform_branch || github.event.inputs.platform_branch}}" >> $GITHUB_ENV
-          echo "TESTBOX_BRANCH_TALENT_PORTAL=${{ github.event_name == 'workflow_call' && inputs.talent_portal_branch|| github.event.inputs.talent_portal_branch }}" >> $GITHUB_ENV
+          const platform_branch = github.event_name === 'workflow_call' ? inputs.platform_branch : github.event.inputs.platform_branch
+          const talent_portal_branch = github.event_name === 'workflow_call' ? inputs.talent_portal_branch : github.event.inputs.talent_portal_branch
+          echo "TESTBOX_BRANCH_PLATFORM=${{ platform_branch }}" >> $GITHUB_ENV
+          echo "TESTBOX_BRANCH_TALENT_PORTAL=${{ talent_portal_branch }}" >> $GITHUB_ENV
       - name: Show Branch
         run: |
           echo ${{ env.TESTBOX_BRANCH_PLATFORM }}
