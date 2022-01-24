@@ -21,12 +21,10 @@ on:
         type: string
         description: 'Input Platform branch (default master)'
         required: true
-        default: master
       talent_portal_branch:
         type: string
         description: 'Input Talent Portal branch (default master)'
         required: true
-        default: master
 
 jobs:
   features:
@@ -39,6 +37,8 @@ jobs:
           echo ${{ github.workflow == 'workflow_call'}}
           echo ${{ github.workflow == 'workflow_call' && inputs.platform_branch }}
           echo ${{ github.event.inputs.platform_branch }}
+          echo ${{ github.event.inputs.platform_branch }} 
+          echo ${{ github.event.inputs.talent_portal_branch }}
           
           echo "TESTBOX_BRANCH_PLATFORM=${{ github.event_name == 'workflow_call' && inputs.platform_branch || github.event.inputs.platform_branch }}" >> $GITHUB_ENV
           echo "TESTBOX_BRANCH_TALENT_PORTAL=${{ github.event_name == 'workflow_call' && inputs.talent_portal_branch|| github.event.inputs.talent_portal_branch }}" >> $GITHUB_ENV
