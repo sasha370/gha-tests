@@ -8,21 +8,21 @@ on:
     inputs:
       platform_branch:
         description: 'Input Platform branch (default master)'
-        required: true
+        required: false
       talent_portal_branch:
         description: 'Input Talent Portal branch (default master)'
-        required: true
+        required: false
 
   workflow_call:
     inputs:
       platform_branch:
         type: string
         description: 'Input Platform branch (default master)'
-        required: true
+        required: false
       talent_portal_branch:
         type: string
         description: 'Input Talent Portal branch (default master)'
-        required: true
+        required: false
 
 jobs:
   features:
