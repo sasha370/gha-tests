@@ -35,9 +35,9 @@ jobs:
     steps:
       - name: Set Branches
         run: |
-          echo ${{ github.event_name }}
-          echo ${{ github.event_name == 'workflow_call'}}
-          echo ${{ github.event_name == 'workflow_call' && inputs.platform_branch }}
+          echo ${{ github.workflow }}
+          echo ${{ github.workflow == 'workflow_call'}}
+          echo ${{ github.workflow == 'workflow_call' && inputs.platform_branch }}
           echo ${{ github.event.inputs.platform_branch }}
           
           echo "TESTBOX_BRANCH_PLATFORM=${{ github.event_name == 'workflow_call' && inputs.platform_branch || github.event.inputs.platform_branch }}" >> $GITHUB_ENV
