@@ -9,11 +9,9 @@ on:
       platform_branch:
         description: 'Input Platform branch (default master)'
         required: true
-        default: master
       talent_portal_branch:
         description: 'Input Talent Portal branch (default master)'
         required: true
-        default: master
 
   workflow_call:
     inputs:
@@ -33,15 +31,13 @@ jobs:
     steps:
       - name: Set Branches
         run: |
-          echo ${{ github.workflow }}
-          echo ${{ github.workflow == 'workflow_call'}}
-          echo ${{ github.workflow == 'workflow_call' && inputs.platform_branch }}
-          echo ${{ github.event.inputs.platform_branch }}
+          echo ${{ inputs.platform_branch }}
+          echo ${{ inputs.talent_portal_branch }}
           echo ${{ github.event.inputs.platform_branch }} 
           echo ${{ github.event.inputs.talent_portal_branch }}
           
-          echo "TESTBOX_BRANCH_PLATFORM=${{ github.event_name == 'workflow_call' && inputs.platform_branch || github.event.inputs.platform_branch }}" >> $GITHUB_ENV
-          echo "TESTBOX_BRANCH_TALENT_PORTAL=${{ github.event_name == 'workflow_call' && inputs.talent_portal_branch|| github.event.inputs.talent_portal_branch }}" >> $GITHUB_ENV
+          echo "TESTBOX_BRANCH_PLATFORM=${{ inputs.platform_branch || github.event.inputs.platform_branch || 'master' }}" >> $GITHUB_ENV
+          echo "TESTBOX_BRANCH_TALENT_PORTAL=${{ inputs.talent_portal_branch|| github.event.inputs.talent_portal_branch || 'master' }}" >> $GITHUB_ENV
       - name: Show Branch
         run: |
           echo ${{ env.TESTBOX_BRANCH_PLATFORM }}
