@@ -43,6 +43,28 @@ jobs:
         run: |
           echo "Author:  ${{ env.PR_AUTHOR }}."
           echo "Author by GH:  ${{ github.actor }}."
+          
+      - uses: octokit/graphql-action@v2.x
+        id: get_author_teams
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          query: |
+            query organization(login: "toptal") {
+              teams(first: 100, userLogins: [${{ github.actor }}]) {
+                totalCount
+                edges {
+                  node {
+                  name
+                  description
+                  }
+                }
+              }
+            }
+
+          owner: ${{ github.event.repository.owner.name }}
+          repo: ${{ github.event.repository.name }}
+      - run: "echo 'Teams: ${{ steps.get_author_teams.outputs.data }}'"
 
       - name: Get Author teams
         uses: octokit/request-action@v2.x
