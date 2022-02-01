@@ -59,3 +59,4 @@ jobs:
         run: |
           echo ${{ env.TESTBOX_BRANCH_PLATFORM }}
           echo ${{ env.TESTBOX_BRANCH_TALENT_PORTAL }}
+
