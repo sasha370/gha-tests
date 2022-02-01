@@ -49,8 +49,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          owner: ${{ github.event.repository_owner.name }}
-          repo: ${{ github.event.repository.name }}
           query: |
             query organization(login: "toptal") {
               teams(first: 100, userLogins: [${{ github.actor }}]) {
