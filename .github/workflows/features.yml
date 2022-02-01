@@ -1,9 +1,9 @@
 name: Features
 
 on:
-  push:
-    branches:
-      - '*features*'
+  pull_request:
+    types: [opened, synchronize]
+    
   workflow_dispatch:
     inputs:
       platform_branch:
