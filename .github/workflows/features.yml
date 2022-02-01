@@ -1,9 +1,9 @@
 name: Features
 
 on:
-  push:
+  pull_request:
     branches:
-      - '*features*'
+      - 'master'
   workflow_dispatch:
     inputs:
       platform_branch:
@@ -33,6 +33,12 @@ jobs:
     name: Run features
     runs-on: ubuntu-latest
     steps:
+      - name: Set PR's author github teams
+        run: |
+          echo "This PR is opened by ${{ github.event.pull_request.user.login }}."
+
+      
+
       - name: Set Branches
         run: |
           echo "${{ inputs.platform_branch}}"
