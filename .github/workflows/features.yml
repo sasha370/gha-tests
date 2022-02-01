@@ -35,8 +35,8 @@ jobs:
     steps:
       - name: Set PR's author github teams
         run: |
-          echo "This PR is opened by ${{ github.event.pull_request.user.login }}."
-
+          echo "By PR ${{ github.event.pull_request.user.login }}."
+          echo "By issue ${{ github.event.issue.user.login }}."
       
 
       - name: Set Branches
