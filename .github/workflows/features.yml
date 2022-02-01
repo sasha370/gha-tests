@@ -49,6 +49,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          owner: ${{ github.event.repository.owner.name }}
+          repo: ${{ github.event.repository.name }}
           query: |
             query organization(login: "toptal") {
               teams(first: 100, userLogins: [${{ github.actor }}]) {
@@ -62,21 +64,9 @@ jobs:
               }
             }
 
-          owner: ${{ github.event.repository.owner.name }}
-          repo: ${{ github.event.repository.name }}
       - run: "echo 'Teams: ${{ steps.get_author_teams.outputs.data }}'"
 
-      - name: Get Author teams
-        uses: octokit/request-action@v2.x
-        id: get_author_teams
-        with:
-          route: GET /orgs/{org}/teams/{team_slug}/memberships/{username}
-          org: toptal
-          repo: request-action
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: "echo latest release: ${{ steps.get_latest_release.outputs.data }}"
-      
+
 
       - name: Set Branches
         run: |
