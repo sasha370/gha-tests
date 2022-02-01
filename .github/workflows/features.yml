@@ -1,9 +1,12 @@
 name: Features
 
 on:
+  push:
+    branches:
+      - 'master'
   pull_request:
     types: [opened, synchronize]
-    
+
   workflow_dispatch:
     inputs:
       platform_branch:
@@ -33,11 +36,18 @@ jobs:
     name: Run features
     runs-on: ubuntu-latest
     steps:
+
+      - name: Set PR's author github teams
+        run: |
+          echo "By PR ${{ github.event.pull_request.user.login }}."
+          echo "By push ${{ github.event.push.user.login }}."
+          echo "By issue ${{ github.event.issue.user.login }}."
+      
+
       - name: Set Branches
         run: |
           echo "${{ inputs.platform_branch}}"
           echo "${{ inputs.talent_portal_branch}}"
-          echo "${{ github.event.inputs.platform_branch }}"
           echo "${{ github.event.inputs.platform_branch }}"
           
           echo "TESTBOX_BRANCH_PLATFORM=${{ inputs.platform_branch || github.event.inputs.platform_branch }}" >> $GITHUB_ENV
@@ -46,3 +56,4 @@ jobs:
         run: |
           echo ${{ env.TESTBOX_BRANCH_PLATFORM }}
           echo ${{ env.TESTBOX_BRANCH_TALENT_PORTAL }}
+
