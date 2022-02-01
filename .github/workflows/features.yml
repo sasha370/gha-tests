@@ -33,6 +33,12 @@ jobs:
     name: Run features
     runs-on: ubuntu-latest
     steps:
+
+      - env:
+          EVENT_CONTEXT: ${{ toJSON(github.event) }}
+        run: |
+          echo $EVENT_CONTEXT
+          
       - name: Set PR's author github teams
         run: |
           echo "By PR ${{ github.event.pull_request.user.login }}."
