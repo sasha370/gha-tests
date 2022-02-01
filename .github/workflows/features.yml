@@ -42,6 +42,18 @@ jobs:
           PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: |
           echo "Author:  ${{ env.PR_AUTHOR }}."
+          echo "Author by GH:  ${{ github.actor }}."
+
+      - name: Get Author teams
+        uses: octokit/request-action@v2.x
+        id: get_author_teams
+        with:
+          route: GET /orgs/{org}/teams/{team_slug}/memberships/{username}
+          org: toptal
+          repo: request-action
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: "echo latest release: ${{ steps.get_latest_release.outputs.data }}"
       
 
       - name: Set Branches
