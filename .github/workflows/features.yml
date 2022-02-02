@@ -47,7 +47,7 @@ jobs:
       - uses: octokit/graphql-action@v2.x
         id: get_author_teams
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GHA_TEST_REPO }}
         with:
           query: |
             query {
