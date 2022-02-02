@@ -67,7 +67,7 @@ jobs:
         run: |
           data=fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug
           teams=join($data, ' ')
-          echo $teams
+          echo ${{ join(fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug, ' ') }}
 #          echo $json | jq '.organization.teams.edges | .[].node.slug'
 
 
