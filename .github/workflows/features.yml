@@ -64,9 +64,8 @@ jobs:
 
       - name: Get Teams name
         run: |
-          echo "Data: ${{steps.get_author_teams.outputs.data}}"
-          ${{ steps.get_author_teams.outputs.data}} | jq '.organization.teams.edges | .[].node.slug'
-          echo $1
+          "echo 'latest release: ${{steps.get_author_teams.outputs.data}}'"
+#          ${{ steps.get_author_teams.outputs.data}} | jq '.organization.teams.edges | .[].node.slug'
   
 
 #      - name:  Set PR's author github teams VER 2
