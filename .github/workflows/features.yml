@@ -92,7 +92,7 @@ jobs:
             const result = await github.graphql(query, variables)
             console.log(result)
 
-            core.setOutput('teams', (jq '.viewer.organization.teams.edges | .[].node.slug' <<< $result))
+            echo `jq '.viewer.organization.teams.edges | .[].node.slug' <<< $result`
 
 
 
