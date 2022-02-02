@@ -64,7 +64,7 @@ jobs:
 
       - name: Get Teams name
         run: |
-          echo ${{steps.get_author_teams.outputs.data}}
+          echo "Data: ${{steps.get_author_teams.outputs.data}}"
           ${{ steps.get_author_teams.outputs.data}} | jq '.organization.teams.edges | .[].node.slug'
           echo $1
   
