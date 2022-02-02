@@ -65,7 +65,7 @@ jobs:
       - name: Get Teams name
         shell: bash
         run: |
-          echo "Teams: ${{ steps.get_author_teams.outputs.data | jq '.[].name' }}"
+          echo "Teams: ${{ jq '.organization.teams.edges | .[].node.name' steps.get_author_teams.outputs.data  }}"
 
 
 #      - name:  Set PR's author github teams VER 2
