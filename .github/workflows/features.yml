@@ -63,6 +63,31 @@ jobs:
             }
       - run: "echo 'Teams: ${{ steps.get_author_teams.outputs.data }}'"
 
+      - name:  Set PR's author github teams VER 2
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GHA_TEST_REPO}}
+          script: |
+            const query = `query team($author:String!) {
+              viewer {
+                organization(login: "toptal") {
+                  teams(first: 100, userLogins: [$author]) {
+                    edges {
+                      node {
+                        slug
+                      }
+                    }
+                  }
+                }
+              }
+            }`;
+            const variables = {
+              author: '${{ github.actor }}',
+            }
+            const result = await github.graphql(query, variables)
+            console.log(result)
+
+
 
 
       - name: Set Branches
