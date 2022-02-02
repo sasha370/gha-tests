@@ -63,7 +63,7 @@ jobs:
             }
       - run: |
           echo 'Teams: ${{ steps.get_author_teams.outputs.data }}'
-          echo 'Teams: ${{ parseJSON(steps.get_author_teams.outputs.data).*.name }}'
+          echo 'Teams: ${{ jq 'steps.get_author_teams.outputs.data.[].name' }}'
 
       - name:  Set PR's author github teams VER 2
         uses: actions/github-script@v3
