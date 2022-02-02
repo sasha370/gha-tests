@@ -64,10 +64,8 @@ jobs:
 
       - name: Get Teams name
         run: |
-          data=${{ fromJSON(steps.get_author_teams.outputs.data)}}
-          teams=$(echo $data | jq '.organization.teams.edges | .[].node.slug')
+          teams=${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug}}
           echo "${teams[*]"
-#          echo ::set-output name=teams::$teams
 #          echo $json | jq '.organization.teams.edges | .[].node.slug'
 
 
