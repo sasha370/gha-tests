@@ -66,8 +66,10 @@ jobs:
         shell: bash
         run: |
           teams=${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug}}
-          echo "${teams[*]}"
-          echo $teams
+          for item in ${teams[*]}
+          do 
+            echo $item 
+          done
 #          echo $json | jq '.organization.teams.edges | .[].node.slug'
 
 
