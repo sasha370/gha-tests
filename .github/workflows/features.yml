@@ -92,8 +92,8 @@ jobs:
             const result = await github.graphql(query, variables)
             console.log(result)
 
-            echo `jq '.viewer.organization.teams.edges | .[].node.slug' <<< $result`
-
+            const data = jq '.viewer.organization.teams.edges | .[].node.slug' <<< $result
+            console.log(data)
 
 
 
