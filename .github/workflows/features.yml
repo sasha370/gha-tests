@@ -44,55 +44,55 @@ jobs:
           echo "Organization:  ${{ github.event.repository_owner }}."
           echo "Author by GH:  ${{ github.actor }}."
 
-#      - uses: octokit/graphql-action@v2.x
-#        id: get_author_teams
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GHA_TEST_REPO }}
-#        with:
-#          query: |
-#            query {
-#              organization(login: "toptal") {
-#                teams(first: 100, userLogins: ["sasha370"]) {
-#                  edges {
-#                    node {
-#                      name
-#                    }
-#                  }
-#                }
-#              }
-#            }
-#
-#      - name: Get Teams name
-#        shell: bash
-#        run: |
-#          echo 'Teams: ${{ steps.get_author_teams.outputs.data }}'
-#          echo 'Teams: ${{ jq 'steps.get_author_teams.outputs.data.[].name' }}'
-
-      - name:  Set PR's author github teams VER 2
-        uses: actions/github-script@v3
+      - uses: octokit/graphql-action@v2.x
+        id: get_author_teams
+        env:
+          GITHUB_TOKEN: ${{ secrets.GHA_TEST_REPO }}
         with:
-          github-token: ${{secrets.GHA_TEST_REPO}}
-          script: |
-            const query = `query team($author:String!) {
-              viewer {
-                organization(login: "toptal") {
-                  teams(first: 100, userLogins: [$author]) {
-                    edges {
-                      node {
-                        slug
-                      }
+          query: |
+            query {
+              organization(login: "toptal") {
+                teams(first: 100, userLogins: ["sasha370"]) {
+                  edges {
+                    node {
+                      name
                     }
                   }
                 }
               }
-            }`;
-            const variables = {
-              author: '${{ github.actor }}',
             }
-            const result = await github.graphql(query, variables)
-            console.log(result)
-           
-            core.setOutput('teams', (jq 'result.[].name'))
+
+      - name: Get Teams name
+        shell: bash
+        run: |
+          echo 'Teams: ${{ steps.get_author_teams.outputs.data }}'
+          echo "Teams: ${{ steps.get_author_teams.outputs.data | jq .[].name }}"
+
+#      - name:  Set PR's author github teams VER 2
+#        uses: actions/github-script@v3
+#        with:
+#          github-token: ${{secrets.GHA_TEST_REPO}}
+#          script: |
+#            const query = `query team($author:String!) {
+#              viewer {
+#                organization(login: "toptal") {
+#                  teams(first: 100, userLogins: [$author]) {
+#                    edges {
+#                      node {
+#                        slug
+#                      }
+#                    }
+#                  }
+#                }
+#              }
+#            }`;
+#            const variables = {
+#              author: '${{ github.actor }}',
+#            }
+#            const result = await github.graphql(query, variables)
+#            console.log(result)
+#
+#            core.setOutput('teams', (jq 'result.[].name'))
 
 
 
