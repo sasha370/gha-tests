@@ -67,7 +67,7 @@ jobs:
         run: |
           content = ${{ steps.get_author_teams.outputs.data }}
           echo 'Teams: ${content}'
-          teams = $(context | jq .[].name)
+          teams = $(content | jq .[].name)
           echo "Teams: ${teams}"
 
 #      - name:  Set PR's author github teams VER 2
