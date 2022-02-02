@@ -61,7 +61,10 @@ jobs:
                 }
               }
             }
-      - run: |
+        
+      - name: Get Teams name
+        shell: bash
+        run: |
           echo 'Teams: ${{ steps.get_author_teams.outputs.data }}'
           echo 'Teams: ${{ jq 'steps.get_author_teams.outputs.data.[].name' }}'
 
