@@ -65,10 +65,8 @@ jobs:
       - name: Get Teams name
         shell: bash
         run: |
-          content = ${{ steps.get_author_teams.outputs.data }}
-          echo 'Teams: ${content}'
-          teams = $(content | jq .[].name)
-          echo "Teams: ${teams}"
+          echo "Teams: ${{ fromJson(steps.get_author_teams.outputs.data.[].name) }}"
+
 
 #      - name:  Set PR's author github teams VER 2
 #        uses: actions/github-script@v3
