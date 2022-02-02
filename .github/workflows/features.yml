@@ -63,10 +63,9 @@ jobs:
             }
 
       - name: Get Teams name
-        env:
-          json: ${{ fromJSON(steps.get_author_teams.outputs.data) }}
         run: |
-          echo $json | jq '.organization.teams.edges | .[].node.slug'
+          echo ${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges }}
+#          echo $json | jq '.organization.teams.edges | .[].node.slug'
 
 
 #      - name:  Set PR's author github teams VER 2
