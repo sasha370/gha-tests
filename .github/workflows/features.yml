@@ -65,7 +65,8 @@ jobs:
       - name: Get Teams name
         shell: bash
         run: |
-          teams=join(fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug , ' ')
+          data=fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug
+          teams=join($data, ' ')
           echo $teams
 #          echo $json | jq '.organization.teams.edges | .[].node.slug'
 
