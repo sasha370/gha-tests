@@ -51,7 +51,7 @@ jobs:
         with:
           author: ${{ github.event.pull_request.user.login }}
           query: |
-            query team($author:String!){
+            query team($author:String!) {
               organization(login: "toptal") {
                 teams(first: 100, userLogins: [$author]) {
                   edges {
