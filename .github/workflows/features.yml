@@ -35,7 +35,7 @@ jobs:
         id: set_teams
         shell: bash
         run: |
-          teams="${{ join(fromJSON(steps.get_graphql_data.outputs.data).organization.teams.edges.*.node.slug, ' ') }}"
+          teams="${{ join(fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug, ' ') }}"
           echo "::set-output name=PR_AUTHOR_TEAMS::${teams}"
       - run: |
           echo "PR_AUTHOR_TEAMS=${{ steps.set_teams.outputs.pr_author_teams }}" >> $GITHUB_ENV
