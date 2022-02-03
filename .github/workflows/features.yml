@@ -65,9 +65,11 @@ jobs:
       - name: Get Teams name
         shell: bash
         run: |
-          data=${{ steps.get_author_teams.outputs.data }}
-          echo $data | jq '.organization.teams.edges | .[].node.slug'
-#         data=${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug[1] }}
+          "echo 'Teams: ${{ steps.get_author_teams.outputs.data }}'"
+          "echo 'Teams: ${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug }}'"
+#          data=${{ steps.get_author_teams.outputs.data }}
+#          echo $data | jq '.organization.teams.edges | .[].node.slug'
+#          data=${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug[1] }}
 
 #      - name:  Set PR's author github teams VER 2
 #        uses: actions/github-script@v3
