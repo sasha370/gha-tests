@@ -70,7 +70,7 @@ jobs:
           teams=${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug }}
           echo 'Teams: ${env.data}'
           echo 'Teams: ${teams}'
-          echo ${{ join(fromJSON(${env.data}.organization.teams.edges.*.node.slug), ' ') }}
+          echo ${{ fromJSON(${env.data}.organization.teams.edges.*.node.slug }}
           echo ${ env.data } | jq '.organization.teams.edges | .[].node.slug'
 #         data=${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug[1] }}
 
