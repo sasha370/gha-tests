@@ -7,43 +7,11 @@ on:
   pull_request:
     types: [opened, synchronize]
 
-  workflow_dispatch:
-    inputs:
-      platform_branch:
-        description: 'Input Platform branch (default master)'
-        required: false
-        default: 'master_WD'
-      talent_portal_branch:
-        description: 'Input Talent Portal branch (default master)'
-        required: false
-        default: 'master_WD'
-
-  workflow_call:
-    inputs:
-      platform_branch:
-        type: string
-        description: 'Input Platform branch (default master)'
-        required: false
-        default: 'master_WC'
-      talent_portal_branch:
-        type: string
-        description: 'Input Talent Portal branch (default master)'
-        required: false
-        default: 'master_WC'
-
 jobs:
   features:
     name: Run features
     runs-on: ubuntu-latest
     steps:
-
-      - name: Set PR's author github teams
-        env:
-          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
-        run: |
-          echo "Organization:  ${{ github.event.repository_owner }}."
-          echo "Author by GH:  ${{ github.event.pull_request.user.login }}."
-
       - uses: octokit/graphql-action@v2.x
         id: get_pr_author_teams
         env:
@@ -64,15 +32,15 @@ jobs:
             }
 
       - name: Set PR_AUTHOR_TEAMS env
+        id: set_teams
         shell: bash
         run: |
-          echo ${{ join(fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug, ' ') }}
-          echo "PR_AUTHOR_TEAMS=${{ join(fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug, ' ') }}" >> $GITHUB_ENV
-      - name: Show results
-        shell: bash
-        run: |
-          echo PR author is: ${{ github.event.pull_request.user.login }}
-          echo PR_AUTHOR_TEAMS: ${{ env.PR_AUTHOR_TEAMS }}
+          teams="${{ join(fromJSON(steps.get_graphql_data.outputs.data).organization.teams.edges.*.node.slug, ' ') }}"
+          echo "::set-output name=PR_AUTHOR_TEAMS::${teams}"
+      - run: |
+          echo "PR_AUTHOR_TEAMS=${{ steps.set_teams.outputs.pr_author_teams }}" >> $GITHUB_ENV
+      - run: |       
+          echo ${{env.PR_AUTHOR_TEAMS}}
 
 #      - name:  Set PR's author github teams VER 2
 #        uses: actions/github-script@v3
