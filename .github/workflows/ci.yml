@@ -22,8 +22,8 @@ jobs:
 
   feature_test_testbox_GHA:
     name: "Run testbox features on GHA"
-#    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     uses: sasha370/gha-tests/.github/workflows/features.yml@master
     with:
       platform_branch: master123
-
+      talent_portal_branch: ''
