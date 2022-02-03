@@ -67,7 +67,7 @@ jobs:
         env:
           data: ${{ steps.get_author_teams.outputs.data }}
         run: |
-          ${{ fromJSON(steps.get_author_teams.outputs.data) }} >> teams.json
+          ${{ steps.get_author_teams.outputs.data }} >> teams.json
           echo $(jq '.organization.teams.edges | .[].node.slug' teams.json)
 
 #      - name:  Set PR's author github teams VER 2
