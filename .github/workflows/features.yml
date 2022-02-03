@@ -67,11 +67,11 @@ jobs:
         env:
           data: ${{ steps.get_author_teams.outputs.data }}
         run: |
-          teams=${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug }}
-          echo ${{ join($teams, ' ') }}
-          echo 'Teams: ${env.data}'
-          echo 'Teams: ${teams}'
-          echo ${ env.data } | jq '.organization.teams.edges | .[].node.slug'
+          ${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug }} >> teams.json
+#         echo ${{ join($teams, ' ') }}
+#         echo 'Teams: ${env.data}'
+#         echo 'Teams: ${teams}'
+          echo jq '.organization.teams.edges | .[].node.slug' teams.json
 #         data=${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug[1] }}
 
 #      - name:  Set PR's author github teams VER 2
