@@ -67,12 +67,8 @@ jobs:
         env:
           data: ${{ steps.get_author_teams.outputs.data }}
         run: |
-          ${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug }} >> teams.json
-#         echo ${{ join($teams, ' ') }}
-#         echo 'Teams: ${env.data}'
-#         echo 'Teams: ${teams}'
-          echo jq '.organization.teams.edges | .[].node.slug' teams.json
-#         data=${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug[1] }}
+          ${{ fromJSON(steps.get_author_teams.outputs.data) }} >> teams.json
+          echo $(jq '.organization.teams.edges | .[].node.slug' teams.json)
 
 #      - name:  Set PR's author github teams VER 2
 #        uses: actions/github-script@v3
