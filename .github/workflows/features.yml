@@ -65,8 +65,8 @@ jobs:
       - name: Get Teams name
         env:
           data: ${{ steps.get_author_teams.outputs.data }}
-          teams: ${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug }}
         run: |
+          teams=${{ fromJSON(steps.get_author_teams.outputs.data).organization.teams.edges.*.node.slug }}
           echo 'Teams: ${data}'
           echo 'Teams: ${teams}'
           echo join($teams, ' ')
