@@ -11,11 +11,11 @@ on:
     inputs:
       platform_branch:
         description: 'Input Platform branch (default master)'
-        required: false
+        required: true
         default: 'master_WD'
       talent_portal_branch:
         description: 'Input Talent Portal branch (default master)'
-        required: false
+        required: true
         default: 'master_WD'
 
   workflow_call:
@@ -23,12 +23,12 @@ on:
       platform_branch:
         type: string
         description: 'Input Platform branch (default master)'
-        required: false
+        required: true
         default: 'master_WC'
       talent_portal_branch:
         type: string
         description: 'Input Talent Portal branch (default master)'
-        required: false
+        required: true
         default: 'master_WC'
 
 jobs:
