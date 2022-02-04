@@ -42,7 +42,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GHA_TEST_REPO }}
           INPUT_AUTHOR: "${{ github.event.pull_request.user.login }}"
         with:
-          author: $(echo $INPUT_AUTHOR)
+          author: $INPUT_AUTHOR
           query: |
             query team($author:String!){
               organization(login: "toptal") {
