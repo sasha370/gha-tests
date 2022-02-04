@@ -40,9 +40,9 @@ jobs:
         id: get_pr_author_teams
         env:
           GITHUB_TOKEN: ${{ secrets.GHA_TEST_REPO }}
-          INPUT_AUTHOR: "${{ github.event.pull_request.user.login }}"
+          INPUT_AUTHOR: ${{ github.event.pull_request.user.login }}
         with:
-          author: ${{ env.input_author }}
+          author: "${{ env.input_author }}"
           query: |
             query team($author:String!){
               organization(login: "toptal") {
