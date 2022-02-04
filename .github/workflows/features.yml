@@ -7,6 +7,7 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+
   workflow_dispatch:
     inputs:
       platform_branch:
@@ -40,11 +41,10 @@ jobs:
         id: get_pr_author_teams
         env:
           GITHUB_TOKEN: ${{ secrets.GHA_TEST_REPO }}
-          INPUT_AUTHOR: ''
+          INPUT_AUTHOR: "${{ github.event.pull_request.user.login }}"
         with:
-          author: ${{ github.event.pull_request.user.login }}
           query: |
-            query team($author:String!){
+            query team($author:String!) {
               organization(login: "toptal") {
                 teams(first: 100, userLogins: [$author]) {
                   edges {
