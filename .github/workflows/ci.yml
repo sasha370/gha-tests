@@ -21,13 +21,9 @@ jobs:
           echo "${{ github.sha }}"
 
   feature_test_testbox_GHA:
-#    needs:
-#      [
-#        first_job
-#      ]
     name: "Run testbox features on GHA"
     if: github.ref == 'refs/heads/master'
-    uses: sasha370/gha-tests/.github/workflows/features.yml@author-teams
+    uses: sasha370/gha-tests/.github/workflows/features.yml@master
     with:
       platform_branch: master123
-      talent_portal_branch: "${{ github.sha }}"
+      talent_portal_branch: ''

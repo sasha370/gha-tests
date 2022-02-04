@@ -7,6 +7,29 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+  workflow_dispatch:
+    inputs:
+      platform_branch:
+        description: 'Input Platform branch (default master)'
+        required: true
+        default: 'master_WD'
+      talent_portal_branch:
+        description: 'Input Talent Portal branch (default master)'
+        required: true
+        default: 'master_WD'
+
+  workflow_call:
+    inputs:
+      platform_branch:
+        type: string
+        description: 'Input Platform branch (default master)'
+        required: true
+        default: 'master_WC'
+      talent_portal_branch:
+        type: string
+        description: 'Input Talent Portal branch (default master)'
+        required: true
+        default: 'master_WC'
 
 jobs:
   features:
