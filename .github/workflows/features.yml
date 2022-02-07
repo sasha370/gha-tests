@@ -98,6 +98,7 @@ jobs:
         run: |
           echo "TESTBOX_BRANCH_PLATFORM=${{ inputs.platform_branch || github.event.inputs.platform_branch }}" >> $GITHUB_ENV
           echo "TESTBOX_BRANCH_TALENT_PORTAL=${{ inputs.talent_portal_branch|| github.event.inputs.talent_portal_branch }}" >> $GITHUB_ENV
+          echo ${{github.event.started_at}}
       - name: Show Branch
         run: |
           echo ${{ env.TESTBOX_BRANCH_PLATFORM }}
