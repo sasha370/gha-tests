@@ -7,6 +7,7 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+
   workflow_dispatch:
     inputs:
       platform_branch:
@@ -36,20 +37,69 @@ jobs:
     name: Run features
     runs-on: ubuntu-latest
     steps:
+      - uses: octokit/graphql-action@v2.x
+        id: get_pr_author_teams
+        env:
+          GITHUB_TOKEN: ${{ secrets.GHA_TEST_REPO }}
+          INPUT_AUTHOR: ${{ github.event.pull_request.user.login }}
+        with:
+          query: |
+            query team($author:String!) {
+              organization(login: "toptal") {
+                teams(first: 100, userLogins: [$author]) {
+                  edges {
+                    node {
+                      slug
+                    }
+                  }
+                }
+              }
+            }
 
-      - name: Set PR's author github teams
+      - name: Set PR_AUTHOR_TEAMS env
+        id: set_teams
+        shell: bash
         run: |
-          echo "By PR ${{ github.event.pull_request.user.login }}."
-          echo "By push ${{ github.event.push.user.login }}."
-          echo "By issue ${{ github.event.issue.user.login }}."
-      
+          raw_teams="${{ join(fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug, ' ') }}"
+          teams="$(echo "$raw_teams" | sed '/^$/!s/[^ ]* */@toptal\/&/g')"
+          echo "::set-output name=PR_AUTHOR_TEAMS::${teams}"
+      - run: |
+          echo "PR_AUTHOR_TEAMS=${{ steps.set_teams.outputs.pr_author_teams }}" >> $GITHUB_ENV
+      - run: |       
+          echo ${{env.PR_AUTHOR_TEAMS}}
+#      - name:  Set PR's author github teams VER 2
+#        uses: actions/github-script@v3
+#        with:
+#          github-token: ${{secrets.GHA_TEST_REPO}}
+#          script: |
+#            const query = `query team($author:String!) {
+#                organization(login: "toptal") {
+#                  teams(first: 100, userLogins: [$author]) {
+#                    edges {
+#                      node {
+#                        slug
+#                      }
+#                    }
+#                  }
+#                }
+#            }`;
+#            const variables = {
+#              author: '${{ github.actor }}',
+#            }
+#            const result = await github.graphql(query, variables)
+#            console.log(result)
+#
+#            const data = result | jq '.data.organization.teams.edges | .[].node.slug'
+#            console.log(data)
+
+
 
       - name: Set Branches
         run: |
           echo "TESTBOX_BRANCH_PLATFORM=${{ inputs.platform_branch || github.event.inputs.platform_branch }}" >> $GITHUB_ENV
           echo "TESTBOX_BRANCH_TALENT_PORTAL=${{ inputs.talent_portal_branch|| github.event.inputs.talent_portal_branch }}" >> $GITHUB_ENV
+          echo ${{github.started_at}}
       - name: Show Branch
         run: |
           echo ${{ env.TESTBOX_BRANCH_PLATFORM }}
           echo ${{ env.TESTBOX_BRANCH_TALENT_PORTAL }}
-
