@@ -60,15 +60,15 @@ jobs:
         id: set_teams
         shell: bash
         env:
-          teams_dump: ${{ fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug }}
+          teams_dump: ${{  }}
         run: |
-          teams= ${{ join(env.teams_dump, ' ') }}
+          raw_teams="${{ join(fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug, ' ') }}"
+          teams="$(echo "$raw_teams" | sed '/^$/!s/[^ ]* */@toptal\/&/g')"
           echo "::set-output name=PR_AUTHOR_TEAMS::${teams}"
       - run: |
           echo "PR_AUTHOR_TEAMS=${{ steps.set_teams.outputs.pr_author_teams }}" >> $GITHUB_ENV
       - run: |       
           echo ${{env.PR_AUTHOR_TEAMS}}
-
 #      - name:  Set PR's author github teams VER 2
 #        uses: actions/github-script@v3
 #        with:
@@ -105,4 +105,3 @@ jobs:
         run: |
           echo ${{ env.TESTBOX_BRANCH_PLATFORM }}
           echo ${{ env.TESTBOX_BRANCH_TALENT_PORTAL }}
-
