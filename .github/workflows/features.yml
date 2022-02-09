@@ -60,7 +60,7 @@ jobs:
         id: set_teams
         shell: bash
         env:
-          teams_dump: fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug
+          teams_dump: ${{ fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug }}
         run: |
           teams= ${{ join(env.teams_dump, ' ') }}
           echo "::set-output name=PR_AUTHOR_TEAMS::${teams}"
