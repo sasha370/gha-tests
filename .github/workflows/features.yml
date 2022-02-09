@@ -60,8 +60,8 @@ jobs:
         id: set_teams
         shell: bash
         run: |
-          raw_teams="${{ join(fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug, ',') }}"
-          teams="$(echo "$raw_teams" | sed '/^$/!s/[^,]* */@toptal\/&/g')"
+          raw_teams="${{ join(fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug, ' ') }}"
+          teams="$(echo "$raw_teams" | sed '/^$/!s/[^ ]* */@toptal\/&/g')"
           echo "::set-output name=PR_AUTHOR_TEAMS::${teams}"
       - run: |
           echo "PR_AUTHOR_TEAMS=${{ steps.set_teams.outputs.pr_author_teams }}" >> $GITHUB_ENV
