@@ -59,9 +59,10 @@ jobs:
       - name: Set PR_AUTHOR_TEAMS env
         id: set_teams
         shell: bash
+        env:
+          teams_dump: fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug
         run: |
-          teams_dump="${{ fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug }}"
-          teams= github.join($teams_dump, ' ')
+          teams= github.join(env.teams_dump, ' ')
           echo "::set-output name=PR_AUTHOR_TEAMS::${teams}"
       - run: |
           echo "PR_AUTHOR_TEAMS=${{ steps.set_teams.outputs.pr_author_teams }}" >> $GITHUB_ENV
