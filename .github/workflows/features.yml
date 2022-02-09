@@ -60,7 +60,8 @@ jobs:
         id: set_teams
         shell: bash
         run: |
-          teams="${{ join(fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug, '@toptal/ ') }}"
+          teams_dump="${{ fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug }}"
+          teams="${{ join($teams_dump, ' ') }}"
           echo "::set-output name=PR_AUTHOR_TEAMS::${teams}"
       - run: |
           echo "PR_AUTHOR_TEAMS=${{ steps.set_teams.outputs.pr_author_teams }}" >> $GITHUB_ENV
