@@ -59,8 +59,6 @@ jobs:
       - name: Set PR_AUTHOR_TEAMS env
         id: set_teams
         shell: bash
-        env:
-          teams_dump: ${{  }}
         run: |
           raw_teams="${{ join(fromJSON(steps.get_pr_author_teams.outputs.data).organization.teams.edges.*.node.slug, ' ') }}"
           teams="$(echo "$raw_teams" | sed '/^$/!s/[^ ]* */@toptal\/&/g')"
