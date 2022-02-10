@@ -1,4 +1,4 @@
-name: Workflow Publisher
+name: This workflow publishes everything in the templates folder to repos in the matrix
 on:
   push:
     branches:
@@ -26,14 +26,14 @@ jobs:
           token: ${{ secrets.PERSONAL_TOKEN}}
           ref: master
 
-      - name: Update workflows
+      - name: Update workflows dir in target repo
         shell: bash
         run: |
           mkdir -p .github/workflows/
           cp ../main/templates/* .github/workflows/
         working-directory: ./${{ matrix.target_repo }}
 
-      - name: Publish workflows
+      - name: Publishing the modified version of the repo with commit
         shell: bash
         run: |
           git config --local user.email "action@github.com"
