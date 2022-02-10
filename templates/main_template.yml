@@ -1,4 +1,4 @@
-name: Main template
+name: THIS IS THE TEMPLATE WORKFLOW TO COPY TO ALL REPO
 
 on:
   push:
