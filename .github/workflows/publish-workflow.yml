@@ -17,20 +17,21 @@ jobs:
         with:
           path: main
 
-  - name: Checkout target repo
-      uses: actions/checkout@v2
-      with:
-        repository: ${{ github.repository_owner }}/${{ matrix.target_repo }}
-        path: ${{ matrix.target_repo }}
-        token: ${{ secrets.PERSONAL_TOKEN}}
-        ref: master
+      - name: Checkout target repo
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.repository_owner }}/${{ matrix.target_repo }}
+          path: ${{ matrix.target_repo }}
+          token: ${{ secrets.PERSONAL_TOKEN}}
+          ref: master
 
-  - name: Update workflows
-      shell: bash
-      run: |
-        mkdir -p .github/workflows/
-        cp ../main/templates/* .github/workflows/
-      working-directory: ./${{ matrix.target_repo }}
+      - name: Update workflows
+        shell: bash
+        run: |
+          mkdir -p .github/workflows/
+          cp ../main/templates/* .github/workflows/
+        working-directory: ./${{ matrix.target_repo }}
+
       - name: Publish workflows
         shell: bash
         run: |
