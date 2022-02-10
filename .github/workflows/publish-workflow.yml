@@ -5,7 +5,7 @@ on:
       - 'master'
     paths:
       - 'templates/**'
-      - '.github/workflows/publish-workflow.yml'
+
 jobs:
   publish-workflow-template:
     runs-on: ubuntu-latest
