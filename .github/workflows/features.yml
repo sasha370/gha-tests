@@ -30,6 +30,11 @@ on:
         description: 'Input Talent Portal branch (default master)'
         required: true
         default: 'master_WC'
+      ANVIL_PARENT_BUILD_ID:
+        type: string
+        description: 'Parent Build ID from Anvil'
+        required: false
+        default: ''
 
 jobs:
   features:
@@ -39,10 +44,7 @@ jobs:
 
       - name: Set PR's author github teams
         run: |
-          echo "By PR ${{ github.event.pull_request.user.login }}."
-          echo "By push ${{ github.event.push.user.login }}."
-          echo "By issue ${{ github.event.issue.user.login }}."
-      
+          echo "ANVIL_PARENT_BUILD_ID:  ${{ inputs.ANVIL_PARENT_BUILD_ID }}"
 
       - name: Set Branches
         run: |

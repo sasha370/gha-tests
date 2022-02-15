@@ -12,18 +12,35 @@ on:
     ]
 
 jobs:
+  call_action:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Generate the SCC report
+        uses: .github/actions/test
+        env:
+          TESTBOX_BRANCH_PLATFORM: 'test_branch'
+          ANVIL_NUMBER: 123123
+
   first_job:
     runs-on: ubuntu-latest
     name: "Echo 1"
+    outputs:
+      ANVIL_BUILD_ID: ${{ steps.first_step.outputs.anvil_build_id }}
     steps:
       - name: "Echo 1"
+        id: first_step
         run: |
           echo "${{ github.sha }}"
+          echo "::set-output name=anvil_build_id::${{ github.sha }}"
 
   feature_test_testbox_GHA:
     name: "Run testbox features on GHA"
+    needs: first_job
     if: github.ref == 'refs/heads/master'
     uses: sasha370/gha-tests/.github/workflows/features.yml@master
     with:
       platform_branch: master123
       talent_portal_branch: ''
+      ANVIL_PARENT_BUILD_ID: ${{ needs.first_job.outputs.ANVIL_BUILD_ID }}

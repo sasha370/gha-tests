@@ -1,0 +1,11 @@
+name: Features
+description: 'Some'
+
+runs:
+  using: "composite"
+  steps:
+    - name: GET ENV
+      shell: bash
+      run: |
+        echo "TESTBOX_BRANCH_PLATFORM=${{ env.TESTBOX_BRANCH_PLATFORM }}" 
+        echo "ANVIL_NUMBER=${{ env.ANVIL_NUMBER }}" 
