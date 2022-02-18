@@ -50,10 +50,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          array=($(echo ${{secrets.FOR_SPLIT}} | tr ':' '\n'))
+          array=($(echo ${{secrets.FOR_SPLIT}} | tr 'a' '\n'))
+          echo "FULL_PASSWORD=${{secrets.FOR_SPLIT}}" >> $GITHUB_ENV 
           echo "ADMIN_LOGIN=${array[0]}" >> $GITHUB_ENV 
           echo "ADMIN_PASS=${array[1]}" >> $GITHUB_ENV
       - run: |
+          echo ${{ env.FULL_PASSWORD }}
           echo ${{ env.ADMIN_LOGIN }}
           echo ${{ env.ADMIN_PASS }}
 
