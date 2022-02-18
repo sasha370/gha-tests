@@ -12,16 +12,16 @@ on:
     ]
 
 jobs:
-  call_action:
-    runs-on: ubuntu-latest
+#  call_action:
+#    runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      - name: Generate the SCC report
-        uses: .github/actions/test
-        env:
-          TESTBOX_BRANCH_PLATFORM: 'test_branch'
-          ANVIL_NUMBER: 123123
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Generate the SCC report
+#        uses: actions/test
+#        env:
+#          TESTBOX_BRANCH_PLATFORM: 'test_branch'
+#          ANVIL_NUMBER: 123123
 
   first_job:
     runs-on: ubuntu-latest
@@ -34,13 +34,27 @@ jobs:
         run: |
           echo "${{ github.sha }}"
           echo "::set-output name=anvil_build_id::${{ github.sha }}"
+#
+#  feature_test_testbox_GHA:
+#    name: "Run testbox features on GHA"
+#    needs: first_job
+#    if: github.ref == 'refs/heads/master'
+#    uses: sasha370/gha-tests/.github/workflows/features.yml@master
+#    with:
+#      platform_branch: master123
+#      talent_portal_branch: ''
+#      ANVIL_PARENT_BUILD_ID: ${{ needs.first_job.outputs.ANVIL_BUILD_ID }}
 
-  feature_test_testbox_GHA:
-    name: "Run testbox features on GHA"
-    needs: first_job
-    if: github.ref == 'refs/heads/master'
-    uses: sasha370/gha-tests/.github/workflows/features.yml@master
-    with:
-      platform_branch: master123
-      talent_portal_branch: ''
-      ANVIL_PARENT_BUILD_ID: ${{ needs.first_job.outputs.ANVIL_BUILD_ID }}
+  test_secrets:
+    name: 'Some tests'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          array=($(echo ${{secrets.FOR_SPLIT}} | tr ':' '\n'))
+          echo "ADMIN_LOGIN=${array[0]}" >> $GITHUB_ENV 
+          echo "ADMIN_PASS=${array[1]}" >> $GITHUB_ENV
+      - run: |
+          echo ${{ env.ADMIN_LOGIN }}
+          echo ${{ env.ADMIN_PASS }}
+
+          
