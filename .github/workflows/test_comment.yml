@@ -1,0 +1,41 @@
+name: Trigger phrase
+
+on:
+  issue_comment:
+    types: [ created ]
+jobs:
+  first_job:
+    runs-on: ubuntu-latest
+    name: "Echo 1"
+    outputs:
+      ANVIL_BUILD_ID: ${{ steps.first_step.outputs.anvil_build_id }}
+    steps:
+      - name: "Echo 1"
+        id: first_step
+        run: |
+          echo "${{ github.sha }}"
+          echo "::set-output name=anvil_build_id::${{ github.sha }}"
+
+  run_platform_features:
+    name: Trigger action and react on comment
+    runs-on: ubuntu-latest
+    needs: first_job
+    if: >
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, '@toptal-bot run features GHA')
+    steps:
+      - run: |
+          echo "Say Hello"
+      - name: React to comment - success or failure
+        if: ${{ always() }}
+        env:
+          JOB_STATUS: ${{ job.status }}
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GHA_TEST_REPO }}
+          script: |
+            const { owner, repo } = context.issue;
+            const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
+            await github.rest.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
+      - run: |
+          exit 1
