@@ -29,12 +29,14 @@ jobs:
           CONTENT : "${{ toJson(github.event.issue.pull_request) }}"
           CONTENT1 : "${{ toJson(github.event.issue) }}"
           CONTENT2 : "${{ toJson(github.event) }}"
+          CONTENT3 : "${{ toJson(context.issue) }}"
 
         run: |
           echo "Say Hello"
           echo $CONTENT
           echo $CONTENT1
           echo $CONTENT2
+          echo $CONTENT3
           echo $GITHUB_BASE_REF
           echo ${{ github.base_ref }}
           echo ${{ github.ref }}
