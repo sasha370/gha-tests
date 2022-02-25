@@ -5,16 +5,26 @@ on:
     types: [ created ]
 jobs:
   first_job:
+    if: github.event_name == 'issue_comment'
     runs-on: ubuntu-latest
     name: "Echo 1"
     outputs:
       ANVIL_BUILD_ID: ${{ steps.first_step.outputs.anvil_build_id }}
     steps:
-      - name: "Echo 1"
+      - id: get-branch-from-issue
+        run: echo ::set-output name=branch::$(gh pr view $PR_NO --repo $REPO --json headRefName --jq '.headRefName')
+        env:
+          REPO: ${{ github.repository }}
+          PR_NO: ${{ github.event.issue.number }}
+          GITHUB_TOKEN: ${{ secrets.GHA_TEST_REPO }}
+
+      - name: "SET CURRENT_BRUNCH"
         id: first_step
         run: |
-          echo "${{ github.sha }}"
-          echo "::set-output name=anvil_build_id::${{ github.sha }}"
+          echo "${{ steps.get-branch-from-issue.outputs.branch }}"
+          echo "CURRENT_BRUNCH=${{ steps.get-branch-from-issue.outputs.branch }}" >> $GITHUB_ENV
+      - run: |
+          echo "${{ env.CURRENT_BRUNCH }}
 
   run_platform_features:
     name: Trigger action and react on comment
@@ -29,7 +39,8 @@ jobs:
           CONTENT : "${{ toJson(github.event.issue.pull_request) }}"
           CONTENT1 : "${{ toJson(github.event.issue) }}"
           CONTENT2 : "${{ toJson(github.event) }}"
-          CONTENT3 : "${{ toJson(context.issue) }}"
+          CONTENT3 : "${{ toJson(github.event.comment.body) }}"
+          CONTENT4 : "${{ toJson(github.event.issue.number ) }}"
 
         run: |
           echo "Say Hello"
@@ -37,6 +48,7 @@ jobs:
           echo $CONTENT1
           echo $CONTENT2
           echo $CONTENT3
+          echo $CONTENT4
           echo $GITHUB_BASE_REF
           echo ${{ github.base_ref }}
           echo ${{ github.ref }}
