@@ -31,31 +31,6 @@ jobs:
           echo ${{ github.ref }}
           echo ${{ github.ref_name }}
           echo ${{ github.sha }}
-          
-
-      - name: React to comment - success or failure
-        if: ${{ always() }}
-        env:
-          JOB_STATUS: ${{ job.status }}
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GHA_TEST_REPO }}
-          script: |
-            const { owner, repo } = context.issue;
-            const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
-            await github.rest.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
-
-      - id: prData
-        uses: actions/github-script@v4
-        with:
-          script: |
-            const { owner, repo, number } = context.issue;
-            const { data: pr } = await github.pulls.get({ owner, repo, pull_number: number });
-            core.setOutput('ref', pr.merge_commit_sha)
-      - name: Show SHA
-        run: |
-          echo "${{ steps.prData.outputs.ref }}"
-          
 
       - id: prData1
         uses: actions/github-script@v4
@@ -71,3 +46,18 @@ jobs:
       - name: Show SHA (mergebale)
         run: |
           echo "${{ steps.prData1.outputs.ref }}"
+      
+
+      - name: React to comment - success or failure
+        if: ${{ always() }}
+        env:
+          JOB_STATUS: ${{ job.status }}
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GHA_TEST_REPO }}
+          script: |
+            const { owner, repo } = context.issue;
+            const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
+            await github.rest.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
+
+          
