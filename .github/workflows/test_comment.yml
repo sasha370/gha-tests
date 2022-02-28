@@ -4,32 +4,9 @@ on:
   issue_comment:
     types: [ created ]
 jobs:
-  first_job:
-    if: github.event_name == 'issue_comment'
-    runs-on: ubuntu-latest
-    name: "Echo 1"
-    outputs:
-      ANVIL_BUILD_ID: ${{ steps.first_step.outputs.anvil_build_id }}
-    steps:
-      - id: get-branch-from-issue
-        run: echo ::set-output name=branch::$(gh pr view $PR_NO --repo $REPO --json headRefName --jq '.headRefName')
-        env:
-          REPO: ${{ github.repository }}
-          PR_NO: ${{ github.event.issue.number }}
-          GITHUB_TOKEN: ${{ secrets.GHA_TEST_REPO }}
-
-      - name: "SET CURRENT_BRUNCH"
-        id: first_step
-        run: |
-          echo "${{ steps.get-branch-from-issue.outputs.branch }}"
-          echo "CURRENT_BRUNCH=${{ steps.get-branch-from-issue.outputs.branch }}" >> $GITHUB_ENV
-      - run: |
-          echo "${{ env.CURRENT_BRUNCH }}
-
   run_platform_features:
     name: Trigger action and react on comment
     runs-on: ubuntu-latest
-    needs: first_job
     if: >
       github.event.issue.pull_request &&
       contains(github.event.comment.body, '@toptal-bot run features GHA')
@@ -67,5 +44,30 @@ jobs:
             const { owner, repo } = context.issue;
             const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
             await github.rest.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
-#      - run: |
-#          exit 1
+
+      - id: prData
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const { owner, repo, number } = context.issue;
+            const { data: pr } = await github.pulls.get({ owner, repo, pull_number: number });
+            core.setOutput('ref', pr.merge_commit_sha)
+      - name: Show SHA
+        run: |
+          echo "${{ steps.prData.outputs.ref }}"
+          
+
+      - id: prData1
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const { owner, repo, number } = context.issue;
+            const { data: pr } = await github.pulls.get({ owner, repo, pull_number: number });
+            if (pr.mergeable) {
+              core.setOutput('ref', pr.merge_commit_sha)
+            } else {
+              throw "PR can't be automatically merged. Please rebase and retry."
+            }
+      - name: Show SHA (mergebale)
+        run: |
+          echo "${{ steps.prData1.outputs.ref }}"

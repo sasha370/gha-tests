@@ -1,0 +1,27 @@
+on:
+  pull_request:
+    branches:
+      - master1
+
+jobs:
+#  first_job:
+#    if: github.event_name == 'issue_comment'
+#    runs-on: ubuntu-latest
+#    name: "Echo 1"
+#    outputs:
+#      ANVIL_BUILD_ID: ${{ steps.first_step.outputs.anvil_build_id }}
+#    steps:
+#      - id: get-branch-from-issue
+#        run: echo ::set-output name=branch::$(gh pr view $PR_NO --repo $REPO --json headRefName --jq '.headRefName')
+#        env:
+#          REPO: ${{ github.repository }}
+#          PR_NO: ${{ github.event.issue.number }}
+#          GITHUB_TOKEN: ${{ secrets.GHA_TEST_REPO }}
+#
+#      - name: "SET CURRENT_BRUNCH"
+#        id: first_step
+#        run: |
+#          echo "${{ steps.get-branch-from-issue.outputs.branch }}"
+#          echo "CURRENT_BRUNCH=${{ steps.get-branch-from-issue.outputs.branch }}" >> $GITHUB_ENV
+#      - run: |
+#          echo "${{ env.CURRENT_BRUNCH }}
