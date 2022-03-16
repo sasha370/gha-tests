@@ -41,6 +41,11 @@ jobs:
     name: Run features
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Actions
+        uses: actions/checkout@v2
+
+      - name: Trigger the action
+        uses: ./.github/actions/test
 
       - name: Set PR's author github teams
         run: |
@@ -57,6 +62,6 @@ jobs:
           echo ${{ env.TESTBOX_BRANCH_TALENT_PORTAL }}
       - name: Run always
         run: |
-          echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+          echo "++++++++++++++++ This Always from current workflow"
         if: ${{ always() }}
 

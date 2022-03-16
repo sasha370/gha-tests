@@ -8,4 +8,10 @@ runs:
       shell: bash
       run: |
         echo "TESTBOX_BRANCH_PLATFORM=${{ env.TESTBOX_BRANCH_PLATFORM }}" 
-        echo "ANVIL_NUMBER=${{ env.ANVIL_NUMBER }}" 
+        echo "ANVIL_NUMBER=${{ env.ANVIL_NUMBER }}"
+    - name: Check Always
+      shell: bash
+      if: always()
+      run: |
+        sleep 10
+        echo " **************  This Always from action"
