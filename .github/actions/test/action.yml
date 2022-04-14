@@ -1,5 +1,8 @@
 name: Features
 description: 'Some'
+branding:
+  icon: 'award'  
+  color: 'green'
 
 runs:
   using: "composite"
