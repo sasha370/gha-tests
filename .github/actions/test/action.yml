@@ -17,7 +17,7 @@ runs:
       if: always()
       run: |
         link="https://console.cloud.google.com/logs/quer"
-        echo -e "\e[32mGreen text Green text Green text Green text Green text"
+        echo -e "\e[7mGreen text Green text Green text Green text Green text"
         echo -e "\e[44mmGreen text Green text ${link}"
         echo -e "\e[36mCIAN text CIAN text CIAN text CIAN text CIAN text CIAN text CIAN text "
         echo -e "\e[96mCIAN text CIAN text CIAN text CIAN text CIAN text CIAN text CIAN text "
