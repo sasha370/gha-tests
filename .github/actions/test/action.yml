@@ -16,9 +16,9 @@ runs:
       shell: bash
       if: always()
       run: |
-        sleep 10
+        link="https://console.cloud.google.com/logs/quer"
         echo -e "\e[32mGreen text Green text Green text Green text Green text"
-        echo -e "\e[92mGreen text Green text Green text Green text Green text"
+        echo -e "\e[92mGreen text Green text \e[92m${link}"
         echo -e "\e[36mCIAN text CIAN text CIAN text CIAN text CIAN text CIAN text CIAN text "
         echo -e "\e[96mCIAN text CIAN text CIAN text CIAN text CIAN text CIAN text CIAN text "
 
