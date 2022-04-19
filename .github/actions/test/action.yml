@@ -17,4 +17,4 @@ runs:
       if: always()
       run: |
         sleep 10
-        echo " **************  This Always from action"
+        echo "::debug::**************  This Always from action"
