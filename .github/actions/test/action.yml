@@ -18,7 +18,9 @@ runs:
       run: |
         sleep 10
         echo -e "\e[32mGreen text Green text Green text Green text Green text"
+        echo -e "\e[92mGreen text Green text Green text Green text Green text"
         echo -e "\e[36mCIAN text CIAN text CIAN text CIAN text CIAN text CIAN text CIAN text "
-        echo -e "\e[42mGreen  background Green  background Green  background Green  background "
-        echo -e "\e[46mCIAN  background CIAN  background CIAN  background CIAN  background "
+        echo -e "\e[96mCIAN text CIAN text CIAN text CIAN text CIAN text CIAN text CIAN text "
+
+
 
