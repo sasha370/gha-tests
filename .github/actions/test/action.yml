@@ -18,3 +18,5 @@ runs:
       run: |
         sleep 10
         echo " **************  This Always from action"
+        logs_link="sssssssssssssssssssssssssssssssssssssssssss"
+        ::warning::Google Logs: ${logs_link}
