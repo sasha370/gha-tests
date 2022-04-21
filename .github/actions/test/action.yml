@@ -28,7 +28,7 @@ runs:
         echo "GOOGLE_LOGS_LINK=${logs_link}" >> $GITHUB_ENV
         echo "$GITHUB_CONTEXT"
         
-        time_range="timeRange=$(date --utc +%FT%TZ -d ${{guthub.event.commits.timestamp}})
+        time_range="timeRange=$(date --utc +%FT%TZ -d ${{github.event.commits.timestamp}})
         echo $time_range
         
     - name: Print link
