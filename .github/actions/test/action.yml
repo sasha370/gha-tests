@@ -26,7 +26,7 @@ runs:
         logs_link="${base_url};${url_params};${time_range}?project=toptal-ci"
         echo -e "\e[44mGoogle Logs: ${logs_link}\e[0m"
         echo "GOOGLE_LOGS_LINK=${logs_link}" >> $GITHUB_ENV
-        echo ${{ toJSON(github.event)}}
+        echo ${{ env.GITHUB_CONTEXT}}
         
         
         time_range="timeRange=$(date --utc +%FT%TZ -d \"${{github.event.commits.timestamp}}\")"
