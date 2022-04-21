@@ -33,9 +33,9 @@ runs:
         url_params="query=resource.type=\"k8s_container\" resource.labels.cluster_name=\"testbox\" resource.labels.namespace_name=~\"github-features-staff-portal-15120-1\""
         time_range="timeRange=2022-04-15T15:37:39.560Z%2F2022-04-15T16:37:39.560Z"
         logs_link="${base_url};${url_params};${time_range}?project=toptal-ci"
-        printf "\e]8;;${logs_link}\e\\This is a link\e]8;;\e\\\n"
+        echo -e  "\e]8;;${logs_link}\e\\This is a link\e]8;;\e\\\n"
 
-        echo "::warning::Google Logs: `printf "\e]8;;${logs_link}\e\\This is a link\e]8;;\e\\\n"`"
+        echo "::warning::Google Logs: `echo -e  "\e]8;;${logs_link}\e\\This is a link\e]8;;\e\\\n"`"
         
         
 
