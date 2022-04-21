@@ -18,7 +18,7 @@ runs:
       run: |
         base_url='https://console.cloud.google.com/logs/query'
         
-        url_params="query=resource.labels.namespace_name%3D~%22github-features-staff-portal-15120-1%22;"
+        url_params="query=resource.labels.namespace_name%3D~%22github-features-staff-portal-15120-1%22"
         time_range="cursorTimestamp=$(date --utc +%FT%TZ)%2F$(date --utc +%FT%TZ -d '+3 hour')"
         logs_link="${base_url};${url_params};${time_range}?project=toptal-ci"
         echo "::warning::Google Logs: ${logs_link}"
