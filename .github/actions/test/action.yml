@@ -18,7 +18,7 @@ runs:
       run: |
         base_url='https://console.cloud.google.com/logs/query'
         
-        url_params="query=resource.type=\"k8s_container\" resource.labels.cluster_name=\"testbox\" resource.labels.namespace_name=~\"sddsds\";"
+        url_params="query=resource.type=\"k8s_container\" resource.labels.cluster_name=\"testbox\" resource.labels.namespace_name=~\"github-features-staff-portal-15120-1\";"
         time_range="cursorTimestamp=$(date --utc +%FT%TZ)/$(date --utc +%FT%TZ -d '+3 hour')"
         converted_link=`echo $url_params$time_range?project=toptal-ci | jq -sRr @uri`
         logs_link="${base_url};${converted_link}"
