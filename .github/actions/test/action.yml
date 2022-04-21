@@ -26,11 +26,8 @@ runs:
         logs_link="${base_url};${url_params};${time_range}?project=toptal-ci"
         echo -e "\e[44mGoogle Logs: ${logs_link}\e[0m"
         echo "GOOGLE_LOGS_LINK=${logs_link}" >> $GITHUB_ENV
-        echo ${{ env.GITHUB_CONTEXT}}
-        
-        
-        time_range="timeRange=$(date --utc +%FT%TZ -d \"${{github.event.commits.timestamp}}\")"
-        echo $time_range
+        echo "The job context is:"
+        echo "${{ toJson(job) }}"
         
     - name: Print link
       shell: bash
