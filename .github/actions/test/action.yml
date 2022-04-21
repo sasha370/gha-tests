@@ -16,19 +16,11 @@ runs:
       shell: bash
       if: always()
       run: |
-        link="https://console.cloud.google.com/logs/quer"
-        echo -e "\e[41mGreen text Green ${link}"
-        echo -e "\e[42mGreen text Green ${link}"
-        echo -e "\e[43mGreen text Green ${link}"
-        echo -e "\e[44mGreen text Green ${link}"
-        echo -e "\e[45mGreen text Green ${link}"
-        echo -e "\e[46mGreen text Green ${link}"
-        echo -e "\e[47mGreen text Green ${link}"
-        echo -e "\e[100mGreen text Green ${link}"
-        echo -e "\e[101mGreen text Green ${link}"
-        echo -e "\e[102mGreen text Green ${link}"
-        echo -e "\e[104mGreen text Green ${link}"
-        echo -e "\e[106mGreen text Green ${link}"
+        base_url='https://console.cloud.google.com/logs/query'
+        url_params="query=resource.type%3D%22k8s_container%22%20%0Aresource.labels.cluster_name%3D%22testbox%22%0Aresource.labels.namespace_name%3D~%22$some-namespace%22"
+        time_range="timeRange=PT3H;cursorTimestamp=$(date --utc +%FT%TZ -d '30 minutes ago')"
+        logs_link="${base_url};${url_params};${time_range}?project=toptal-ci"
+        echo "::warning::Google Logs: ${logs_link}"
         
         
 
