@@ -29,7 +29,7 @@ runs:
         echo ${{github.event}}
         
         
-        time_range="timeRange=$(date --utc +%FT%TZ -d ${{github.event.commits.timestamp}})"
+        time_range="timeRange=$(date --utc +%FT%TZ -d \"${{github.event.commits.timestamp}}\")"
         echo $time_range
         
     - name: Print link
