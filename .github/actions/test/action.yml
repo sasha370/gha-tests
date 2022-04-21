@@ -17,21 +17,18 @@ runs:
       if: always()
       run: |
         base_url='https://console.cloud.google.com/logs/query'
-        
-        url_params="query=resource.labels.namespace_name%3D~%22github-features-staff-portal-15120-1%22"
+        url_params="query=resource.labels.namespace_name%3D~%22$github-features-staff-portal-15120-1%22%0Aresource.type%3D%22k8s_container%22%0Aresource.labels.cluster_name%3D%22testbox%22"
+
+        # url_params="query=resource.labels.namespace_name%3D~%22github-features-staff-portal-15120-1%22"
         time_range="timeRange=$(date --utc +%FT%TZ -d '30 minutes ago')%2F$(date --utc +%FT%TZ -d '+2 hour')"
         logs_link="${base_url};${url_params};${time_range}?project=toptal-ci"
-        echo "Google Logs: ${logs_link}"
+        echo -e "\e[44mGoogle Logs: ${logs_link}"
         
                 
         url_params="query=resource.type%3D%22k8s_container%22%20%0Aresource.labels.cluster_name%3D%22testbox%22%0Aresource.labels.namespace_name%3D~%22github-features-staff-portal-15120-1%22"
         time_range="timeRange=2022-04-15T15:37:39.560Z%2F2022-04-15T16:37:39.560Z"
         logs_link="${base_url};${url_params};${time_range}?project=toptal-ci"
-        echo "Google Logs: ${logs_link}"
-        
-
-        logs_link="https://console.cloud.google.com/logs/query;cursorTimestamp=2022-04-15T16:22:03.038579810Z;query=resource.type%3D%22k8s_container%22%20%0Aresource.labels.cluster_name%3D%22testbox%22%0Aresource.labels.namespace_name%3D%22github-features-staff-portal-15120-1-leader%22;summaryFields=:false:32:beginning:false;timeRange=2022-04-15T15:37:39.560Z%2F2022-04-15T16:37:39.560Z?project=toptal-ci"
-        echo "Google Logs: ${logs_link}"
+        echo -e "\e[44Google Logs: ${logs_link}"
         
         
 
