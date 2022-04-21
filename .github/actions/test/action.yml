@@ -31,7 +31,7 @@ runs:
         
 
         logs_link="https://console.cloud.google.com/logs/query;cursorTimestamp=2022-04-15T16:22:03.038579810Z;query=resource.type%3D%22k8s_container%22%20%0Aresource.labels.cluster_name%3D%22testbox%22%0Aresource.labels.namespace_name%3D%22github-features-staff-portal-15120-1-leader%22;summaryFields=:false:32:beginning:false;timeRange=2022-04-15T15:37:39.560Z%2F2022-04-15T16:37:39.560Z?project=toptal-ci"
-        echo "::warning::Google Logs: ${logs_link}"
+        echo "Google Logs: ${logs_link}"
         
         
 
