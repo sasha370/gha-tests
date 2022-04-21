@@ -23,5 +23,11 @@ runs:
         logs_link="${base_url};${url_params};${time_range}?project=toptal-ci"
         echo "::warning::Google Logs: ${logs_link}"
         
+                
+        url_params="query=resource.labels.namespace_name%3D~%22github-features-staff-portal-15120-1%22"
+        time_range="cursorTimestamp=2022-04-15T15:37:39.560Z%2F2022-04-15T16:37:39.560Z"
+        logs_link="${base_url};${url_params};${time_range}?project=toptal-ci"
+        echo "::warning::Google Logs: ${logs_link}"
+        
         
 
