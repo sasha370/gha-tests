@@ -18,6 +18,7 @@ runs:
       shell: bash
       if: always()
       run: |
+        echo "STARTED_AT=$(date --utc +%FT%TZ)" >> $GITHUB_ENV
         base_url='https://console.cloud.google.com/logs/query'
         url_params="query=resource.labels.namespace_name%3D~%22$github-features-staff-portal-15120-1%22%0Aresource.type%3D%22k8s_container%22%0Aresource.labels.cluster_name%3D%22testbox%22"
 
@@ -32,4 +33,4 @@ runs:
     - name: Print link
       shell: bash
       run: |
-        echo -e "\e[44mGoogle Logs: ${{ env.GOOGLE_LOGS_LINK }}\e[0m"
+        echo -e "\e[44mGoogle Logs: ${{ env.STARTED_AT }}\e[0m"
