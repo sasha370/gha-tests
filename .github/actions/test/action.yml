@@ -21,7 +21,8 @@ runs:
 
         time_range="cursorTimestamp=$(date --utc +%FT%TZ)%2F$(date --utc +%FT%TZ -d '+3 hour')"
         logs_link="${base_url};${url_params};${time_range}?project=toptal-ci"
-        echo "::warning::Google Logs: ${logs_link | jq -sRr @uri }"
+        converted_link=`echo $logs_link | jq -sRr @uri`
+        echo "::warning::Google Logs: ${converted_link}"
         
         
 
