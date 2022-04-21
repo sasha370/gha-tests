@@ -17,11 +17,11 @@ runs:
       if: always()
       run: |
         base_url='https://console.cloud.google.com/logs/query'
-        url_params='query=resource.type%3D%22k8s_container%22%20%0Aresource.labels.cluster_name%3D%22testbox%22%0Aresource.labels.namespace_name%3D~%22$%22'
+        url_params="query=resource.type='k8s_container' resource.labels.cluster_name='testbox' resource.labels.namespace_name=~'sddsds'"
 
         time_range="cursorTimestamp=$(date --utc +%FT%TZ)%2F$(date --utc +%FT%TZ -d '+3 hour')"
         logs_link="${base_url};${url_params};${time_range}?project=toptal-ci"
-        echo "::warning::Google Logs: ${logs_link}"
+        echo "::warning::Google Logs: ${logs_link | jq -sRr @uri }"
         
         
 
