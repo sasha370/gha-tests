@@ -20,7 +20,28 @@ jobs:
        shell: bash
        run: |
          echo $LS_COLORS
-         echo -en "\033[37;1;44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[1;44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[30;44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[37;44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[32;44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[36;44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         
+         echo -en "\033[42m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[1;42m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[30;42m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[34;42m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[36;42m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[37;42m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         
+         echo -en "\033[47m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[1;47m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[30;47m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[34;47m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+         echo -en "\033[37;47m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+
+ 
+         
 
          
   first_job:
