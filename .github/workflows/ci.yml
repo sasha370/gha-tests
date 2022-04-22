@@ -12,17 +12,15 @@ on:
     ]
 
 jobs:
-#  call_action:
-#    runs-on: ubuntu-latest
+  call_action:
+    runs-on: ubuntu-latest
 
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Generate the SCC report
-#        uses: actions/test
-#        env:
-#          TESTBOX_BRANCH_PLATFORM: 'test_branch'
-#          ANVIL_NUMBER: 123123
-
+    steps:
+     - name:  LOOK HERE 
+       run: |
+         echo $LS_COLORS
+         
+         
   first_job:
     runs-on: ubuntu-latest
     name: "Echo 1"
