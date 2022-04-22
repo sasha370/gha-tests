@@ -17,9 +17,11 @@ jobs:
 
     steps:
      - name:  LOOK HERE 
+       shell: bash
        run: |
          echo $LS_COLORS
-         
+         echo -en "\033[37;1;44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+
          
   first_job:
     runs-on: ubuntu-latest
