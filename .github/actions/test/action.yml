@@ -16,21 +16,22 @@ runs:
       env: 
         GITHUB_CONTEXT: ${{ toJSON(github) }}
       shell: bash
-      if: always()
+      id: features
       run: |
-        echo "STARTED_AT=$(date --utc +%FT%TZ)" >> $GITHUB_ENV
-        base_url='https://console.cloud.google.com/logs/query'
-        url_params="query=resource.labels.namespace_name%3D~%22$github-features-staff-portal-15120-1%22%0Aresource.type%3D%22k8s_container%22%0Aresource.labels.cluster_name%3D%22testbox%22"
-
-        # url_params="query=resource.labels.namespace_name%3D~%22github-features-staff-portal-15120-1%22"
-        time_range="timeRange=$(date --utc +%FT%TZ -d '30 minutes ago')%2F$(date --utc +%FT%TZ -d '+2 hour')"
-        logs_link="${base_url};${url_params};${time_range}?project=toptal-ci"
-        echo -e "\e[44mGoogle Logs: ${logs_link}\e[0m"
-        echo "GOOGLE_LOGS_LINK=${logs_link}" >> $GITHUB_ENV
-        echo "The job context is:"
-        echo "${{ toJson(job) }}"
+        exit 1
         
-    - name: Print link
+    - name: Print link Outcome
+      if: steps.features.outcome != 'success'
       shell: bash
       run: |
-        echo -e "\e[44mGoogle Logs: ${{ env.STARTED_AT }}\e[0m"
+        echo -e "HEre we are!"
+    - name: Print link Conclusion
+      if: steps.features.conclusion != 'success'
+      shell: bash
+      run: |
+        echo -e "HEre we are with Conclusion!"
+    - name: Print link Always 
+      if: ${{always()}}
+      shell: bash
+      run: |
+        echo -e "HEre we are with Always!"
