@@ -13,7 +13,6 @@ runs:
         echo "TESTBOX_BRANCH_PLATFORM=${{ env.TESTBOX_BRANCH_PLATFORM }}" 
         echo "ANVIL_NUMBER=${{ env.ANVIL_NUMBER }}"
     - name: Check 
-      continue-on-error: true
       env: 
         GITHUB_CONTEXT: ${{ toJSON(github) }}
       shell: bash
