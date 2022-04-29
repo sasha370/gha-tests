@@ -13,7 +13,7 @@ runs:
         echo "TESTBOX_BRANCH_PLATFORM=${{ env.TESTBOX_BRANCH_PLATFORM }}" 
         echo "ANVIL_NUMBER=${{ env.ANVIL_NUMBER }}"
     - name: Check 
-      continue-on-error: false
+      #       continue-on-error: false
       env: 
         GITHUB_CONTEXT: ${{ toJSON(github) }}
       shell: bash
@@ -32,7 +32,7 @@ runs:
       run: |
         echo -e "HEre we are with Conclusion!"
     - name: Print link Always 
-      if: ${{always()}}
+      if: ${{failure()}}
       shell: bash
       run: |
         echo -e "HEre we are with Always!"
