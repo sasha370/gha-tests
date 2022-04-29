@@ -19,7 +19,7 @@ runs:
       shell: bash
       id: features
       run: |
-        exit 1
+        exit 0
         
     - name: Print link Outcome
       if: steps.features.outcome != 'success'
