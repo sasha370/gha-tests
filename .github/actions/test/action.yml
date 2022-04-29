@@ -32,7 +32,7 @@ runs:
       run: |
         echo -e "HEre we are with Conclusion!"
     - name: Print link Always 
-      if: ${{failure()}}
+      if: ${{ !success() }}
       shell: bash
       run: |
         echo -e "HEre we are with Always!"
