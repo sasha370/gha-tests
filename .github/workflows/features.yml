@@ -46,9 +46,11 @@ jobs:
 
       - name: Trigger the action
         uses: ./.github/actions/test
+        id: action
 
       - name: Set PR's author github teams
         run: |
+          echo ${{ steps.action.outputs.BASE_NAME_OUT }}
           echo "ANVIL_PARENT_BUILD_ID:  ${{ inputs.ANVIL_PARENT_BUILD_ID }}"
           sleep 20
 
