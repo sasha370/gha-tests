@@ -4,6 +4,16 @@ branding:
   icon: 'chevrons-up'  
   color: 'green'
 
+inputs:
+  BASE_NAME: 
+    default: 'TEST'
+    required: false
+    
+outputs:
+  BASE_NAME_OUT:
+    value: ${{ inputs.BASE_NAME }}
+    description: 'BASE_NAME outputs'
+
 runs:
   using: "composite"
   steps:
