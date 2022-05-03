@@ -29,6 +29,7 @@ runs:
       shell: bash
       id: features
       run: |
-        exit "::notice:: Hello from notice"
-        exit "::info:: Hello from Info"
-        exit "::warning:: Hello from Warning"
+        echo "::notice:: Hello from notice"
+        echo "::info:: Hello from Info"
+        echo "::warning:: Hello from Warning"
+        exit 1
