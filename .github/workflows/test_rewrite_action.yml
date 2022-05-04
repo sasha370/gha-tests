@@ -1,4 +1,4 @@
-name: CI rewrite actions
+name: CI rewrite
 
 on:
   push:
