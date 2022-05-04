@@ -1,0 +1,15 @@
+name: CI rewrite actions
+
+on:
+  push:
+    branches:
+      - test_rewrite_actions
+
+jobs:
+  rewrite:
+    name: rewrite
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print
+        run: |
+          echo "Say Hello"
