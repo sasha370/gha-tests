@@ -12,4 +12,4 @@ jobs:
     steps:
       - name: Print
         run: |
-          echo "Say Hello"
+          ecssho "Say Hello"
