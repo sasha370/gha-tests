@@ -38,5 +38,5 @@ runs:
         echo -e "\033[47m https://wqewe.wer/sdfsdf/sdf  \033[0m"
         echo -e "\033[1;47m https://wqewe.wer/sdfsdf/sdf  \033[0m"
         
-        echo -e "\e[34 LINK LINK https://wqewe.wer/sdfsdf/sdf  \e[0m"
-        echo -e "\e[36 LINK LINK  https://wqewe.wer/sdfsdf/sdf  \e[0m"
+        echo -e "\e[34m LINK LINK https://wqewe.wer/sdfsdf/sdf  \e[0m"
+        echo -e "\e[36m LINK LINK  https://wqewe.wer/sdfsdf/sdf  \e[0m"
