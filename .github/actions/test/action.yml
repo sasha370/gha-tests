@@ -29,7 +29,11 @@ runs:
       shell: bash
       id: features
       run: |
-        echo "::notice:: Hello from notice"
-        echo "::info:: Hello from Info"
-        echo "::warning:: Hello from Warning"
-        exit 1
+        echo -e "\033[44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+        echo -e "\033[1;44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+
+        echo -e "\033[42m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+        echo -e "\033[1;42m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+
+        echo -e "\033[47m https://wqewe.wer/sdfsdf/sdf  \033[0m"
+        echo -e "\033[1;47m https://wqewe.wer/sdfsdf/sdf  \033[0m"
