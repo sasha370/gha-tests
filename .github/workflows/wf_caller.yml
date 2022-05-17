@@ -15,4 +15,4 @@ jobs:
   inputs_test:
     uses: ./.github/workflows/test_inputs.yml
     with:
-      set_status: true
+      set_status: false
