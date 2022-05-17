@@ -1,0 +1,9 @@
+name: Middle layer
+on: [workflow_call]
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger last step
+        uses: ./.github/actions/test_input/

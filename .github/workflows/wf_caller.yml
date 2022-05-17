@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Actions
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          ref: 'test_inputs'
   inputs_test:
-    uses: ./.github/workflows/test_inputs.yml
-    with:
-      set_status: false
+    uses: ./.github/workflows/middle_test_inputs.yml
