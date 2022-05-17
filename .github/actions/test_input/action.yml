@@ -3,8 +3,8 @@ description: Some description
 
 inputs:
   set_status:
-    default: false
-    type: boolean
+    required: false
+    default: 'false'
     description: "If set to true, set the initial 'pending' status for the run"
 
 runs:
@@ -12,7 +12,7 @@ runs:
   steps:
     - name: Show inputs
       shell: bash
-      if: inputs.set_status
+      if: inputs.set_status != 'true'
       run: |
         echo "Дефолтный инпут был False, этой строчки не должно быть"
     

@@ -12,6 +12,6 @@ jobs:
       - name: Trigger last step
         uses: ./.github/actions/test_input/
         with:
-          set_status: false
+          set_status: 'false'
 
 
