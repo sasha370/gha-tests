@@ -5,6 +5,10 @@ jobs:
   run_tests:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: 'test_inputs'
       - name: Trigger last step
         uses: ./.github/actions/test_input/
 
