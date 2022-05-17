@@ -11,5 +11,7 @@ jobs:
           ref: 'test_inputs'
       - name: Trigger last step
         uses: ./.github/actions/test_input/
+        with:
+          set_status: false
 
 
