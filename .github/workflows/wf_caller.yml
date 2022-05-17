@@ -1,0 +1,18 @@
+name: WF initializer
+
+on:
+  push:
+    branches:
+      - 'test_inputs'
+
+jobs:
+  features:
+    name: Checkout
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Actions
+        uses: actions/checkout@v3
+        with:
+          ref: 'test_inputs'
+  inputs_test:
+    uses: ./.github/workflows/middle_test_inputs.yml

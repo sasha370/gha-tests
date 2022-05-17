@@ -1,0 +1,20 @@
+name: Test Inputs
+description: Some description
+
+inputs:
+  set_status:
+    default: false
+    type: boolean
+    description: "If set to true, set the initial 'pending' status for the run"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Show inputs
+      shell: bash
+      if: inputs.set_status
+      run: |
+        echo "Дефолтный инпут был False, этой строчки не должно быть"
+    
+      
+        
