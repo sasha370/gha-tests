@@ -12,7 +12,7 @@ runs:
   steps:
     - name: Show inputs
       shell: bash
-      if: inputs.set_status == 'true'
+#       if: inputs.set_status == 'true'
       run: |
         echo "Дефолтный инпут был False, этой строчки не должно быть"
         sleep 100
