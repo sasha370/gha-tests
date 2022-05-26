@@ -15,6 +15,11 @@ runs:
       if: inputs.set_status
       run: |
         echo "Дефолтный инпут был False, этой строчки не должно быть"
-    
+        sleep 100
+    - name: Test Aborting
+      if: ${{ always() }}
+      shell: bash
+      run: |
+        echo "Hey! The job was abort and I Can see me!!!!!!"
       
         
