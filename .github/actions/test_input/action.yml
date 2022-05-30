@@ -21,6 +21,7 @@ runs:
       shell: bash
       run: |
         echo "Hey! The job was abort and I Can see me!!!!!!"
+        echo " ${{ github.action_path }}"
     
       
         
