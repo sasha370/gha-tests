@@ -11,18 +11,18 @@ runs:
   using: "composite"
   steps:
     - name: Show inputs
+      id: output_step
       shell: bash
 #       if: inputs.set_status == 'true'
       run: |
-        echo "Дефолтный инпут был False, этой строчки не должно быть"
-        sleep 100
+        echo "::set-output name=count::111111"
     - name: Test Aborting
 #       if: ${{ always() && true }}
       shell: bash
       run: |
         echo "Hey! The job was abort and I Can see me!!!!!!"
         echo " ${{ github.action_path }}"
-        echo inputs.set_status || "11111111111111111111 "
+        echo "${{ inputs.set_status || steps.output_step.outputs.count }}"
     
       
         
