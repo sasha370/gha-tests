@@ -14,5 +14,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: 'test_inputs'
+      - name: Print SMT
+        run: |
+          echo "HELLOOOOOOOO"
   inputs_test:
     uses: ./.github/workflows/middle_test_inputs.yml
