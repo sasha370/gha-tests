@@ -10,66 +10,35 @@ on:
         reopened, # PR was closed and is now open again
         ready_for_review # PR was converted from draft to open
     ]
-
-jobs:
-  call_action:
-    runs-on: ubuntu-latest
-
-    steps:
-     - name:  LOOK HERE 
-       shell: bash
-       run: |
-         echo $LS_COLORS
-         echo -e "\033[44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
-         echo -e "\033[1;44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
-
-         
-         echo -e "\033[42m https://wqewe.wer/sdfsdf/sdf  \033[0m"
-         echo -e "\033[1;42m https://wqewe.wer/sdfsdf/sdf  \033[0m"
-
-         
-         echo -e "\033[47m https://wqewe.wer/sdfsdf/sdf  \033[0m"
-         echo -e "\033[1;47m https://wqewe.wer/sdfsdf/sdf  \033[0m"
-
-
- 
-         
-
-         
+    
+jobs:        
   first_job:
     runs-on: ubuntu-latest
-    name: "Echo 1"
+    name: "Name: first_job "
     outputs:
-      ANVIL_BUILD_ID: ${{ steps.first_step.outputs.anvil_build_id }}
+      need_to_push: ${{ steps.first_step.outputs.need_to_push }}
     steps:
-      - name: "Echo 1"
+      - name: "first_step 1"
         id: first_step
         run: |
           echo "${{ github.sha }}"
-          echo "::set-output name=anvil_build_id::${{ github.sha }}"
-#
-#  feature_test_testbox_GHA:
-#    name: "Run testbox features on GHA"
-#    needs: first_job
-#    if: github.ref == 'refs/heads/master'
-#    uses: sasha370/gha-tests/.github/workflows/features.yml@master
-#    with:
-#      platform_branch: master123
-#      talent_portal_branch: ''
-#      ANVIL_PARENT_BUILD_ID: ${{ needs.first_job.outputs.ANVIL_BUILD_ID }}
+          echo "::set-output name=need_to_push::true"
+          echo "NEED_TO_PUSH_ENV=false" >> $GITHUB_ENV 
 
-  test_secrets:
+  test1:
     name: 'Some tests'
+    needs: first_job
+    if: needs.first_job.outputs.need_to_push == 'true'
     runs-on: ubuntu-latest
     steps:
       - run: |
-          array=($(echo ${{secrets.FOR_SPLIT}} | tr 'a' '\n'))
-          echo "FULL_PASSWORD=${{secrets.FOR_SPLIT}}" >> $GITHUB_ENV 
-          echo "ADMIN_LOGIN=${array[0]}" >> $GITHUB_ENV 
-          echo "ADMIN_PASS=${array[1]}" >> $GITHUB_ENV
+          echo "Ok, first catch is Successfully!!!!"
+   
+  test2:
+    name: 'Some tests'
+    needs: first_job
+    if: env.NEED_TO_PUSH_ENV == 'false'
+    runs-on: ubuntu-latest
+    steps:
       - run: |
-          echo ${{ env.FULL_PASSWORD }}
-          echo ${{ env.ADMIN_LOGIN }}
-          echo ${{ env.ADMIN_PASS }}
-
-          
+          echo "Ok, second catch is Successfully!!!!"
