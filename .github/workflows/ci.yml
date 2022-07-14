@@ -1,36 +1,28 @@
-name: CI
-
+name: Only for tests 
 on:
   push:
     branches: [master]
   pull_request:
-    types: [
-        synchronize, # PR was updated
-        opened, # PR was open
-        reopened, # PR was closed and is now open again
-        ready_for_review # PR was converted from draft to open
-    ]
+    types: [synchronize]
     
 jobs:        
-  first_job:
+  check_image:
     runs-on: ubuntu-latest
     name: "Name: first_job "
     outputs:
-      need_to_push: ${{ steps.first_step.outputs.need_to_push }}
+      need_to_push: ${{ steps.check_image_step.outputs.need_to_push }}
     steps:
-      - name: "first_step 1"
-        id: first_step
+      - name: "Chech that image exists"
+        id: check_image_step
         run: |
-          echo "${{ github.sha }}"
           echo "::set-output name=need_to_push::true"
-          echo "NEED_TO_PUSH_ENV=false" >> $GITHUB_ENV 
 
-  test1:
-    name: 'Some tests'
-    needs: first_job
-    if: needs.first_job.outputs.need_to_push == 'false'
+  push_image:
+    name: 'Push to GCS'
+    needs: check_image
+    if: needs.check_image.outputs.need_to_push == 'true'
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo "Ok, first catch is Successfully!!!!"
+          echo "OK, I'll push it!!!"
 
