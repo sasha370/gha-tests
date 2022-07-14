@@ -33,12 +33,4 @@ jobs:
     steps:
       - run: |
           echo "Ok, first catch is Successfully!!!!"
-   
-  test2:
-    name: 'Some tests'
-    needs: first_job
-    if: ${{ env.NEED_TO_PUSH_ENV == 'false' }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "Ok, second catch is Successfully!!!!"
+
