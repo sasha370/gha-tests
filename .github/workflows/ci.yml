@@ -28,7 +28,7 @@ jobs:
   test1:
     name: 'Some tests'
     needs: first_job
-    if: needs.first_job.outputs.need_to_push == 'true'
+    if: needs.first_job.outputs.need_to_push == 'false'
     runs-on: ubuntu-latest
     steps:
       - run: |
