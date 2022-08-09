@@ -71,8 +71,8 @@ jobs:
         id: set_cluster
         shell: bash
         run: |
-          repo_name = $(echo ${{ github.repository }} | awk -F '/' '{ print $2 }')
-          cluster_name = $([ $repo_name = 'gha--test' ] && 'testbox' || 'testbox-1')
+          repo_name=$(echo ${{ github.repository }} | awk -F '/' '{ print $2 }')
+          cluster_name=$([ $repo_name = 'gha-tests' ] && echo 'testbox' || echo 'testbox-1')
           echo "::set-output name=cluster_name::${cluster_name}"
           
       - uses: ruby/setup-ruby@v1
