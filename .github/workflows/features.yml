@@ -67,4 +67,16 @@ jobs:
           echo "++++++++++++++++ This Always from current workflow"
           echo ${{ github.repository }} | awk -F '/' '{ print $2 }'
         if: ${{ always() }}
-
+      - name: Set cluster
+        id: set_cluster
+        shell: bash
+        run: |
+          repo_name = $(echo ${{ github.repository }} | awk -F '/' '{ print $2 }')
+          cluster_name = $([ $repo_name = 'gha--test' ] && 'testbox' || 'testbox-1')
+          echo "::set-output name=cluster_name::${cluster_name}"
+          
+      - uses: ruby/setup-ruby@v1
+        with:
+           cluster_name: ${{ steps.set_cluster.outputs.cluster_name }}
+           bundler-cache: true
+           working-directory: ./platform
