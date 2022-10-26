@@ -4,11 +4,11 @@ description: 'Kibana Logs Link Generator'
 inputs:
   logs_started_at:
     description: 'Logs Started At'
-    required: true
+    required: false
 
   logs_finished_at:
     description: 'Logs Finished At'
-    required: true
+    required: false
 
 runs:
   using: "composite"
