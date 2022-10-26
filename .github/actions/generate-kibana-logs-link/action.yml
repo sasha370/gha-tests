@@ -10,6 +10,11 @@ inputs:
     description: 'Logs Finished At'
     required: false
 
+outputs:
+  logs_link:
+    description: 'The outcome of the script stating whether subsequent actions should be skipped. Either "skip" or "continue".'
+    value: ${{ steps.generate_kibana_logs_link.outputs.LOGS_LINK }}
+
 runs:
   using: "composite"
 

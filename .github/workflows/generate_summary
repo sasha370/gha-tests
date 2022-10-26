@@ -3,7 +3,7 @@
 set -euo pipefail
 
 logs_link="${KIBANA_LOGS_LINK:=''}"
-anvil_link="https://anvil.toptal.net/ci_builds/$ANVIL_BUILD_ID"
+anvil_link="https://anvil.toptal.net/ci_builds/00000"
 
 echo -e "\e[34mAnvil: ${anvil_link}\e[0m"
 # The register-anvil-build does this. However, when we write the logs
