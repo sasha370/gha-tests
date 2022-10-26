@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-time_filter="from:%27${LOGS_STARTED_AT}%27%2Cto:%27${LOGS_FINISHED_AT}%27"
+logs_started_at="${LOGS_STARTED_AT:-$(date --utc +%FT%TZ)}"
+logs_finished_at="${LOGS_FINISHED_AT:-$(date -d +1hour --utc +%FT%TZ)}"
+
+time_filter="from:%27${logs_started_at}%27%2Cto:%27${logs_finished_at}%27"
 dashboard_id="42af9830-1249-11ed-9499-AAAAAA"
 
 search="match_phrase:%28kubernetes.namespace_name:${LOGS_KUBERNETES_NAMESPACE_BASE}%29"
@@ -9,4 +12,5 @@ search="match_phrase:%28kubernetes.namespace_name:${LOGS_KUBERNETES_NAMESPACE_BA
 LOGS_LINK="https://logs-ci.toptal.net/app/dashboards#/view/${dashboard_id}?_g=%28filters:!%28%28query:%28${search}%29%29%29%2Ctime:%28${time_filter}%29%29"
 
 echo -e "\e[34mLogs: ${LOGS_LINK}\e[0m"
+
 echo "LOGS_LINK=$LOGS_LINK" >> $GITHUB_ENV
