@@ -1,0 +1,32 @@
+name: Inputs test
+
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
+    types: [opened, synchronize]
+
+  workflow_dispatch:
+    inputs:
+      logs_started_at:
+        description: 'Logs Started At'
+        required: false
+
+      logs_finished_at:
+        description: 'Logs Finished At'
+        required: false
+
+jobs:
+  logs_link:
+    name: Run Logs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Actions
+        uses: actions/checkout@v2
+
+      - id: generate_kibana_logs_link
+        uses: ./.github/actions/generate-kibana-logs-link/
+        with:
+          logs_started_at: ${{ inputs.logs_started_at }}
+          logs_finished_at: ${{ inputs.logs_finished_at }}

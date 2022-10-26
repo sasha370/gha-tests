@@ -1,11 +1,11 @@
 name: Features
 
 on:
-  push:
-    branches:
-      - 'master'
-  pull_request:
-    types: [opened, synchronize]
+#  push:
+#    branches:
+#      - 'master'
+#  pull_request:
+#    types: [opened, synchronize]
 
   workflow_dispatch:
     inputs:
