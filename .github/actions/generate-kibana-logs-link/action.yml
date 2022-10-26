@@ -1,0 +1,25 @@
+name: Generate Kibana Logs Link
+description: 'Kibana Logs Link Generator'
+
+inputs:
+  logs_started_at:
+    description: 'Logs Started At'
+    required: true
+
+  logs_finished_at:
+    description: 'Logs Finished At'
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - shell: bash
+      id: set_env
+      run: |
+        echo "LOGS_KUBERNETES_NAMESPACE_BASE=github-features-${{ inputs.kubernetes_namespaces_basename }}-${{ github.run_number }}-${{ github.run_attempt }}"  >> $GITHUB_ENV
+        echo "LOGS_STARTED_AT=${{ inputs.logs_started_at }}" >> $GITHUB_ENV
+        echo "LOGS_FINISHED_AT=${{ inputs.logs_finished_at }}"  >> $GITHUB_ENV
+    - id: generate_kibana_logs_link
+      shell: bash
+      run: ${{ github.action_path }}/generate_kibana_logs_link
