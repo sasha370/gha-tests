@@ -30,3 +30,12 @@ jobs:
         with:
           logs_started_at: ${{ inputs.logs_started_at }}
           logs_finished_at: ${{ inputs.logs_finished_at }}
+
+      - shell: bash
+        run: |
+          # Generate summary
+          generate_summary
+        env:
+          KIBANA_LOGS_LINK: ${{ steps.generate_kibana_logs_link.outputs.LOGS_LINK }}
+
+

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+logs_link="${KIBANA_LOGS_LINK:=''}"
+anvil_link="https://anvil.toptal.net/ci_builds/$ANVIL_BUILD_ID"
+
+echo -e "\e[34mAnvil: ${anvil_link}\e[0m"
+# The register-anvil-build does this. However, when we write the logs
+# it gets overwritten no matter what.
+echo "[Anvil](${anvil_link})" >> $GITHUB_STEP_SUMMARY
+echo "" >> $GITHUB_STEP_SUMMARY
+echo "[Logs](${logs_link})" >> $GITHUB_STEP_SUMMARY
