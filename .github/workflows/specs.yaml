@@ -1,0 +1,69 @@
+name: Rspec
+on:
+  workflow_dispatch:
+    inputs:
+      platform_branch:
+        description: 'Platform branch'
+        required: false
+        default: 'master'
+      actions_branch:
+        description: 'Actions branch'
+        required: false
+        default: 'main'
+
+  issue_comment:
+    types: [ created ]
+
+env:
+  LANG: C.UTF-8
+
+jobs:
+  run_backend_specs:
+    name: Run backend specs
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.issue.pull_request &&
+        (contains(github.event.comment.body, '@toptal-bot run ') &&
+          (contains(github.event.comment.body, 'backend specs') ||
+            contains(github.event.comment.body, 'backend specs gha') ||
+            contains(github.event.comment.body, 'default') ||
+            contains(github.event.comment.body, 'mergecheck') ||
+            contains(github.event.comment.body, 'backend pack') ||
+            contains(github.event.comment.body, 'backend distrib-specs')
+          )
+        )
+      )
+    concurrency:
+      group: ${{ github.repository }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.issue.number || github.ref }}-${{ github.triggering_actor }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: toptal/actions
+          token: ${{ secrets.PERSONAL_TOKEN }}
+          path: ./.github/actions/
+          # Change manually to test toptal/actions.
+          ref: ${{ github.event.inputs.actions_branch || 'main' }}
+
+      - name: React to comment - success or failure
+        # Reaction means that the comment is accepted and everything is ready to run the specs.
+        if: github.event_name == 'issue_comment'
+        env:
+          JOB_STATUS: ${{ job.status }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.PERSONAL_TOKEN }}
+          script: |
+            const { owner, repo } = context.issue;
+            const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
+            await github.rest.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
+
+      - name: Run specs
+        id: specs
+        shell: bash
+        run: |
+          sleep 60
+          echo "This is a workflow sketch. In order to be able to testing, this part must be merged into the master"
+          echo ${{ github.repository }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.issue.number || github.ref }}-${{ github.triggering_actor }}
+
