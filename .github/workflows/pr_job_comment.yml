@@ -1,28 +1,26 @@
-#name: PR Comments
-##test
-#on:
-#  issue_comment:
-#    types: [created]
-#
-#jobs:
-#  triggerPrWorkflow:
-#    name: Trigger PR Workflow
-#    if: >
-#      github.event.issue.pull_request &&
-#      startsWith(github.event.comment.body, '@toptal-bot run') &&
-#      (
-#        contains(github.event.comment.body, 'features GHA')
-#      )
-#    runs-on: ubuntu-latest
-#    steps:
-#      - id: prData
-#        uses: actions/github-script@v4
-#        with:
-#          script: |
-#            const { owner, repo, number } = context.issue;
-#            const { data: pr } = await github.pulls.get({ owner, repo, pull_number: number });
-#            core.setOutput('ref', pr.head.ref)
-#
+name: PR Comments
+#test
+on:
+ issue_comment:
+   types: [created]
+
+jobs:
+ triggerPrWorkflow:
+   name: Trigger PR Workflow
+   if: >
+     github.event.issue.pull_request &&
+     startsWith(github.event.comment.body, '@toptal-bot run')
+   runs-on: ubuntu-latest
+   steps:
+   
+   
+     - id: prData
+       uses: actions/github-script@v4
+       with:
+         script: |
+           console.log(`Context...${context}`)
+
+
 #      - name: Trigger Features
 #        if: ${{ contains(github.event.comment.body, 'features GHA') }}
 #        uses: benc-uk/workflow-dispatch@v1.1
@@ -30,7 +28,7 @@
 #          workflow: Features
 #          token: ${{ secrets.PERSONAL_TOKEN }}
 #          inputs: '{ "talent_portal_branch": "${{ steps.prData.outputs.ref }}" }'
-#
+
 #      - name: React to comment - success or failure
 #        if: ${{ always() }}
 #        env:
