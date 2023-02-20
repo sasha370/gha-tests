@@ -17,7 +17,7 @@ jobs:
        - name: View context attributes
          uses: actions/github-script@v6
          with:
-           script: console.log(context.issue.pull_request)
+           script: console.log(context.payload.issue.pull_request)
 
 
 #      - name: Trigger Features
