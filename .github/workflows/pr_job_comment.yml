@@ -14,11 +14,9 @@ jobs:
    steps:
    
    
-     - id: prData
-       uses: actions/github-script@v4
-       with:
-         script: |
-           console.log(`Context...${context}`)
+      - name: Context before checkout
+        shell: bash
+        run: echo '${{ toJSON(github) }}'
 
 
 #      - name: Trigger Features
