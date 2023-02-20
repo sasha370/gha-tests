@@ -36,8 +36,16 @@ jobs:
        - name: View context attributes
          uses: actions/github-script@v6
          with:
-           script: console.log(context)
+           script: |
+             console.log(context)
+             if (context.issue.pull_request) {
+               const { owner, repo, number } = context.issue;
+               const { data: pr } = await octokit.rest.pulls.get({ owner, repo, pull_number: number });
 
+               console.log(pr.merge_commit_sha);
+               console.log(pr.head.sha);
+               console.log(pr.head.ref);
+             }
 
 #      - name: Trigger Features
 #        if: ${{ contains(github.event.comment.body, 'features GHA') }}
