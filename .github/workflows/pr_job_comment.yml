@@ -14,13 +14,10 @@ jobs:
    steps:
    
    
-      - name: script
-        id: script
-        uses: actions/github-script@v5
-        with:
-          script: |
-               const payload = JSON.stringify(github.context, undefined, 10)
-               console.log(`The event payload: ${payload}`);
+       - name: View context attributes
+         uses: actions/github-script@v6
+         with:
+           script: console.log(context)
 
 
 #      - name: Trigger Features
