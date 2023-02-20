@@ -14,9 +14,13 @@ jobs:
    steps:
    
    
-      - name: Context before checkout
-        shell: bash
-        run: echo '${{ toJSON(github) }}'
+      - name: script
+        id: script
+        uses: actions/github-script@v5
+        with:
+          script: |
+               const payload = JSON.stringify(github.context, undefined, 10)
+               console.log(`The event payload: ${payload}`);
 
 
 #      - name: Trigger Features
