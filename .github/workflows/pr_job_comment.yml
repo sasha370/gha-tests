@@ -29,8 +29,8 @@ jobs:
  triggerPrWorkflow:
    name: Trigger PR Workflow
    if: >
-     github.event.issue.pull_request &&
-     startsWith(github.event.comment.body, '@toptal-bot run')
+    (github.event_name == 'workflow_dispatch') || (github.event.issue.pull_request &&
+     startsWith(github.event.comment.body, '@toptal-bot run'))
    runs-on: ubuntu-latest
    steps:
        - name: View context attributes
