@@ -38,8 +38,8 @@ jobs:
          with:
            script: |
              console.log(context)
-             if (context.issue.pull_request) {
-               const { owner, repo, number } = context.issue;
+             if (context.payload.issue.pull_request) {
+               const { owner, repo, number } = context.payload.issue;
                const { data: pr } = await octokit.rest.pulls.get({ owner, repo, pull_number: number });
 
                console.log(pr.merge_commit_sha);
