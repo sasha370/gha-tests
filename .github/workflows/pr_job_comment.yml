@@ -12,12 +12,22 @@ jobs:
      startsWith(github.event.comment.body, '@toptal-bot run')
    runs-on: ubuntu-latest
    steps:
-   
+       - name: View context attributes
+         uses: actions/github-script@v6
+         with:
+           script: console.log(context)
+       - name: Checkout Platform
+         uses: actions/checkout@v3
+         with:
+           repository: toptal/platform
+           ref: 'devx-1372-run-testbox-specs-in-parallel-with-classic'
+           token: ${{ secrets.PERSONAL_TOKEN }}
+           path: ./platform
    
        - name: View context attributes
          uses: actions/github-script@v6
          with:
-           script: console.log(context.payload.issue.pull_request)
+           script: console.log(context)
 
 
 #      - name: Trigger Features
