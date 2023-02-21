@@ -36,7 +36,7 @@ jobs:
        - name: From Github
          shell: bash
          run: |
-            echo ${{github.head.ref}}
+            echo ${{github.ref_name}}
        - name: View context attributes
          uses: actions/github-script@v6
          with:
