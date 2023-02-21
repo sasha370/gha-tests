@@ -12,8 +12,8 @@ on:
    inputs:
      platform_branch:
        description: 'Input Platform branch (default master)'
-       required: true
-       default: 'master_WD'
+      
+       default: releases/latest
      pr_head_ref:
        description: 'Head ref'
        required: false
@@ -42,6 +42,7 @@ jobs:
          run: |
             echo ${{github.ref_name}}
             echo ${{inputs.pr_head_ref}}
+            echo ${{inputs.platform_branch}}
        - name: View context attributes
          uses: actions/github-script@v6
          with:
