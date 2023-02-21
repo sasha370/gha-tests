@@ -37,6 +37,7 @@ jobs:
          uses: actions/github-script@v6
          with:
            script: |
+             console.log(context.payload.issue.pull_request)
              console.log(context)
              if (context.payload.issue.pull_request) {
                const { owner, repo, number } = context.payload.issue;
