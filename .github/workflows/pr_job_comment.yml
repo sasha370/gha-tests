@@ -33,6 +33,10 @@ jobs:
      startsWith(github.event.comment.body, '@toptal-bot run'))
    runs-on: ubuntu-latest
    steps:
+       - name: From Github
+         shell: bash
+         run: |
+            echo ${{github.ref}}
        - name: View context attributes
          uses: actions/github-script@v6
          with:
