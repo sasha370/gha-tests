@@ -48,7 +48,7 @@ jobs:
            script: |
 
              console.log(context)
-             console.log(context.ref_name)
+             console.log(process.env.GITHUB_REF_NAME)
             # if (context.payload.issue.pull_request) {
              #  const { owner, repo, number } = context.payload.issue;
               # const { data: pr } = await octokit.rest.pulls.get({ owner, repo, pull_number: number });
