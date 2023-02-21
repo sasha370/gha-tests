@@ -39,14 +39,14 @@ jobs:
            script: |
              console.log(context.payload.issue.pull_request)
              console.log(context)
-             if (context.payload.issue.pull_request) {
-               const { owner, repo, number } = context.payload.issue;
-               const { data: pr } = await octokit.rest.pulls.get({ owner, repo, pull_number: number });
+            # if (context.payload.issue.pull_request) {
+             #  const { owner, repo, number } = context.payload.issue;
+              # const { data: pr } = await octokit.rest.pulls.get({ owner, repo, pull_number: number });
 
-               console.log(pr.merge_commit_sha);
-               console.log(pr.head.sha);
-               console.log(pr.head.ref);
-             }
+             #  console.log(pr.merge_commit_sha);
+             #  console.log(pr.head.sha);
+             #  console.log(pr.head.ref);
+            # }
 
 #      - name: Trigger Features
 #        if: ${{ contains(github.event.comment.body, 'features GHA') }}
