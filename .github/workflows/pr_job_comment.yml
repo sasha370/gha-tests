@@ -46,7 +46,7 @@ jobs:
          uses: actions/github-script@v6
          with:
            script: |
-             console.log(context.payload.issue.pull_request)
+
              console.log(context)
              console.log(context.ref_name)
             # if (context.payload.issue.pull_request) {
