@@ -43,3 +43,8 @@ runs:
         
         echo -e "\e[34m LINK LINK https://wqewe.wer/sdfsdf/sdf  \e[0m"
         echo -e "\e[36m LINK LINK  https://wqewe.wer/sdfsdf/sdf  \e[0m"
+        
+    - shell: bash
+      if: ${{ always() }}
+      run: |
+        echo "Should be vesible even if TIMED_OUT +++++++++++++++++++++++++++++++++++"
