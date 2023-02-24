@@ -39,6 +39,7 @@ on:
 jobs:
   features:
     name: Run features
+    timeout-minutes: 1
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Actions
