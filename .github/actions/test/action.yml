@@ -31,6 +31,7 @@ runs:
       shell: bash
       id: features
       run: |
+        sleep 120
         echo -e "\033[44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
         echo -e "\033[1;44m https://wqewe.wer/sdfsdf/sdf  \033[0m"
 
