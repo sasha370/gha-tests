@@ -34,6 +34,7 @@ jobs:
       - shell: bash
         run: |
           ${PWD}/.github/workflows/generate_summary
+          echo ${{github.workflow}}
         env:
           KIBANA_LOGS_LINK: ${{ steps.generate_kibana_logs_link.outputs.logs_link }}
 
