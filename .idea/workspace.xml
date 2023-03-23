@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="037253a5-cefe-47c0-baad-fdfa3cb45e75" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/manual_set_status.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/manual_set_status.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,8 +29,12 @@
               <option name="branches">
                 <list>
                   <RecentBranch>
+                    <option name="branchName" value="test_pr" />
+                    <option name="lastUsedInstant" value="1679571732" />
+                  </RecentBranch>
+                  <RecentBranch>
                     <option name="branchName" value="master" />
-                    <option name="lastUsedInstant" value="1675755013" />
+                    <option name="lastUsedInstant" value="1679571713" />
                   </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="test-branch" />
@@ -43,10 +47,6 @@
                   <RecentBranch>
                     <option name="branchName" value="test" />
                     <option name="lastUsedInstant" value="1643002761" />
-                  </RecentBranch>
-                  <RecentBranch>
-                    <option name="branchName" value="test_head" />
-                    <option name="lastUsedInstant" value="1642749634" />
                   </RecentBranch>
                 </list>
               </option>

@@ -10,8 +10,8 @@ on:
 
 jobs:
   sleep:
-    name: Sleep 10 seconds
+    name: Sleep 30 seconds
     runs-on: ubuntu-latest
     steps:
       - name: Sleep
-        run: sleep 10
+        run: sleep 30
