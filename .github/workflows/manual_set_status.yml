@@ -10,6 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set final status
-        bash: |
+        run: |
           echo "Set final status"
           echo "Current time: $(date)"
