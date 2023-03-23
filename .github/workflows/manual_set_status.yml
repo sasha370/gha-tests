@@ -1,0 +1,15 @@
+name: 'Manual checks final status'
+on:
+  workflow_run:
+    workflows: [Features, Packwerk]
+    types:
+      - completed
+
+jobs:
+  manual_check_final_status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set final status
+        bash: |
+          echo "Set final status"
+          echo "Current time: $(date)"

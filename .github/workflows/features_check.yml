@@ -1,0 +1,17 @@
+name: Features
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
+    types: [opened, synchronize]
+
+
+
+jobs:
+  sleep:
+    name: Sleep 10 seconds
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep
+        run: sleep 10

@@ -1,0 +1,19 @@
+name: Packwerk
+
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
+    types: [opened, synchronize]
+
+
+
+jobs:
+  skip_build:
+    name: Skip build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep
+        run: sleep 10
+        if: false
