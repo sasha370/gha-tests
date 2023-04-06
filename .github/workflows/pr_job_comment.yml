@@ -33,17 +33,14 @@ jobs:
  triggerPrWorkflow:
    name: Trigger PR Workflow
    if: >
-     (github.event_name == 'workflow_dispatch') || (github.event_name == 'repository_dispatch') || (github.event_name == 'schedule') ||
+      (github.event_name == 'workflow_dispatch') || (github.event_name == 'repository_dispatch') || (github.event_name == 'schedule') ||
       (
         github.event.issue.pull_request &&
         (
           startsWith(github.event.comment.body, '@toptal-bot run') &&
           (
             contains(github.event.comment.body, 'default') ||
-            (
-              contains(github.event.comment.body, 'features') &&
-              !contains(github.event.comment.body, 'features for'
-            )
+            (contains(github.event.comment.body, 'features') && !contains(github.event.comment.body, 'features for'))
           )
         )
       )
