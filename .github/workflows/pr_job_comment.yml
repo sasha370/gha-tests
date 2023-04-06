@@ -76,14 +76,14 @@ jobs:
 #          token: ${{ secrets.PERSONAL_TOKEN }}
 #          inputs: '{ "talent_portal_branch": "${{ steps.prData.outputs.ref }}" }'
 
-#      - name: React to comment - success or failure
-#        if: ${{ always() }}
-#        env:
-#          JOB_STATUS: ${{ job.status }}
-#        uses: actions/github-script@v5
-#        with:
-#          github-token: ${{ secrets.PERSONAL_TOKEN }}
-#          script: |
-#            const { owner, repo } = context.issue;
-#            const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
-#            await github.rest.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
+       - name: React to comment - success or failure
+         if: ${{ always() }}
+         env:
+           JOB_STATUS: ${{ job.status }}
+         uses: actions/github-script@v5
+         with:
+           github-token: ${{ secrets.PERSONAL_TOKEN }}
+           script: |
+             const { owner, repo } = context.issue;
+             const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
+             await github.rest.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
