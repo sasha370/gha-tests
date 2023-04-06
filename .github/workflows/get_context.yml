@@ -1,4 +1,4 @@
-name: Trigger phrase
+name: Get context
 
 on:
   issue_comment:
@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     if: >
       github.event.issue.pull_request &&
-      contains(github.event.comment.body, '@toptal-bot run features GHA')
+      contains(github.event.comment.body, 'get context')
     steps:
       - name: Print
         env :
