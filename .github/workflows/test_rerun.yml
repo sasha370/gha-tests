@@ -24,5 +24,8 @@ jobs:
     name: Show context
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Actions
+        uses: actions/checkout@v2
+
       - name: Show context
         uses: ./.github/actions/print_context/
