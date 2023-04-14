@@ -25,4 +25,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Show context
-        uses: ./.github/actions/test_input/
+        uses: ./.github/actions/print_context/
