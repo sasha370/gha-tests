@@ -22,7 +22,8 @@ jobs:
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.are_you_sure == 'true' && github.run_attempt > 1
         shell: bash 
         run: |
-          echo "It is forbidden to restart specs for RCs. Please use `workflow_dispatch` instead."
+          echo "It is forbidden to restart specs for RC."
+          echo "Please use `workflow_dispatch` with current SHA: ${{ github.sha }} and 'release_candidate: false' instead."
           exit 1    
 
   context:
