@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="037253a5-cefe-47c0-baad-fdfa3cb45e75" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/manual_set_status.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/manual_set_status.yml" afterDir="false" />
-    </list>
+    <list default="true" id="037253a5-cefe-47c0-baad-fdfa3cb45e75" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,7 +13,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="test_pr" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -29,12 +27,12 @@
               <option name="branches">
                 <list>
                   <RecentBranch>
-                    <option name="branchName" value="test_pr" />
-                    <option name="lastUsedInstant" value="1679571732" />
+                    <option name="branchName" value="master" />
+                    <option name="lastUsedInstant" value="1679572159" />
                   </RecentBranch>
                   <RecentBranch>
-                    <option name="branchName" value="master" />
-                    <option name="lastUsedInstant" value="1679571713" />
+                    <option name="branchName" value="test_pr" />
+                    <option name="lastUsedInstant" value="1679571732" />
                   </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="test-branch" />
@@ -126,6 +124,7 @@
       <workItem from="1645184446256" duration="1247000" />
       <workItem from="1666776110497" duration="4431000" />
       <workItem from="1675752992621" duration="2984000" />
+      <workItem from="1679572150335" duration="650000" />
     </task>
     <servers />
   </component>

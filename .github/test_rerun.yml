@@ -1,0 +1,22 @@
+name: Test the event when rerun is triggered
+
+on:
+  workflow_dispatch:
+    inputs:
+      are_you_sure:
+        description: 'Are you sure?'
+        required: false
+        default: false
+
+jobs:
+  if: >
+    ( github.event_name == 'workflow_dispatch' ) ||
+    !( github.event_name == 'workflow_dispatch' && github.event.inputs.are_you_sure == 'true' && github.run_number > 1 ) 
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep
+        run: sleep 10
+        if: ${{ github.event.inputs.are_you_sure == 'true' }}
