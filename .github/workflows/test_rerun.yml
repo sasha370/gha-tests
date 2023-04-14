@@ -11,7 +11,7 @@ on:
 jobs:
   test:
     if: >
-      !( github.event_name == 'workflow_dispatch' && github.event.inputs.are_you_sure == 'true' && github.run_number > 1 )  ||
+      !( github.event_name == 'workflow_dispatch' && github.event.inputs.are_you_sure == 'true' && github.run_number > 1 )  &&
       ( github.event_name == 'workflow_dispatch' )
 
     name: Test
