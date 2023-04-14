@@ -23,7 +23,7 @@ jobs:
         shell: bash 
         run: |
           echo "It is forbidden to restart specs for RC."
-          echo "Please use `workflow_dispatch` with current SHA: ${{ github.sha }} and 'release_candidate: false' instead."
+          echo "Please use 'workflow_dispatch' with 'Platform branch: ${{ github.sha }}' and 'release_candidate: false' instead."
           exit 1    
 
   context:
