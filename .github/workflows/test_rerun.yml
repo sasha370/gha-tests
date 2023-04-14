@@ -9,14 +9,20 @@ on:
         default: false
 
 jobs:
-  if: >
-    ( github.event_name == 'workflow_dispatch' ) ||
-    !( github.event_name == 'workflow_dispatch' && github.event.inputs.are_you_sure == 'true' && github.run_number > 1 ) 
-
   test:
+    if: >
+      ( github.event_name == 'workflow_dispatch' ) ||
+      !( github.event_name == 'workflow_dispatch' && github.event.inputs.are_you_sure == 'true' && github.run_number > 1 ) 
+
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - name: Sleep
-        run: sleep 10
-        if: ${{ github.event.inputs.are_you_sure == 'true' }}
+      - name: SMT
+        run: echo "SMT"
+
+  context:
+    name: Show context
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show context
+        uses: ./.github/actions/test_input/
