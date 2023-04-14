@@ -10,10 +10,12 @@ on:
 
 jobs:
   test:
-    # This job will be skipped if the workflow is triggered by workflow_dispatch and run_attempt > 1.
+
     if: >
-      !( github.event_name == 'workflow_dispatch' && github.event.inputs.are_you_sure == 'true' && github.run_attempt > 1 )  &&
+      !( github.event_name == 'workflow_dispatch' && github.event.inputs.are_you_sure == 'true' && github.run_attempt > 1 )  && 
       ( github.event_name == 'workflow_dispatch' )
+
+      # This job will be skipped if the workflow is triggered by workflow_dispatch and run_attempt > 1.
 
     name: Test
     runs-on: ubuntu-latest
