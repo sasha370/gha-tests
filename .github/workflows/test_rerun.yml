@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: SMT
+        if: github.event.inputs.are_you_sure == 'true'
         run: echo "SMT"
 
   context:
