@@ -11,16 +11,20 @@ on:
 jobs:
   test:
 
-    if: >
-      !( github.event_name == 'workflow_dispatch' && github.event.inputs.are_you_sure == 'true' && github.run_attempt > 1 )  && 
-      ( github.event_name == 'workflow_dispatch' )
-
     name: Test
     runs-on: ubuntu-latest
     steps:
       - name: SMT
         if: github.event.inputs.are_you_sure == 'true'
         run: echo "SMT"
+        
+      - name: Skip?
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.are_you_sure == 'true' && github.run_attempt > 1
+        shell: bash 
+        run: |
+          echo "It is forbidden to restart specs for RCs. Please use `workflow_dispatch` instead."
+          exit 1
+    
 
   context:
     name: Show context
