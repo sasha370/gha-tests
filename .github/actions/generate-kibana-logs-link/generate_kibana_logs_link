@@ -5,7 +5,7 @@ logs_started_at="${LOGS_STARTED_AT:-$(date --utc +%FT%TZ)}"
 logs_finished_at="${LOGS_FINISHED_AT:-$(date -d +1hour --utc +%FT%TZ)}"
 
 time_filter="from:%27${logs_started_at}%27%2Cto:%27${logs_finished_at}%27"
-dashboard_id="42af9830-1249-11ed-9499-AAAAAA"
+dashboard_id="42af9830-1249-11ed-9499-AAAAAAA2"
 
 search="match_phrase:%28kubernetes.namespace_name:${LOGS_KUBERNETES_NAMESPACE_BASE}%29"
 
