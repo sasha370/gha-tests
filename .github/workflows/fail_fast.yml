@@ -57,9 +57,6 @@ jobs:
           
       - name: Check Job Results
         run: |
-          echo "${{needs.job1.outputs.result}}"
-          echo "${{needs.job2.outputs.result}}"
-          echo "${{needs.job3.outputs.result}}"
           if [[ needs.job1.outputs.result != '0' || needs.job2.outputs.result != '0' || needs.job3.outputs.result != '0' ]]; then
             echo "One or more jobs failed. Failing the build."
             exit 1
