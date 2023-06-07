@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Job 1
-        uses: ./.github/workflows/wf_called_pause.yml.yml
+        uses: ./.github/workflows/wf_called_pause.yml
         with:
           pause: 5
           
@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Job 2
-        uses: ./.github/workflows/wf_called_pause.yml.yml
+        uses: ./.github/workflows/wf_called_pause.yml
         with:
           pause: 10
           
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Job 3
-        uses: ./.github/workflows/wf_called_pause.yml.yml
+        uses: ./.github/workflows/wf_called_pause.yml
         with:
           pause: 60
           
