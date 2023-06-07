@@ -1,0 +1,16 @@
+name: Set pause
+on: 
+  workflow_call:
+    inputs:
+      pause: 
+        required: true
+        type: string
+  
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep
+        run: |
+          sleep ${{ inputs.pause }}
