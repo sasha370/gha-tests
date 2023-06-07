@@ -7,8 +7,11 @@ on:
   workflow_dispatch:
 
 jobs:
+
   job1:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
     steps:
       - name: Job 1
         run: |
@@ -17,6 +20,8 @@ jobs:
   
   job2:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
     steps:
       - name: Job 2
         run: |
@@ -25,6 +30,8 @@ jobs:
   
   job3:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
     steps:
       - name: Job 3
         run: |
