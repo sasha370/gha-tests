@@ -14,40 +14,66 @@ jobs:
   one:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump GitHub context
+      - name: ENV
+        run: env
+      - name: JSON env
+        run: |
+          echo $context | jq --color-output .
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      - name: Dump job context
+          context: ${{ toJSON(env) }}
+      - name: JSON vars
+        run: |
+          echo $context | jq --color-output .
         env:
-          JOB_CONTEXT: ${{ toJson(job) }}
-        run: echo "$JOB_CONTEXT"
-
-      - name: Dump steps context
+          context: ${{ toJSON(vars) }}
+      - name: JSON job
+        run: |
+          echo $context | jq --color-output .
         env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
-
-      - name: Dump runner context
+          context: ${{ toJSON(job) }}
+      # The workflow is not valid. In .github/workflows/workflow_dispatch_debug_contexts.yml (Line: 16, Col: 11):
+      # Error from called workflow kml/github-actions-playground/.github/workflows/workflow_call_debug_contexts.yml@main (Line: 31, Col: 20):
+      # Unrecognized named-value: 'jobs'. Located at position 8 within expression: toJSON(jobs)
+      # - name: JSON jobs
+      #   run: |
+      #     echo $context | jq --color-output .
+      #   env:
+      #     context: ${{ toJSON(jobs) }}
+      - name: JSON steps
+        run: |
+          echo $context | jq --color-output .
         env:
-          RUNNER_CONTEXT: ${{ toJson(runner) }}
-        run: echo "$RUNNER_CONTEXT"
-
-      - name: Dump strategy context
+          context: ${{ toJSON(steps) }}
+      - name: JSON runner
+        run: |
+          echo $context | jq --color-output .
         env:
-          STRATEGY_CONTEXT: ${{ toJson(strategy) }}
-        run: echo "$STRATEGY_CONTEXT"
-
-      - name: Dump matrix context
+          context: ${{ toJSON(runner) }}
+      - name: JSON secrets
+        run: |
+          echo $context | jq --color-output .
         env:
-          MATRIX_CONTEXT: ${{ toJson(matrix) }}
-        run: echo "$MATRIX_CONTEXT"
-
-      - name: Dump issue context
+          context: ${{ toJSON(secrets) }}
+      # - name: JSON strategy
+      #   run: |
+      #     echo $context | jq --color-output .
+      #   env:
+      #     context: ${{ toJSON(strategy) }}
+      # - name: JSON matrix
+      #   run: |
+      #     echo $context | jq --color-output .
+      #   env:
+      #     context: ${{ toJSON(matrix) }}
+      - name: JSON needs
+        run: |
+          echo $context | jq --color-output .
         env:
-          ISSUE_CONTEXT: ${{ toJson(github.issue) }}
-        run: echo "$ISSUE_CONTEXT"
+          context: ${{ toJSON(needs) }}
+      - name: JSON inputs
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(inputs) }}
 
       - name: Show default environment variables
         run: |
