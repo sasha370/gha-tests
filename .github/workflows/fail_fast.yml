@@ -13,17 +13,17 @@ jobs:
     with:
       pause: 5
   
-#   job2:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Job 2
-#         run: |
-#           sleep 10
-#           exit 1
+  job2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Job 2
+        run: |
+          sleep 10
+          exit 0
           
-#       - name: Cancelling parallel jobs
-#         if: failure()
-#         uses: andymckay/cancel-action@0.3
+      - name: Cancelling parallel jobs
+        if: failure()
+        uses: andymckay/cancel-action@0.3
   
   job3:
     runs-on: ubuntu-latest
