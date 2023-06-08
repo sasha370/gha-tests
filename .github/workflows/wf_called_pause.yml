@@ -15,6 +15,7 @@ jobs:
         id: pause
         run: |
           sleep ${{ inputs.pause }}
+          exit 1
           
       
       - name: Dump GitHub context
