@@ -14,17 +14,7 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     steps:
-name: Workflow Call Debug Contexts
 
-# https://docs.github.com/en/actions/learn-github-actions/contexts#about-contexts
-
-on:
-  workflow_call:
-
-jobs:
-  debug:
-    runs-on: ubuntu-latest
-    steps:
       - name: ENV
         run: env
       - name: JSON env
