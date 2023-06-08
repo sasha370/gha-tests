@@ -9,7 +9,7 @@ on:
 jobs:
 
   job1:
-    uses: ./.github/workflows/wf_called.pause.yml
+    uses: ./.github/workflows/wf_called_pause.yml
     with:
       pause: 5
   
