@@ -25,9 +25,10 @@ jobs:
         id: pause
         run: |
           sleep ${{ inputs.pause }}
+          echo ${{github.inputs}}
           exit 1
 
 
       - name: Fail fast
-        if: failure() 
+        if: (failure() && github.inputs.release_candidate == 'false')
         uses: andymckay/cancel-action@0.3
