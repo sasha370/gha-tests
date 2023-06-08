@@ -15,5 +15,11 @@ jobs:
 
       - name: Features
         uses: ./.github/workflows/features.yml
+        with: 
+          platform_branch: 'master'
+          talent_portal_branch: 'master'
   inputs_test:
     uses: ./.github/workflows/features.yml
+    with: 
+      platform_branch: 'master'
+      talent_portal_branch: 'master'
