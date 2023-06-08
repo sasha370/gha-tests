@@ -14,12 +14,61 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     steps:
-                
-      
-      - name: Dump GitHub context
+name: Workflow Call Debug Contexts
+
+# https://docs.github.com/en/actions/learn-github-actions/contexts#about-contexts
+
+on:
+  workflow_call:
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ENV
+        run: env
+      - name: JSON env
+        run: |
+          echo $context | jq --color-output .
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+          context: ${{ toJSON(env) }}
+      - name: JSON vars
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(vars) }}
+      - name: JSON job
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(job) }}
+
+      - name: JSON steps
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(steps) }}
+      - name: JSON runner
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(runner) }}
+      - name: JSON secrets
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(secrets) }}
+
+      - name: JSON needs
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(needs) }}
+      - name: JSON inputs
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(inputs) }}
         
       - name: Sleep
         id: pause
