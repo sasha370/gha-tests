@@ -29,5 +29,5 @@ jobs:
 
 
       - name: Fail fast
-        if: github.inputs.release_candidate == 'false'
+        if: failure() && (github.inputs.release_candidate == 'false')
         uses: andymckay/cancel-action@0.3
