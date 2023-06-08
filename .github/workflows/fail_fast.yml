@@ -9,17 +9,9 @@ on:
 jobs:
 
   job1:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Job 1
-        run: |
-          sleep 5
-          exit 0
-          
-      - name: Cancelling parallel jobs
-        if: failure()
-        uses: andymckay/cancel-action@0.3
+    uses: ./.github/workflows/wf_called.pause.yml
+    with:
+      pause: 5
   
   job2:
     runs-on: ubuntu-latest
