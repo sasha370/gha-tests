@@ -25,7 +25,9 @@ jobs:
         id: pause
         run: |
           sleep ${{ inputs.pause }}
-          echo ${{github.inputs}}
+          echo ${{github.event.workflow_run.inputs}}
+          echo ${{github.event.workflow_run.inputs.pause}}
+          echo ${{github.event.workflow_run.inputs.release_candidate}}
           exit 1
 
 
