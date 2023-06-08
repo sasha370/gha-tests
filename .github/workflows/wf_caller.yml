@@ -3,7 +3,7 @@ name: WF initializer
 on:
   push:
     branches:
-      - 'test_inputs'
+      - 'master'
 
 jobs:
   features:
@@ -12,7 +12,8 @@ jobs:
     steps:
       - name: Checkout Actions
         uses: actions/checkout@v3
-        with:
-          ref: 'test_inputs'
+
+      - name: Features
+        uses: ./.github/workflows/features.yml
   inputs_test:
-    uses: ./.github/workflows/middle_test_inputs.yml
+    uses: ./.github/workflows/features.yml
