@@ -14,18 +14,20 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     steps:
-      - name: Sleep
-        id: pause
-        run: |
-          sleep ${{ inputs.pause }}
-          exit 1
-          
+                
       
       - name: Dump GitHub context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+        
+      - name: Sleep
+        id: pause
+        run: |
+          sleep ${{ inputs.pause }}
+          exit 1
+
 
       - name: Fail fast
-        if: failure() && github.inputs.release_candidate == 'false'
+        if: github.inputs.release_candidate == 'false'
         uses: andymckay/cancel-action@0.3
