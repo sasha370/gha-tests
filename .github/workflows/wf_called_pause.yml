@@ -70,5 +70,5 @@ jobs:
 
 
       - name: Fail fast
-        if: (failure() && inputs.release_candidate == 'false')
+        if: failure() && inputs.release_candidate == false
         uses: andymckay/cancel-action@0.3
