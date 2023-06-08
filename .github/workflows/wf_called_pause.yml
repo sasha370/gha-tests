@@ -5,6 +5,9 @@ on:
       pause: 
         required: true
         type: string
+      release_candidate: 
+        required: false
+        type: boolean
   
 
 jobs:
@@ -24,5 +27,5 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
 
       - name: Fail fast
-        if: failure()
+        if: failure() && github.inputs.release_candidate == 'false'
         uses: andymckay/cancel-action@0.3
