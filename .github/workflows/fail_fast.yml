@@ -12,7 +12,7 @@ jobs:
     uses: ./.github/workflows/wf_called_pause.yml
     with:
       pause: 5
-      release_candidate: true
+      release_candidate: false
   
   job2:
     runs-on: ubuntu-latest
