@@ -16,8 +16,9 @@ jobs:
           status=0
  
           echo "::group::Group A"
+                      set +e
           (
-            set +e
+
             ls -la
           )
           exit_code=$?
@@ -27,9 +28,9 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::Group B"
-          
+                      set +e
           (
-            set +e
+
             cat 404
           )
           exit_code=$?
@@ -39,8 +40,9 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::Group C"
+                      set +e
           (
-            set +e
+
             echo "Hello"
           )
           exit_code=$?
