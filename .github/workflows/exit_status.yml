@@ -16,7 +16,7 @@ jobs:
           status=0
  
           echo "::group::Group A"
-            set +e                   
+             
           (
 
             ls -la
