@@ -9,11 +9,25 @@ on:
     inputs:
       sha:
         description: Git reference commit.
-        type: string
+        type: boolean
         required: false
 
 jobs:
-  register-build-in-anvil:
+  step1:
+    if: ${{ inputs.sha }}
     runs-on: ubuntu-latest
 
     steps:
+      - name: First
+        run: |
+          echo 1
+
+  check:
+    
+    needs: [step1]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Second
+        run: |
+          echo 2
