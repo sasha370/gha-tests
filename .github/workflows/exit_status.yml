@@ -16,39 +16,42 @@ jobs:
           status=0
  
           echo "::group::Group A"
-                   
+            set +e                   
           (
-            set +e
+
             ls -la
           )
           exit_code=$?
           if [ $exit_code -ne 0 ]; then
             status=1
           fi
+                      set -e   
           echo "::endgroup::"
 
           echo "::group::Group B"
-
-          (
             set +e
+          (
+
             cat 404
           )
           exit_code=$?
           if [ $exit_code -ne 0 ]; then
             status=2
           fi
+            set -e   
           echo "::endgroup::"
 
           echo "::group::Group C"
-
-          (
             set +e
+          (
+
             echo "Hello"
           )
           exit_code=$?
           if [ $exit_code -ne 0 ]; then
             status=3
           fi
+            set -e          
           echo "::endgroup::"
           echo "status: $status"
           exit $status
