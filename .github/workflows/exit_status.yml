@@ -28,7 +28,7 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::Group B"
-                      set +e
+
           (
 
             cat 404
