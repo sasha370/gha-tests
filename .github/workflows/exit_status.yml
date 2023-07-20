@@ -13,35 +13,40 @@ jobs:
         # Run echo "::group::Group A"
         run: |
           # Run specs
-          RSPEC_STATUS=0
+          status=0
  
-          echo "::group::Group A"             
+          echo "::group::Group A"
           (
+
             ls -la
           )
-          (( RSPEC_STATUS=RSPEC_STATUS || $? ))
-
+          exit_code=$?
+          if [ $exit_code -ne 0 ]; then
+            status=1
+          fi
           echo "::endgroup::"
 
           echo "::group::Group B"
-
+          
           (
+
             cat 404
           )
           exit_code=$?
-          (( RSPEC_STATUS=RSPEC_STATUS || $? ))
+          if [ $exit_code -ne 0 ]; then
+            status=1
+          fi
           echo "::endgroup::"
 
           echo "::group::Group C"
           (
+
             echo "Hello"
           )
-          (( RSPEC_STATUS=RSPEC_STATUS || $? ))        
+          exit_code=$?
+          if [ $exit_code -ne 0 ]; then
+            status=1
+          fi
           echo "::endgroup::"
-          echo "status: $status"
           
-          if [ $RSPEC_STATUS -eq 0 ]; then
-            exit 0
-          else
-            exit 1
-          fi  
+          exit $status
