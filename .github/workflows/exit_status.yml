@@ -13,8 +13,8 @@ jobs:
         # Run echo "::group::Group A"
         run: |
           # Run specs
-          status=0
- 
+          status=0  
+          set +e
           echo "::group::Group A"
           (
 
