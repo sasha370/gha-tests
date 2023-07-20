@@ -50,5 +50,5 @@ jobs:
             status=1
           fi
           echo "::endgroup::"
-          
+          echo "status: $status"
           exit $status
