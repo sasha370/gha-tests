@@ -1,0 +1,52 @@
+name: Group A
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Group test
+        # Comment used at run to hide 
+        # Run echo "::group::Group A"
+        run: |
+          # Run specs
+          status=0
+ 
+          echo "::group::Group A"
+          (
+            set +e
+            ls -la
+          )
+          exit_code=$?
+          if [ $exit_code -ne 0 ]; then
+            status=1
+          fi
+          echo "::endgroup::"
+
+          echo "::group::Group B"
+          
+          (
+            set +e
+            cat 404
+          )
+          exit_code=$?
+          if [ $exit_code -ne 0 ]; then
+            status=1
+          fi
+          echo "::endgroup::"
+
+          echo "::group::Group C"
+          (
+            set +e
+            echo "Hello"
+          )
+          exit_code=$?
+          if [ $exit_code -ne 0 ]; then
+            status=1
+          fi
+          echo "::endgroup::"
+          
+          exit $status
