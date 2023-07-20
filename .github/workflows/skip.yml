@@ -1,0 +1,19 @@
+name: Skip
+
+
+on:
+  push:
+    branches: [ 'devx-2297-gems-specs' ]
+
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Git reference commit.
+        type: string
+        required: false
+
+jobs:
+  register-build-in-anvil:
+    runs-on: ubuntu-latest
+
+    steps:
