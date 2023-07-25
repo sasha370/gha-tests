@@ -1,0 +1,27 @@
+name: My Workflow
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 1
+        run: exit 0
+
+  job2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 2
+        run: exit 1
+
+    if: ${{ always() }}
+
+  job3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step 3
+        run: exit 0
