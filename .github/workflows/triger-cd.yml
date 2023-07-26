@@ -1,0 +1,44 @@
+name: Trigger CD
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail 1
+        id: fail1
+        run: |
+          false
+   
+      - name: Success 1
+        id: success1
+        run: |
+          true
+  test2: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail 3
+        id: fail3
+        run: |
+          # let processes to fail
+          set +e
+          cat 505
+          echo "exit_status=$?" >> $GITHUB_OUTPUT
+          echo "XYZ"
+
+      - name: debug steps
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(steps) }}
+
+  final:
+    runs-on: ubuntu-latest
+    needs: [test, test2]
+    steps:
+      - name: Calculate conclusion
+        run: |
+          echo "Here we go"
+
