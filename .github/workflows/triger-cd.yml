@@ -10,7 +10,7 @@ jobs:
       - name: Fail 1
         id: fail1
         run: |
-          false
+          true
    
       - name: Success 1
         id: success1
