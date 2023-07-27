@@ -44,6 +44,7 @@ jobs:
     steps:
       - name: Echo
         run: |
+          echo "Event name: ${{ github.event_name }}
           echo HERE ARE WE GO!!!!
   
   
