@@ -37,6 +37,16 @@ on:
         default: ''
 
 jobs:
+  check-workflow-call:
+    name: Check if it's a workflow_call
+    if: github.event_name == 'workflow_call'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo
+        run: |
+          echo HERE ARE WE GO!!!!
+  
+  
   features:
     name: Run features
     timeout-minutes: 1
@@ -44,6 +54,9 @@ jobs:
     steps:
       - name: Checkout Actions
         uses: actions/checkout@v2
+
+      - name: Show context
+        uses: ./.github/actions/print_context/
 
       - name: Trigger the action
         uses: ./.github/actions/test
