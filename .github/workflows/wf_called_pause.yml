@@ -1,5 +1,8 @@
 name: Set pause
 on: 
+
+  workflow_dispatch:
+  
   workflow_call:
     inputs:
       pause: 
