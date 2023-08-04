@@ -16,7 +16,7 @@ jobs:
         continue-on-error: true
         run: |
           cat 42
-          # [ $? -ne 0 ] && echo "::error::Script failed!"
+          [ $? -ne 0 ] && echo "::error::Script failed!"
 
       - name: Simple error
         run: |
