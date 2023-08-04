@@ -18,6 +18,12 @@ jobs:
           cat 42
           [ $? -ne 0 ] && echo "::error::Script failed!"
 
+      - name: With error and canceled
+        if: ${{ !cancelled() }}
+        run: |
+          cat 42
+        
+
       - name: Simple error
         run: |
           exit 1
