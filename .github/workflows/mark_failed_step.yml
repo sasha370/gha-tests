@@ -16,7 +16,12 @@ jobs:
         continue-on-error: true
         run: |
           cat 42
-          [ $? -ne 0 ] && echo "::error::Script failed!"
+          if [ $? -eq 0 ]; then
+            echo "Script completed successfully"
+          else
+            echo "::error::Script failed!"
+          fi
+          # [ $? -ne 0 ] && echo "::error::Script failed!"
 
       - name: With error and canceled
         if: ${{ !cancelled() }}
