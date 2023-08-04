@@ -1,0 +1,24 @@
+name: Mark failed step
+on: 
+  workflow_dispatch:
+
+
+jobs: 
+  first-job: 
+    runs-on: ubuntu-latest
+    name: Multi steps job
+    steps: 
+      - name: first_step
+        shell: bash
+        run: |
+          echo "Hello"
+      - name: With error and marked
+        continue-on-error: true
+        run: |
+          cat 42
+          [ $? -ne 0 ] && echo "::error::Script failed!"
+
+      - name: Simple error
+        run: |
+          exit 1
+      
