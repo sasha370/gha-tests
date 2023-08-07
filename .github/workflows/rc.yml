@@ -32,10 +32,10 @@ jobs:
         if: ${{ failure() }}
         shell: bash 
         run: |
-          echo 'RC <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|${{github.run_id}}> with ${{github.sha::7}} is :redex:."'
+          echo "RC <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|${{github.run_id}}> with ${GITHUB_SHA::7} is :redex:."
 
       - name: Report success to Slack
         if: ${{ success() }}
         shell: bash 
         run: |
-          echo 'RC <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|${{github.run_id}}> with ${{github.sha::7}} is :green_heart:."'
+          echo "RC <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|${{github.run_id}}> with ${{github.sha::7}} is :green_heart:."
