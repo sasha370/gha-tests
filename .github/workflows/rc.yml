@@ -23,8 +23,11 @@ jobs:
   context:
     runs-on: ubuntu-latest
     steps:
-      - name: ENV
-        run: env
+      - name: JSON env
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(context) }}
       - name: JSON env
         run: |
           echo $context | jq --color-output .
