@@ -27,7 +27,7 @@ jobs:
         run: |
           echo $context | jq --color-output .
         env:
-          context: ${{ toJSON(context) }}
+          context: ${{ toJSON(github) }}
       - name: JSON env
         run: |
           echo $context | jq --color-output .
