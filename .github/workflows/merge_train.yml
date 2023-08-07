@@ -1,0 +1,19 @@
+name: Merge train
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: >-
+    rc
+    ${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  first_job:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Sleep
+        shell: bash
+        run: |
+          sleep 100
+    
