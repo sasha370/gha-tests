@@ -1,0 +1,41 @@
+name: Release candidate
+
+on:
+ push:
+   branches: [ master ]
+
+jobs: 
+  first_job: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Success job
+        shell: bash
+        run: |
+          echo 'Green'
+
+  second_job: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Failed job
+        shell: bash
+        run: |
+          exit 1
+
+  get_results: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: JSON env
+        run: |
+          echo $context | jq --color-output .
+          
+      - name: Report failure to Slack
+        if: ${{ failure() }}
+        shell: bash 
+        run: |
+          echo 'RC <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|${{github.run_id}}> with ${{github.sha::7}} is :redex:."'
+
+      - name: Report success to Slack
+        if: ${{ success() }}
+        shell: bash 
+        run: |
+          echo 'RC <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|${{github.run_id}}> with ${{github.sha::7}} is :green_heart:."'
