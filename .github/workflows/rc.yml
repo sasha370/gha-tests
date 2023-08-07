@@ -20,13 +20,55 @@ jobs:
         shell: bash
         run: |
           exit 1
+  context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ENV
+        run: env
+      - name: JSON env
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(env) }}
+      - name: JSON vars
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(vars) }}
+      - name: JSON job
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(job) }}
+      - name: JSON steps
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(steps) }}
+      - name: JSON runner
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(runner) }}
+      - name: JSON secrets
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(secrets) }}
+      - name: JSON needs
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(needs) }}
+      - name: JSON inputs
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(inputs) }}
 
   get_results: 
     runs-on: ubuntu-latest
-    steps:
-      - name: JSON env
-        uses: ./.github/workflows/context
-          
+    steps:          
       - name: Report failure to Slack
         if: ${{ failure() }}
         shell: bash 
