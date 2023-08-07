@@ -82,9 +82,10 @@ jobs:
         shell: bash 
         run: |
           echo "RC <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|${{github.run_id}}> with ${GITHUB_SHA::7} is :redex:."
-          echo "Login ${{ github.pusher.name }}"
+          echo "Login ${{ github.event.pusher.name }}"
       - name: Report success to Slack
         if: ${{ success() }}
         shell: bash 
         run: |
+          echo "Login ${{ github.event.pusher.name }}"
           echo "RC <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|${{github.run_id}}> with ${GITHUB_SHA::7} is :green_heart:."
