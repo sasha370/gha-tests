@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: JSON env
-        uses: ./.github/workflows/context.yml
+        uses: ./.github/workflows/context
           
       - name: Report failure to Slack
         if: ${{ failure() }}
