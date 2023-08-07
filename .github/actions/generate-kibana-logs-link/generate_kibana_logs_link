@@ -13,5 +13,7 @@ LOGS_LINK="https://logs-ci.toptal.net/app/dashboards#/view/${dashboard_id}?_g=%2
 
 echo -e "\e[34mLogs: ${LOGS_LINK}\e[0m"
 
+
+
 #echo "LOGS_LINK=$LOGS_LINK" >> $GITHUB_ENV
 echo "LOGS_LINK=$LOGS_LINK" >> $GITHUB_OUTPUT
