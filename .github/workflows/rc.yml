@@ -20,7 +20,7 @@ jobs:
       - name: Failed job
         shell: bash
         run: |
-          exit 1
+          exit 0
   context:
     runs-on: ubuntu-latest
     steps:
