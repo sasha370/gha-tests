@@ -13,15 +13,15 @@ jobs:
         shell: bash
         run: |
           echo 'Green'
-  
-
-  second_job: 
+          
+    second_job: 
     runs-on: ubuntu-latest
     steps:
       - name: Failed job
         shell: bash
         run: |
           exit 0
+          
   third_job: 
     runs-on: ubuntu-latest
     if: false
@@ -44,7 +44,7 @@ jobs:
           echo "Status: $status"
           echo "rc-status=$status" >> $GITHUB_ENV
     
-          if [ -n "$status" ]; then
+          if [ "$status" ]; then
              echo "emoji=':redex:'" >> $GITHUB_ENV
           else 
             echo "emoji=':green_heart:'" >> $GITHUB_ENV
