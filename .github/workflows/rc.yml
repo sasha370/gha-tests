@@ -80,7 +80,7 @@ jobs:
     needs: [first_job, second_job]
     steps:          
       - name: Report failure to Slack
-        if: ${{ failure() }}
+        if: ${{ contains(join(needs.*.result, ','), 'failure') }}
         shell: bash 
         run: |
           echo "RC <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|${{github.run_id}}> with ${GITHUB_SHA::7} is :redex:."
