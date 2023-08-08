@@ -45,9 +45,9 @@ jobs:
           echo "rc-status=$status" >> $GITHUB_ENV
     
           if [ $status == 'true' ]; then
-             echo "emoji=':redex:'" >> $GITHUB_ENV
+             echo "emoji=:redex:" >> $GITHUB_OUTPUT
           else 
-            echo "emoji=':green_heart:'" >> $GITHUB_ENV
+            echo "emoji=:green_heart:" >> $GITHUB_OUTPUT
           fi
 
     
@@ -69,7 +69,7 @@ jobs:
       - name: Report success to Slack
         shell: bash 
         run: |
-          echo "RC <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|${{github.run_id}}> with <https://github.com/${{github.repository}}/commit/${GITHUB_SHA}|${GITHUB_SHA::7}> (PR # by ${{github.event.pusher.name}}) is ${{env.emoji}}."
+          echo "RC <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|${{github.run_id}}> with <https://github.com/${{github.repository}}/commit/${GITHUB_SHA}|${GITHUB_SHA::7}> (PR # by ${{github.event.pusher.name}}) is ${{steps.prepare_status.output.emoji}}."
 
 
 
