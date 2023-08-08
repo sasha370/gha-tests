@@ -3,6 +3,7 @@ name: Release candidate
 on:
  push:
    branches: [ master ]
+ workflow_dispatch: 
 
 jobs: 
   first_job: 
