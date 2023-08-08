@@ -88,7 +88,7 @@ jobs:
           echo "Login ${{ github.event.pusher.name }}"
           echo "${GITHUB_SHA}|${GITHUB_SHA::7}"
       - name: Report success to Slack
-        if: ${{ success() }}
+        if: ${{ !contains(join(needs.*.result, ','), 'failure') }}
         shell: bash 
         run: |
           echo "Login ${{ github.event.pusher.name }}"
