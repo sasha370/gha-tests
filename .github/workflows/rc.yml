@@ -44,7 +44,7 @@ jobs:
           echo "Status: $status"
           echo "rc-status=$status" >> $GITHUB_ENV
     
-          if [ "$status" ]; then
+          if [ "$status" == "true" ]; then
              echo "emoji=':redex:'" >> $GITHUB_ENV
           else 
             echo "emoji=':green_heart:'" >> $GITHUB_ENV
