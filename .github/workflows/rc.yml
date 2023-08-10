@@ -66,17 +66,17 @@ jobs:
           status_strings=$(IFS=$'\n'; echo "${results[*]}")
           echo "$status_strings"
         
-          echo ${{ join(needs.*.result, ',') }}
-          echo ${{ !contains(needs.*.result, 'failure') }}
-          status=${{ contains(join(needs.*.result, ','), 'failure') }}
-          echo "Status: $status"
-          echo "rc-status=$status" >> $GITHUB_ENV
+#           echo ${{ join(needs.*.result, ',') }}
+#           echo ${{ !contains(needs.*.result, 'failure') }}
+#           status=${{ contains(join(needs.*.result, ','), 'failure') }}
+#           echo "Status: $status"
+#           echo "rc-status=$status" >> $GITHUB_ENV
     
-          if [ $status == 'true' ]; then
-             echo "emoji=:redex:" >> $GITHUB_OUTPUT
-          else 
-            echo "emoji=:green_heart:" >> $GITHUB_OUTPUT
-          fi
+#           if [ $status == 'true' ]; then
+#              echo "emoji=:redex:" >> $GITHUB_OUTPUT
+#           else 
+#             echo "emoji=:green_heart:" >> $GITHUB_OUTPUT
+#           fi
 
     
       - name: Report failure to Slack
