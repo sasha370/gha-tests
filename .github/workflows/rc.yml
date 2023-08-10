@@ -59,11 +59,9 @@ jobs:
         shell: bash
         run: |
             results=()
-            for need in ${{ toJson(needs) }}; do
-              result=$(echo $need | jq -r '.result')
-              results+=("$need: $result\n")
-            done
-            echo "$results"
+            needs=$(echo "${{ toJson(needs) }}" | jq -r 'to_entries | .[] | select(.value.result) | "\(.key): \(.value.result)"')
+            IFS=$'\n' read -rd '' -a results <<< "$needs"
+            printf "%s\n" "${results[@]}"
 
         
 #           echo ${{ join(needs.*.result, ',') }}
