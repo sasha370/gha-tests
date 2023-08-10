@@ -58,6 +58,14 @@ jobs:
         id: prepare_status
         shell: bash
         run: |
+          results=()
+          for need in "${!needs[@]}"; do
+            result="${{ needs[$need].result }}"
+            results+=("needs.$need.result: $result")
+          done
+          status_strings=$(IFS=$'\n'; echo "${results[*]}")
+          echo "$status_strings"
+        
           echo ${{ join(needs.*.result, ',') }}
           echo ${{ !contains(needs.*.result, 'failure') }}
           status=${{ contains(join(needs.*.result, ','), 'failure') }}
