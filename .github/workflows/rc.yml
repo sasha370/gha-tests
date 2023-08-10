@@ -59,10 +59,12 @@ jobs:
         shell: bash
         run: |
             results=()
-            needs=$(echo "${{ toJson(needs) }}" | jq -r 'to_entries | .[] | select(.value.result) | "\(.key): \(.value.result)"')
-            IFS=$'\n' read -rd '' -a results <<< "$needs"
+            for need in first_job second_job third_job; do
+              result=$(echo "${{ needs.$need.result }}")
+              results+=("$need: $result")
+            done
+            echo "Results:"
             printf "%s\n" "${results[@]}"
-
         
 #           echo ${{ join(needs.*.result, ',') }}
 #           echo ${{ !contains(needs.*.result, 'failure') }}
