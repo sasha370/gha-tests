@@ -60,7 +60,7 @@ jobs:
         run: |
             results=()
             for need in first_job second_job third_job; do
-              result=$(echo "${{ needs.$need.result }}")
+              result=$(echo "${{ needs['$need'].result }}")
               results+=("$need: $result")
             done
             echo "Results:"
