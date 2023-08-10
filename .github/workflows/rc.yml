@@ -50,7 +50,7 @@ jobs:
         id: prepare_status
         shell: bash
         run: |
-          echo ${{ contains(join(needs.*.result, ',') }}
+          echo ${{ join(needs.*.result, ',') }}
           status=${{ contains(join(needs.*.result, ','), 'failure') }}
           echo "Status: $status"
           echo "rc-status=$status" >> $GITHUB_ENV
