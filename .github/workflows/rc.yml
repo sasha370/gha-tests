@@ -56,7 +56,7 @@ jobs:
         id: prepare_status
         shell: bash
         run: |
-          echo ${{ !contains(needs.*.result, 'skipped') }}
+          echo ${{ join(needs.*.result, ',') }}
           echo ${{ !contains(needs.*.result, 'failure') }}
           status=${{ contains(join(needs.*.result, ','), 'failure') }}
           echo "Status: $status"
