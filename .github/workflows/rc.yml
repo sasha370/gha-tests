@@ -46,11 +46,16 @@ jobs:
     needs: [first_job, second_job, third_job]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
     steps:          
+      - name: JSON needs
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(needs) }}
+    
       - name: Prepare data
         id: prepare_status
         shell: bash
         run: |
-          echo ${{ cancelled() }}
           echo ${{ !contains(needs.*.result, 'skipped') }}
           echo ${{ !contains(needs.*.result, 'failure') }}
           status=${{ contains(join(needs.*.result, ','), 'failure') }}
