@@ -50,7 +50,7 @@ jobs:
         id: prepare_status
         shell: bash
         run: |
-          echo ${{ !contains(needs.*.result, 'skipped') }}
+          echo ${{  !cancelled() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'skipped') }}
           status=${{ contains(join(needs.*.result, ','), 'failure') }}
           echo "Status: $status"
           echo "rc-status=$status" >> $GITHUB_ENV
