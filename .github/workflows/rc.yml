@@ -58,11 +58,13 @@ jobs:
         id: prepare_status
         shell: bash
         run: |
-          results=()
-          for need in "${!needs[@]}"; do
-            results+=("$need: ${{ needs.$need.result }}\n")
-          done
-          echo "$results"
+            results=()
+            for need in ${{ toJson(needs) }}; do
+              result=$(echo $need | jq -r '.outputs.result')
+              results+=("$need: $result\n")
+            done
+            echo "$results"
+
         
 #           echo ${{ join(needs.*.result, ',') }}
 #           echo ${{ !contains(needs.*.result, 'failure') }}
