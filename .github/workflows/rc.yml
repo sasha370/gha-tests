@@ -60,11 +60,9 @@ jobs:
         run: |
           results=()
           for need in "${!needs[@]}"; do
-            result="${{ needs[$need].result }}"
-            results+=("needs.$need.result: $result")
+            results+=("$need: ${{ needs[$need].result }}\n")
           done
-          status_strings=$(IFS=$'\n'; echo "${results[*]}")
-          echo "$status_strings"
+          echo "$results"
         
 #           echo ${{ join(needs.*.result, ',') }}
 #           echo ${{ !contains(needs.*.result, 'failure') }}
