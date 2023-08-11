@@ -58,9 +58,8 @@ jobs:
         id: prepare_status
         shell: bash
         run: |
-            echo "Jobs results: ${{ join(needs.*.result, ',') }}"
-            echo "${!needs[@]}"
-        
+          echo ${{ toJSON(needs) }} | jq --color-output .
+ 
 #           echo ${{ join(needs.*.result, ',') }}
 #           echo ${{ !contains(needs.*.result, 'failure') }}
 #           status=${{ contains(join(needs.*.result, ','), 'failure') }}
