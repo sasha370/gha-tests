@@ -95,7 +95,7 @@ jobs:
           echo "RC <https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}|${{github.run_id}}> with <https://github.com/${{github.repository}}/commit/${GITHUB_SHA}|${GITHUB_SHA::7}> (PR # by ${{github.event.pusher.name}}) is ${{steps.prepare_status.outputs.emoji}}."
  
   trigger-job:
-    uses: ./.github/workflows/inputs_test
+    uses: ./.github/workflows/inputs_test.yml
   
   context:
     runs-on: ubuntu-latest
