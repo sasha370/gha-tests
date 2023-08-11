@@ -16,6 +16,14 @@ on:
       logs_finished_at:
         description: 'Logs Finished At'
         required: false
+     
+      anvil_parent_build_id:
+        description: Parent CiBuild ID
+        type: number
+        required: false
+        
+  workflow_call:
+
 
 jobs:
   logs_link:
@@ -25,6 +33,12 @@ jobs:
       - name: Checkout Actions
         uses: actions/checkout@v2
 
+      - name: JSON inputs
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(inputs) }}
+          
       - id: generate_kibana_logs_link
         uses: ./.github/actions/generate-kibana-logs-link/
         with:
