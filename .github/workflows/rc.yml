@@ -59,7 +59,7 @@ jobs:
         shell: bash
         run: |
             echo "Jobs results: ${{ join(needs.*.result, ',') }}"
-            echo "Needs results: ${{ join(needs.*.value, ',') }}"
+            echo "Needs results: ${{ needs.keys()  }}"
         
 #           echo ${{ join(needs.*.result, ',') }}
 #           echo ${{ !contains(needs.*.result, 'failure') }}
