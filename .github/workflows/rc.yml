@@ -53,26 +53,7 @@ jobs:
           echo $context | jq --color-output .
         env:
           context: ${{ toJSON(needs) }}
-    
-      - name: Prepare data
-        id: prepare_status
-        shell: bash
-        run: |
-          echo ${{ toJSON(needs) }} | jq --color-output .
- 
-#           echo ${{ join(needs.*.result, ',') }}
-#           echo ${{ !contains(needs.*.result, 'failure') }}
-#           status=${{ contains(join(needs.*.result, ','), 'failure') }}
-#           echo "Status: $status"
-#           echo "rc-status=$status" >> $GITHUB_ENV
-    
-#           if [ $status == 'true' ]; then
-#              echo "emoji=:redex:" >> $GITHUB_OUTPUT
-#           else 
-#             echo "emoji=:green_heart:" >> $GITHUB_OUTPUT
-#           fi
-
-    
+   
       - name: Report failure to Slack
         if: ${{ contains(join(needs.*.result, ','), 'failure') }}
         shell: bash 
