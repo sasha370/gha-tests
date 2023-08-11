@@ -68,7 +68,7 @@ jobs:
         if: always()
         shell: bash
         run: |
-           echo 'Uouououhhuhu'
+           echo "Summary: ${{steps.prepare_status.outputs.emoji}}"
   
   context:
     runs-on: ubuntu-latest
