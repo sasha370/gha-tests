@@ -42,6 +42,8 @@ jobs:
   get_results: 
     runs-on: ubuntu-latest
     needs: [ job1,job2, job3]
+    outputs:
+      rc_failed: ${{steps.prepare_status.outputs.rc_failed}}
     permissions:
       statuses: write 
     if: ${{ always() }}
@@ -56,6 +58,7 @@ jobs:
 
           rc_failed=${{ contains(join(needs.*.result, ','), 'failure') || contains(join(needs.*.result, ','), 'cancelled')}}
           echo "RC failed?: $rc_failed"
+          echo "rc_failed=$rc_failed" >> $GITHUB_OUTPUT
 
           if [ $rc_failed == 'true' ]; then
             echo "emoji=:redex:" >> $GITHUB_OUTPUT
@@ -63,6 +66,17 @@ jobs:
           else
             echo "emoji=:green_heart:" >> $GITHUB_OUTPUT
           fi
+          
+  set_workflow_status:
+    runs-on: ubuntu-latest
+    needs: get_results
+    if: ${{ always() }}
+    steps:          
+      - name: Set workflow_status
+        shell: bash
+        run: |
+          exit ${{needs.get_results.outputs.rc_failed}} == 'true'
+  
   context:
     runs-on: ubuntu-latest
     if: ${{ always() }}
