@@ -59,8 +59,8 @@ jobs:
 
           if [ $rc_failed == 'true' ]; then
             echo "emoji=:redex:" >> $GITHUB_OUTPUT
-            echo "https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.event.workflow_run.head_commit.id }}"
-            echo "$URL: {{ github.event.workflow_run.html_url }}"
+            echo "https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}"
+            echo "URL: ${{ github.event.workflow_run.html_url }}"
             echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
             "context": "unit test (kube)",
             curl --request POST \
