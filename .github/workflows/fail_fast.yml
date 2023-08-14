@@ -62,7 +62,6 @@ jobs:
 
           if [ $rc_failed == 'true' ]; then
             echo "emoji=:redex:" >> $GITHUB_OUTPUT
-            exit 1
           else
             echo "emoji=:green_heart:" >> $GITHUB_OUTPUT
           fi
@@ -75,7 +74,9 @@ jobs:
       - name: Set workflow_status
         shell: bash
         run: |
-          exit ${{needs.get_results.outputs.rc_failed}} == 'true'
+          if [[ ${{needs.get_results.outputs.rc_failed}} == true ]]; then
+            exit 1
+          fi
   
   context:
     runs-on: ubuntu-latest
