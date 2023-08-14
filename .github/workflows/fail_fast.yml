@@ -42,7 +42,7 @@ jobs:
   get_results: 
     runs-on: ubuntu-latest
     needs: [ job1,job2, job3]
-    if: ${{ !cancelled() }}
+    if: ${{ always() }}
     steps:          
       - name: Prepare result status
         shell: bash
