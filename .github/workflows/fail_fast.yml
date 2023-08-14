@@ -76,3 +76,57 @@ jobs:
           else
             echo "emoji=:green_heart:" >> $GITHUB_OUTPUT
           fi
+  context:
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    steps:
+      - name: JSON github
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(github) }}
+      - name: JSON env
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(env) }}
+      - name: JSON vars
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(vars) }}
+      - name: JSON job
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(job) }}
+      - name: JSON steps
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(steps) }}
+      - name: JSON runner
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(runner) }}
+      - name: JSON secrets
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(secrets) }}
+      - name: JSON needs
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(needs) }}
+      - name: JSON inputs
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(inputs) }}
+      - name: JSON event
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(github.event) }}
