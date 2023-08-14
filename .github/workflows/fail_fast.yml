@@ -74,7 +74,7 @@ jobs:
       - name: Set workflow_status
         shell: bash
         run: |
-          if [[ ${{needs.get_results.outputs.rc_failed}} ]]; then
+          if [[ ${{needs.get_results.outputs.rc_failed}} == true ]]; then
             exit 1
           fi
   
