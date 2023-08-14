@@ -59,20 +59,7 @@ jobs:
 
           if [ $rc_failed == 'true' ]; then
             echo "emoji=:redex:" >> $GITHUB_OUTPUT
-            echo "https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}"
-            echo "URL: ${{ github.event.workflow_run.html_url }}"
-            echo "Conclusion: ${{ github.event.workflow_run.conclusion }}"
-            "context": "unit test (kube)",
-            curl --request POST \
-            --url https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.event.workflow_run.head_commit.id }} \
-            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-            --header 'content-type: application/json' \
-            --data '{
-              "state": "failure",
-              "context": "RC failed",
-              "target_url": "${{ github.event.workflow_run.html_url }}"
-              }' \
-            --fail
+            exit 1
           else
             echo "emoji=:green_heart:" >> $GITHUB_OUTPUT
           fi
