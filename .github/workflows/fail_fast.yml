@@ -19,6 +19,7 @@ jobs:
     steps:
       - name: Job 2
         run: |
+          
           sleep 10
           exit 0
           
@@ -81,6 +82,7 @@ jobs:
   context:
     runs-on: ubuntu-latest
     if: ${{ always() }}
+    name: ${{ github.ref_name.capitalize() }}
     steps:
       - name: JSON github
         run: |
