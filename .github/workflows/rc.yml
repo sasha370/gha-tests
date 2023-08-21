@@ -54,7 +54,7 @@ jobs:
         run: |
           echo $context | jq --color-output .
           echo "Merged by: ${{ github.event.commits[-1].author.name }}"
-#          echo "Commit id: ${{ github.event.commits[-1].id }}"
+          echo "Commit id: ${{ github.event.commits[-1].id }}"
           
           echo "PR event"
           echo "${{ toJSON(github.event) }}" | jq --color-output .
