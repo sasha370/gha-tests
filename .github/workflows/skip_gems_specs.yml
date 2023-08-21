@@ -18,6 +18,7 @@ concurrency:
 
 jobs:
   gems-specs:
+    name: Gems specs
     runs-on: ubuntu-latest
     steps:
       - run: 'echo "No check required"'
