@@ -3,9 +3,9 @@ name: Release candidate
 on:
  push:
    branches: [ master ]
- workflow_dispatch: 
+ workflow_dispatch:
 
-jobs: 
+jobs:
   zero_job:
     runs-on: ubuntu-latest
     if: false
@@ -14,8 +14,8 @@ jobs:
         shell: bash
         run: |
           echo 'Green'
-  
-  first_job: 
+
+  first_job:
     runs-on: ubuntu-latest
 #     needs: [zero_job]
     if: ${{ !cancelled()}}
@@ -24,28 +24,28 @@ jobs:
         shell: bash
         run: |
           echo 'Green'
-          
-  second_job: 
+
+  second_job:
     runs-on: ubuntu-latest
     steps:
       - name: Failed job
         shell: bash
         run: |
           exit 1
-          
-  third_job: 
+
+  third_job:
     runs-on: ubuntu-latest
     steps:
       - name: Skipped job
         shell: bash
         run: |
           echo 'Green'
- 
-  get_results: 
+
+  get_results:
     runs-on: ubuntu-latest
     needs: [first_job, second_job, third_job]
     if: ${{ !cancelled() }}
-    steps:          
+    steps:
       - name: Prepare result status
         shell: bash
         id: prepare_status
@@ -53,7 +53,8 @@ jobs:
           context: ${{ toJSON(needs) }}
         run: |
           echo $context | jq --color-output .
-          echo "Merged by: ${{github.event.commits[0].author.name }}"
+          echo "Merged by: ${{ github.event.commits[0].author.name }}"
+          echo "Commit id: ${{ github.event.commits[0].id }}"
 
           rc_failed=${{ contains(join(needs.*.result, ','), 'failure') || contains(join(needs.*.result, ','), 'cancelled')}}
           echo "RC failed?: $rc_failed"
@@ -64,13 +65,13 @@ jobs:
           else
             echo "emoji=:green_heart:" >> $GITHUB_OUTPUT
           fi
-          
+
       - name: Post always
         if: always()
         shell: bash
         run: |
            echo "Summary: ${{steps.prepare_status.outputs.emoji}}"
-  
+
   context:
     runs-on: ubuntu-latest
     steps:
