@@ -50,14 +50,12 @@ jobs:
         shell: bash
         id: prepare_status
         env:
-          context: ${{ toJSON(needs) }}
+          context: ${{ toJSON(github.event) }}
         run: |
           echo $context | jq --color-output .
-          echo "Merged by: ${{ github.event.commits[-1].author.name }}"
-          echo "Commit id: ${{ github.event.commits[-1].id }}"
+          echo "Merged by: ${{ github.event.commits[0].author.name }}"
+          echo "Commit id: ${{ github.event.commits[0].id }}"
           
-          echo "PR event"
-          echo "${{ toJSON(github.event) }}" | jq --color-output .
 
           rc_failed=${{ contains(join(needs.*.result, ','), 'failure') || contains(join(needs.*.result, ','), 'cancelled')}}
           echo "RC failed?: $rc_failed"
