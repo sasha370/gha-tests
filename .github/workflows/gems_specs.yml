@@ -37,4 +37,5 @@ jobs:
       - name: Run specs
         shell: bash
         run: |
+          exit 1
           echo "Done"
