@@ -54,7 +54,7 @@ jobs:
         run: |
           echo $context | jq --color-output .
           echo "Merged by: ${{ github.event.head_commit.author.name }}"
-          echo "PR: ${{ github.event.pull_request }}"
+          echo "PR: ${{ github.event.repository.pulls_url }}"
 
           
 
