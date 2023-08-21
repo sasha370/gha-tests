@@ -54,7 +54,7 @@ jobs:
         run: |
           echo $context | jq --color-output .
           echo "Merged by: ${{ github.event.commits[0].author.name }}"
-#          echo "Commit id: ${{ github.event.commits[0].id }}"
+          echo "Commit id: ${{ github.event.commits[0].id }}"
 
           rc_failed=${{ contains(join(needs.*.result, ','), 'failure') || contains(join(needs.*.result, ','), 'cancelled')}}
           echo "RC failed?: $rc_failed"
