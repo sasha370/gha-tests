@@ -1,0 +1,25 @@
+name: Flow specs 1
+
+on:
+  pull_request:
+    paths:
+      - '**.md'
+      - 'docs/**'
+      - '^(?!.*webpack-sizes\.lock$|.*package\.json$|.*yarn\.lock$|\.*\.(e?js|jsx)$).*$'
+
+concurrency:
+  group: >-
+    skip-gems-specs
+    ${{ github.repository }}
+    ${{ github.workflow }}
+    ${{ github.event_name }}
+    ${{ github.event.issue.number || github.ref }}
+    ${{ github.triggering_actor }}
+  cancel-in-progress: true
+
+jobs:
+  flow-specs:
+    name: Flow specs
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo "No check required"'

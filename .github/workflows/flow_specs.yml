@@ -1,0 +1,49 @@
+name: Flow specs 1
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Git reference commit.
+        type: string
+        required: true
+
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '^(?!.*webpack-sizes\.lock$|.*package\.json$|.*yarn\.lock$|\.*\.(e?js|jsx)$).*$'
+
+concurrency:
+  group: >-
+    gems-specs
+    ${{ github.repository }}
+    ${{ github.workflow }}
+    ${{ github.event_name }}
+    ${{ github.event.issue.number || github.ref }}
+    ${{ github.triggering_actor }}
+  cancel-in-progress: true
+
+jobs:
+  flow-specs:
+    name: Flow specs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.sha || github.sha }}
+      - name: Run specs
+        shell: bash
+        run: |
+          echo "Done"
+
+  second_job:
+    name: Second job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run specs
+        shell: bash
+        run: |
+#          exit 1
+          echo "Done"
