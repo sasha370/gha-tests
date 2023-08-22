@@ -35,6 +35,13 @@ jobs:
         )
       )
     steps:
+      - name: JSON event
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(github.event) }}
+
+
       - name: Checkout platform
         uses: actions/checkout@v3
         with:
