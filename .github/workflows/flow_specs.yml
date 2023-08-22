@@ -33,13 +33,14 @@ jobs:
       - name: Checkout platform
         uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.sha || 'flow-test-1' || github.sha }}
-          fetch-depth: 0
+          ref: ${{ inputs.sha || 'test-skip-3' || github.sha }}
 
+#IF it is a issue_comment then Actions tries to get diff for Master branch even if I check out a different branch.
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v37
         with:
+          sha: ${{ inputs.sha || 'f2702ae18a60e54396f7cbd885afa88cd49cdcb1' || github.sha }}
           files_ignore: |
             - **/yarn.lock
             - **/package.json
