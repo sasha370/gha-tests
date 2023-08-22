@@ -2,19 +2,14 @@ name: Flows
 
 on:
   workflow_dispatch:
+    inputs:
+      sha:
+        description: Git reference commit
+        type: string
+        required: true
 
   issue_comment:
     types: [ created ]
-
-concurrency:
-  group: >-
-    flows
-    ${{ github.repository }}
-    ${{ github.workflow }}
-    ${{ github.event_name }}
-    ${{ github.event.issue.number || github.ref }}
-    ${{ github.triggering_actor }}
-  cancel-in-progress: true
 
 jobs:
   check_necessity:
@@ -35,17 +30,10 @@ jobs:
         )
       )
     steps:
-      - name: JSON event
-        run: |
-          echo $context | jq --color-output .
-        env:
-          context: ${{ toJSON(github.event) }}
-
-
       - name: Checkout platform
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.ref || 'flow-test-1' }}
+          ref: ${{ inputs.sha || 'flow-test-1' || github.sha }}
           fetch-depth: 0
 
       - name: Get changed files
@@ -62,11 +50,8 @@ jobs:
             - **.jsx
 
       - name: Check if any files have changed
-        id: conclusion
-        env:
-          any_changed: ${{ steps.changed-files.outputs.any_changed }}
         run: |
-          if [ $any_changed == 'true' ] ; then
+          if [ ${steps.changed-files.outputs.any_changed} == 'true' ] ; then
             echo "Backend files have changed."
             echo "List all the files that have changed: ${{ steps.changed-files.outputs.all_changed_files }}"
           else
@@ -82,15 +67,7 @@ jobs:
     strategy:
       matrix:
         mode: [ explore, test ]
-
     steps:
-      - name: Get merge commit SHA
-        if: github.event_name == 'issue_comment'
-        id: prData
-        uses: toptal/actions/get_merge_commit@main
-        with:
-          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
-
       - name: Checkout platform
         uses: actions/checkout@v3
         with:
