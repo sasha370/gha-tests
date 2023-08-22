@@ -41,17 +41,11 @@ jobs:
         env:
           context: ${{ toJSON(github.event) }}
 
-      - name: Get merge commit SHA
-        if: github.event_name == 'issue_comment'
-        id: prData
-        uses: toptal/actions/get_merge_commit@main
-        with:
-          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
 
       - name: Checkout platform
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.ref || flow-test-1 || steps.prData.outputs.ref }}
+          ref: ${{ github.ref || 'flow-test-1' }}
           fetch-depth: 0
 
       - name: Get changed files
@@ -100,7 +94,7 @@ jobs:
       - name: Checkout platform
         uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.sha || steps.prData.outputs.ref || github.sha }}
+          ref: ${{ inputs.sha || 'flow-test-1' || github.sha }}
 
       - name: Run flows ${{ matrix.mode }}
         run: |
