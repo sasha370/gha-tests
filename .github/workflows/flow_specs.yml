@@ -2,11 +2,6 @@ name: Flows
 
 on:
   workflow_dispatch:
-    inputs:
-      sha:
-        description: Git reference commit
-        type: string
-        required: true
 
   issue_comment:
     types: [ created ]
