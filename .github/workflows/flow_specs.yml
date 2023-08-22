@@ -1,25 +1,19 @@
-name: Flow specs 1
+name: Flows
 
 on:
   workflow_dispatch:
     inputs:
       sha:
-        description: Git reference commit.
+        description: Git reference commit
         type: string
         required: true
 
-#  pull_request:
-#    paths-ignore:
-#      - '**.md'
-#      - 'docs/**'
-#      - '**/package.json'
-#      - '**/yarn.lock'
-#      - '**/*.js'
-#      - '**/*.jsx'
+  issue_comment:
+    types: [ created ]
 
 concurrency:
   group: >-
-    gems-specs
+    flows
     ${{ github.repository }}
     ${{ github.workflow }}
     ${{ github.event_name }}
@@ -28,36 +22,70 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  verify:
-    name: Verify
-    if: false
+  check_necessity:
     runs-on: ubuntu-latest
+    if: >
+      (github.event_name == 'workflow_dispatch') ||
+      (inputs.is_workflow_call == 'true') ||
+      (
+        github.event.issue.pull_request &&
+        (
+          contains(github.event.comment.body, '@toptal-bot run ') &&
+          (
+            contains(github.event.comment.body, 'flows tests') ||
+            contains(github.event.comment.body, 'backend pact') ||
+            contains(github.event.comment.body, 'default') ||
+            contains(github.event.comment.body, 'mergecheck')
+          )
+        )
+      )
+    outputs:
+      continue: ${{ steps.check.outputs.continue }}
     steps:
-      - name: Run specs
-        shell: bash
-        run: |
-          echo "Done"
-          
-  flow-specs:
-    name: Flow specs
-    needs: [verify]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
+      - name: Checkout platform
         uses: actions/checkout@v3
         with:
           ref: ${{ inputs.sha || github.sha }}
-      - name: Run specs
-        shell: bash
-        run: |
-          echo "Done"
+          fetch-depth: 0
 
-  second_job:
-    name: Second job
-    needs: [verify]
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v37
+        with:
+          files_ignore: |
+            - **/yarn.lock
+            - **/package.json
+            - docs/**
+            - **.md
+            - **.js
+            - **.ejs
+            - **.jsx
+
+      - name: Check if any files have changed
+        run: |
+          if [ ${steps.changed-files.outputs.any_changed} == 'true' ] ; then
+            echo "Backend files have changed."
+            echo "List all the files that have changed: ${{ steps.changed-files.outputs.all_changed_files }}"
+          else
+            echo "No backend files have changed. Skip flows tests."
+            exit 0
+          fi
+
+  flows:
+    name: ${{ matrix.mode }}
+    needs: check_necessity
+    if: ${{ !cancelled() && needs.check_necessity.outputs.continue == 'true'}}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mode: [ explore, test ]
+
     steps:
-      - name: Run specs
-        shell: bash
+      - name: Checkout platform
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.sha || github.sha }}
+
+      - name: Run flows ${{ matrix.mode }}
         run: |
           echo "Done"

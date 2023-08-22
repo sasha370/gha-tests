@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="037253a5-cefe-47c0-baad-fdfa3cb45e75" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.github/workflows/flow_specs.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/flow_specs.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/skip_flows_specs.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
