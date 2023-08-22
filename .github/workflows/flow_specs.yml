@@ -50,8 +50,10 @@ jobs:
             - **.jsx
 
       - name: Check if any files have changed
+        env:
+          any_changed: ${{ steps.changed-files.outputs.any_changed }}
         run: |
-          if [ ${steps.changed-files.outputs.any_changed} == 'true' ] ; then
+          if [ $any_changed == 'true' ] ; then
             echo "Backend files have changed."
             echo "List all the files that have changed: ${{ steps.changed-files.outputs.all_changed_files }}"
           else
