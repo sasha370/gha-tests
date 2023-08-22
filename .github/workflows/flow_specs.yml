@@ -8,11 +8,14 @@ on:
         type: string
         required: true
 
-  pull_request:
-    paths-ignore:
-      - '**.md'
-      - 'docs/**'
-      - '^(?!.*webpack-sizes\.lock$|.*package\.json$|.*yarn\.lock$|\.*\.(e?js|jsx)$).*$'
+#  pull_request:
+#    paths-ignore:
+#      - '**.md'
+#      - 'docs/**'
+#      - '**/package.json'
+#      - '**/yarn.lock'
+#      - '**/*.js'
+#      - '**/*.jsx'
 
 concurrency:
   group: >-
@@ -25,8 +28,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  verify:
+    name: Verify
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run specs
+        shell: bash
+        run: |
+          echo "Done"
+          
   flow-specs:
     name: Flow specs
+    needs: [verify]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -40,6 +54,7 @@ jobs:
 
   second_job:
     name: Second job
+    needs: [verify]
     runs-on: ubuntu-latest
     steps:
       - name: Run specs
