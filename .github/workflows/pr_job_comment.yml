@@ -43,9 +43,8 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1.2.2
         with:
           workflow: Flows
-          token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ steps.prData.outputs.ref }}
-          inputs: '{ "sha": "refs/pull/${{ github.event.issue.number }}/merge" }'
+          inputs: '{ "sha": "${{ steps.prData.outputs.merge_commit_sha }}" }'
 
 #      - name: Trigger Jest
 #        if: ${{ contains(github.event.comment.body, 'required') ||  contains(github.event.comment.body, 'jest') }}
@@ -112,7 +111,6 @@ jobs:
           JOB_STATUS: ${{ job.status }}
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { owner, repo } = context.issue;
             const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
