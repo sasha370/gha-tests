@@ -53,7 +53,6 @@ jobs:
 
       - name: Set status check - pending
         uses: actions/github-script@v6
-#        if: ${{ github.event_name != 'workflow_dispatch' }}
         env:
           STATUS_STATE: pending
         with:
@@ -83,7 +82,6 @@ jobs:
           echo "Done"
 
       - name: Set status check - success / failure / error
-#        if: ${{ inputs.is_workflow_call != 'true' }}
         uses: actions/github-script@v6
         env:
           STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
