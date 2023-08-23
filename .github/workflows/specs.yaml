@@ -71,3 +71,4 @@ jobs:
         run: |
           echo "This is a dummy workflow. In order to be able to testing, this part must be merged into the master"
 
+

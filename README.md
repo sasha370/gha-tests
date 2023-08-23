@@ -3,4 +3,5 @@
 # gha-tests
 
 Some tests for GHA 
+<<<<<<< HEAD
 asd
