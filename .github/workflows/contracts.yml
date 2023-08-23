@@ -1,0 +1,102 @@
+name: Contracts
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Git reference commit.
+        type: string
+        required: true
+      ref_name:
+        description: Git branch name.
+        type: string
+        required: true
+      contracts_set:
+        description: Set of contract tests.
+        type: string
+        required: true
+
+  workflow_call:
+    inputs:
+      sha:
+        description: Git reference commit.
+        type: string
+        required: true
+      ref_name:
+        description: Git branch name.
+        type: string
+        required: true
+      contracts_set:
+        description: Set of contract tests.
+        type: string
+        required: false
+        default: 'all'
+      is_workflow_call:
+        description: 'Is workflow call?'
+        type: string
+        required: false
+        default: 'true'
+
+jobs:
+  consumer-contract-tests:
+    name: Consumer
+    runs-on: ubuntu-latest
+    if: ${{ !cancelled() && 
+          ( inputs.contracts_set == 'consumer' || inputs.contracts_set == 'all'  ) 
+        }}
+    steps:
+      - name: Do something
+        shell: bash
+        run: |
+          echo "Consumer contracts verification"
+
+  provider-contracts-graphql-gateway-verify:
+    name: Provider graphql gateway
+    runs-on: ubuntu-latest
+    if: ${{ !cancelled() &&
+          ( inputs.contracts_set == 'provider' || inputs.contracts_set == 'all'  )
+          }}
+    steps:
+      - name: Do something
+        shell: bash
+        run: |
+          echo "Provider GraphQL gateway contracts verification"
+
+  provider-contracts-platform-verify:
+    name: Provider platform
+    runs-on: ubuntu-latest
+    if: ${{ !cancelled() &&
+          ( inputs.contracts_set == 'provider' || inputs.contracts_set == 'all'  )
+        }}
+    steps:
+      - name: Do something
+        shell: bash
+        run: |
+          echo "Provider Platform contracts verification"
+
+  provider-contracts-platform-async-verify:
+    name: Provider platform async
+    runs-on: ubuntu-latest
+    if: ${{ !cancelled() &&
+          ( inputs.contracts_set == 'provider' || inputs.contracts_set == 'all' )
+       }}
+    steps:
+      - name: Do something
+        shell: bash
+        run: |
+          echo "Provider Platform async contracts verification"
+
+  run-can-i-deploy-check:
+    needs:
+      - consumer-contract-tests
+      - provider-contracts-graphql-gateway-verify
+      - provider-contracts-platform-verify
+      - provider-contracts-platform-async-verify
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && inputs.contracts_set == 'all' }}
+    name: Can-I-Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do something
+        shell: bash
+        run: |
+          echo "Can-I-Deploy check"
