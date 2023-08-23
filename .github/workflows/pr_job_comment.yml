@@ -1,89 +1,119 @@
 name: PR Comments
 
-
-
-
 on:
- issue_comment:
-   types: [created]
-   
-   
- workflow_dispatch:
-   inputs:
-     platform_branch:
-       description: 'Input Platform branch (default master)'
-      
-       default: releases/latest
-     pr_head_ref:
-       description: 'Head ref'
-       required: false
- 
-
-
- workflow_call:
-   inputs:
-     platform_branch:
-       type: string
-       description: 'Input Platform branch (default master)'
-       required: true
-       default: 'master_WC'
-
+  issue_comment:
+    types: [created]
 
 jobs:
- triggerPrWorkflow:
-   name: Trigger PR Workflow
-   if: >
-      (github.event_name == 'workflow_dispatch') || (github.event_name == 'repository_dispatch') || (github.event_name == 'schedule') ||
+  triggerPrWorkflow:
+    name: Trigger PR Workflow
+    if: >
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, '@toptal-bot run') &&
       (
-        github.event.issue.pull_request &&
-        (
-          startsWith(github.event.comment.body, '@toptal-bot run') &&
-          (
-            contains(github.event.comment.body, 'default') ||
-            (contains(github.event.comment.body, 'features') && !contains(github.event.comment.body, 'features for'))
-          )
-        )
+        contains(github.event.comment.body, 'required') ||
+        contains(github.event.comment.body, 'default') 
       )
-   runs-on: ubuntu-latest
-   steps:
-       - name: From Github
-         shell: bash
-         run: |
-            echo ${{github.ref_name}}
-            echo ${{inputs.pr_head_ref}}
-            echo ${{inputs.platform_branch}}
-       - name: View context attributes
-         uses: actions/github-script@v6
-         with:
-           script: |
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo github event
+        env:
+          EVENT: '${{ toJson(github.event) }}'
+        run: echo $EVENT
 
-             console.log(context)
-             console.log(process.env.GITHUB_REF_NAME)
-            # if (context.payload.issue.pull_request) {
-             #  const { owner, repo, number } = context.payload.issue;
-              # const { data: pr } = await octokit.rest.pulls.get({ owner, repo, pull_number: number });
+      - id: prData
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo, number } = context.issue;
+            const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: number });
+            core.setOutput('ref', pr.head.ref)
+            core.setOutput('merge_commit_sha', pr.merge_commit_sha)
+            core.setOutput('head_sha', pr.head.sha)
 
-             #  console.log(pr.merge_commit_sha);
-             #  console.log(pr.head.sha);
-             #  console.log(pr.head.ref);
-            # }
+      - name: View prData
+        run: |
+          echo "ref: ${{ steps.prData.outputs.ref }}"
+          echo "merge_commit_sha: ${{ steps.prData.outputs.merge_commit_sha }}"
+          echo "head_sha: ${{ steps.prData.outputs.head_sha}}"
 
-#      - name: Trigger Features
-#        if: ${{ contains(github.event.comment.body, 'features GHA') }}
-#        uses: benc-uk/workflow-dispatch@v1.1
+      - name: Trigger Flows
+        if: ${{ contains(github.event.comment.body, 'required') ||
+          contains(github.event.comment.body, 'default' }}
+        uses: benc-uk/workflow-dispatch@v1.2.2
+        with:
+          workflow: Flows
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ steps.prData.outputs.ref }}
+          inputs: '{ "sha": "refs/pull/${{ github.event.issue.number }}/merge" }'
+
+#      - name: Trigger Jest
+#        if: ${{ contains(github.event.comment.body, 'required') ||  contains(github.event.comment.body, 'jest') }}
+#        uses: benc-uk/workflow-dispatch@v1.2.2
 #        with:
-#          workflow: Features
-#          token: ${{ secrets.PERSONAL_TOKEN }}
-#          inputs: '{ "talent_portal_branch": "${{ steps.prData.outputs.ref }}" }'
+#          workflow: Jest
+#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
+#          ref: ${{ steps.prData.outputs.ref }}
+#          inputs: '{ "ref": "refs/pull/${{ github.event.issue.number }}/merge", "pull_request_id": "${{ github.event.issue.number }}" }'
+#
+#      - name: Trigger Cypress
+#        if: ${{ contains(github.event.comment.body, 'required') ||  contains(github.event.comment.body, 'cypress') }}
+#        uses: benc-uk/workflow-dispatch@v1.2.2
+#        with:
+#          workflow: Cypress
+#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
+#          ref: ${{ steps.prData.outputs.ref }}
+#          inputs: '{ "ref": "${{ steps.prData.outputs.merge_commit_sha }}" }'
+#
+#      - name: Trigger Cucumber Features
+#        if: ${{ contains(github.event.comment.body, 'features') }}
+#        uses: benc-uk/workflow-dispatch@v1.2.2
+#        with:
+#          workflow: Cucumber Features
+#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
+#          ref: ${{ steps.prData.outputs.ref }}
+#
+#      - name: Trigger Required Updates Check
+#        if: ${{ contains(github.event.comment.body, 'required') ||  contains(github.event.comment.body, 'check:updates') }}
+#        uses: benc-uk/workflow-dispatch@v1.2.2
+#        with:
+#          workflow: Required Updates
+#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
+#          ref: ${{ steps.prData.outputs.ref }}
+#
+#      - name: Trigger Pact
+#        if: ${{ contains(github.event.comment.body, 'required') ||  contains(github.event.comment.body, 'pact') }}
+#        uses: benc-uk/workflow-dispatch@v1.2.2
+#        with:
+#          workflow: Pact
+#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
+#          ref: ${{ steps.prData.outputs.ref }}
+#
+#      - name: Trigger Billing alpha legacy package
+#        if: ${{ contains(github.event.comment.body, 'package:billing:alpha-release') }}
+#        uses: benc-uk/workflow-dispatch@v1.2.2
+#        with:
+#          workflow: Publish Billing alpha package
+#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
+#          ref: ${{ steps.prData.outputs.ref }}
+#
+#      - name: Trigger storybook temploy
+#        if: ${{ contains(github.event.comment.body, 'storybook-temploy') }}
+#        uses: benc-uk/workflow-dispatch@v1.2.2
+#        with:
+#          workflow: Deploy Storybook to Temploy
+#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
+#          ref: ${{ steps.prData.outputs.ref }}
+#          inputs: '{ "version": "${{ steps.prData.outputs.head_sha }}", "pr-number": "${{ github.event.issue.number }}"}'
 
-       - name: React to comment - success or failure
-         if: ${{ always() }}
-         env:
-           JOB_STATUS: ${{ job.status }}
-         uses: actions/github-script@v5
-         with:
-           github-token: ${{ secrets.PERSONAL_TOKEN }}
-           script: |
-             const { owner, repo } = context.issue;
-             const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
-             await github.rest.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
+      - name: React to comment - success or failure
+        if: ${{ always() }}
+        env:
+          JOB_STATUS: ${{ job.status }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.issue;
+            const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
+            await github.rest.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
