@@ -20,92 +20,76 @@ on:
         required: false
         default: 'true'
 
-  issue_comment:
-    types: [ created ]
-
 jobs:
-  check_necessity:
+  flows:
+    name: ${{ matrix.mode }}
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
-    if: >
-      (github.event_name == 'workflow_dispatch') ||
-      (inputs.is_workflow_call == 'true') ||
-      (
-        github.event.issue.pull_request &&
-        (
-          contains(github.event.comment.body, '@toptal-bot run ') &&
-          (
-            contains(github.event.comment.body, 'flows tests') ||
-            contains(github.event.comment.body, 'backend pact') ||
-            contains(github.event.comment.body, 'default') ||
-            contains(github.event.comment.body, 'mergecheck')
-          )
-        )
-      )
-    outputs:
-      conclusion: ${{ steps.conclusion.outputs.conclusion }}
+    env:
+      STATUS_CHECK_NAME: Flows:${{ matrix.mode }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    strategy:
+      matrix:
+        mode: [ explore, test ]
     steps:
-      - name: JSON github
-        run: |
-          echo $context | jq --color-output .
-        env:
-          context: ${{ toJSON(github) }}
       - name: JSON event
         run: |
           echo $context | jq --color-output .
         env:
           context: ${{ toJSON(github.event) }}
-
-      - name: Checkout platform
-        uses: actions/checkout@v3
-
-      - name: Get merge commit SHA
-        if: github.event_name == 'issue_comment'
-        id: prData
-        uses: ./.github/actions/get_merge_commit/
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v37
-        with:
-          files_ignore: |
-             **/yarn.lock
-             **/package.json
-             docs/**
-             **/*.md
-             **/*.js
-             **/*.ejs
-             **/*.jsx
-
-      - name: Check if any files have changed
-        id: conclusion
-        env:
-          any_changed: ${{ steps.changed-files.outputs.any_changed }}
+      - name: JSON inputs
         run: |
-          if [ $any_changed == 'true' ] ; then
-            echo "Backend files have changed."
-            echo "List all the files that have changed: ${{ steps.changed-files.outputs.all_changed_files }}"
-            echo "conclusion=continue" >> $GITHUB_OUTPUT
-          else
-            echo "No backend files have changed. Skip flows tests."
-          fi
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(inputs) }}
+      - name: JSON github
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(github) }}
 
-  flows:
-    name: ${{ matrix.mode }}
-    needs: check_necessity
-    if: ${{ !cancelled() && needs.check_necessity.outputs.conclusion == 'continue' }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        mode: [ explore, test ]
-    steps:
-      - name: Checkout platform
+      - name: Set status check - pending
+        uses: actions/github-script@v6
+        if: ${{ github.event_name != 'workflow_dispatch' }}
+        env:
+          STATUS_STATE: pending
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              context: process.env.STATUS_CHECK_NAME,
+              state: process.env.STATUS_STATE,
+              target_url: process.env.STATUS_TARGET_URL
+            })
+
+      - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.sha ||  github.sha }}
+          # This makes Actions fetch all Git history so lerna command --since origin/master can work properly
+          fetch-depth: 0
+          ref: ${{ inputs.sha || github.ref }}
 
       - name: Run flows ${{ matrix.mode }}
         run: |
           echo "${{ needs.check_necessity.outputs.conclusion }}"
           echo "Done"
+
+      - name: Set status check - success / failure / error
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/github-script@v6
+        env:
+          STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              context: process.env.STATUS_CHECK_NAME,
+              state: process.env.STATUS_STATE,
+              target_url: process.env.STATUS_TARGET_URL
+            })
