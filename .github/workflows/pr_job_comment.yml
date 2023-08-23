@@ -38,7 +38,8 @@ jobs:
           echo "head_sha: ${{ steps.prData.outputs.head_sha}}"
 
       - name: Trigger Flows
-        if: ${{ contains(github.event.comment.body, 'default') }}
+        if: ${{ contains(github.event.comment.body, 'required') ||
+          contains(github.event.comment.body, 'default' }}
         uses: benc-uk/workflow-dispatch@v1.2.2
         with:
           workflow: Flows

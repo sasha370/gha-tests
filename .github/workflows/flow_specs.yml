@@ -26,7 +26,7 @@ jobs:
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     env:
-      STATUS_CHECK_NAME: Flows:${{ matrix.mode }}
+      STATUS_CHECK_NAME: Flows test / ${{ matrix.mode }}
       STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
     strategy:
       matrix:
@@ -50,12 +50,13 @@ jobs:
 
       - name: Set status check - pending
         uses: actions/github-script@v6
-        if: ${{ github.event_name != 'workflow_dispatch' }}
         env:
           STATUS_STATE: pending
         with:
           script: |
             const { owner, repo } = context.issue;
+            console.log(context);
+            console.log(context.sha);
             await github.rest.repos.createCommitStatus({
               owner,
               repo,
@@ -78,7 +79,6 @@ jobs:
           echo "Done"
 
       - name: Set status check - success / failure / error
-        if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/github-script@v6
         env:
           STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
