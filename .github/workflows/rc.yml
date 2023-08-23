@@ -1,9 +1,10 @@
 name: Release candidate
 
 on:
- push:
-   branches: [ master ]
- workflow_dispatch:
+  push:
+    branches: [ master ]
+
+  workflow_dispatch:
 
 jobs:
   flows-test:
@@ -12,6 +13,14 @@ jobs:
     secrets: inherit
     with:
       sha: ${{ github.sha }}
+
+  contracts:
+    name: Contracts
+    uses: ./.github/workflows/contracts.yml
+    secrets: inherit
+    with:
+      sha: ${{ github.sha }}
+      ref_name: ${{ github.ref_name }}
 
   first_job:
     runs-on: ubuntu-latest

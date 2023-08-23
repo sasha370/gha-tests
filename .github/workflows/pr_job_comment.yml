@@ -39,72 +39,45 @@ jobs:
 
       - name: Trigger Flows
         if: ${{ contains(github.event.comment.body, 'required') ||
-          contains(github.event.comment.body, 'default' }}
+          contains(github.event.comment.body, 'default') }}
         uses: benc-uk/workflow-dispatch@v1.2.2
         with:
           workflow: Flows
-          token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ steps.prData.outputs.ref }}
-          inputs: '{ "sha": "refs/pull/${{ github.event.issue.number }}/merge" }'
+          inputs: '{ "sha": "${{ steps.prData.outputs.merge_commit_sha }}" }'
 
-#      - name: Trigger Jest
-#        if: ${{ contains(github.event.comment.body, 'required') ||  contains(github.event.comment.body, 'jest') }}
-#        uses: benc-uk/workflow-dispatch@v1.2.2
-#        with:
-#          workflow: Jest
-#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
-#          ref: ${{ steps.prData.outputs.ref }}
-#          inputs: '{ "ref": "refs/pull/${{ github.event.issue.number }}/merge", "pull_request_id": "${{ github.event.issue.number }}" }'
-#
-#      - name: Trigger Cypress
-#        if: ${{ contains(github.event.comment.body, 'required') ||  contains(github.event.comment.body, 'cypress') }}
-#        uses: benc-uk/workflow-dispatch@v1.2.2
-#        with:
-#          workflow: Cypress
-#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
-#          ref: ${{ steps.prData.outputs.ref }}
-#          inputs: '{ "ref": "${{ steps.prData.outputs.merge_commit_sha }}" }'
-#
-#      - name: Trigger Cucumber Features
-#        if: ${{ contains(github.event.comment.body, 'features') }}
-#        uses: benc-uk/workflow-dispatch@v1.2.2
-#        with:
-#          workflow: Cucumber Features
-#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
-#          ref: ${{ steps.prData.outputs.ref }}
-#
-#      - name: Trigger Required Updates Check
-#        if: ${{ contains(github.event.comment.body, 'required') ||  contains(github.event.comment.body, 'check:updates') }}
-#        uses: benc-uk/workflow-dispatch@v1.2.2
-#        with:
-#          workflow: Required Updates
-#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
-#          ref: ${{ steps.prData.outputs.ref }}
-#
-#      - name: Trigger Pact
-#        if: ${{ contains(github.event.comment.body, 'required') ||  contains(github.event.comment.body, 'pact') }}
-#        uses: benc-uk/workflow-dispatch@v1.2.2
-#        with:
-#          workflow: Pact
-#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
-#          ref: ${{ steps.prData.outputs.ref }}
-#
-#      - name: Trigger Billing alpha legacy package
-#        if: ${{ contains(github.event.comment.body, 'package:billing:alpha-release') }}
-#        uses: benc-uk/workflow-dispatch@v1.2.2
-#        with:
-#          workflow: Publish Billing alpha package
-#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
-#          ref: ${{ steps.prData.outputs.ref }}
-#
-#      - name: Trigger storybook temploy
-#        if: ${{ contains(github.event.comment.body, 'storybook-temploy') }}
-#        uses: benc-uk/workflow-dispatch@v1.2.2
-#        with:
-#          workflow: Deploy Storybook to Temploy
-#          token: ${{ secrets.TOPTAL_DEVBOT_TOKEN }}
-#          ref: ${{ steps.prData.outputs.ref }}
-#          inputs: '{ "version": "${{ steps.prData.outputs.head_sha }}", "pr-number": "${{ github.event.issue.number }}"}'
+      - name: Check contracts necessity
+        id: check_contracts_necessity
+        if: ${{ contains(github.event.comment.body, 'contracts provider') ||
+          contains(github.event.comment.body, 'contracts consumer') ||
+          contains(github.event.comment.body, 'contracts pack') ||
+          contains(github.event.comment.body, 'backend pact') ||
+          contains(github.event.comment.body, 'default') ||
+          contains(github.event.comment.body, 'mergecheck') }}
+        shell: bash
+        run: |
+          if [[ "${{ github.event.comment.body }}" == *"contracts provider"* ]]; then
+            conclusion="Run only provider contracts"
+            echo "contracts_set=provider" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.comment.body }}" == *"contracts consumer"* ]]; then
+            conclusion="Run only consumer contracts"
+            echo "contracts_set=consumer" >> $GITHUB_OUTPUT
+          else
+            conclusion="Run all contracts"
+            echo "contracts_set=all" >> $GITHUB_OUTPUT
+          fi
+          echo "Conclusion: $conclusion"
+
+      - name: Trigger Contracts
+        if: steps.check_contracts_necessity.conclusion != 'skipped'
+        uses: benc-uk/workflow-dispatch@v1.2.2
+        with:
+          workflow: Contracts
+          ref: ${{ steps.prData.outputs.ref }}
+          inputs: '{ "sha": "${{ steps.prData.outputs.merge_commit_sha }}",
+            "ref_name": "${{ steps.prData.outputs.ref }}",
+            "contracts_set": "${{ steps.check_contracts_necessity.outputs.contracts_set }}"
+            }'
 
       - name: React to comment - success or failure
         if: ${{ always() }}
@@ -112,7 +85,6 @@ jobs:
           JOB_STATUS: ${{ job.status }}
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { owner, repo } = context.issue;
             const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
