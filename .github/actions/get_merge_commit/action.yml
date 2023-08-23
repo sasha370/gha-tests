@@ -1,0 +1,9 @@
+name: Get merge commit sha
+description: Gets the merge commit and the head sha from a PR and exposes it to be used by other steps in the workflow.
+inputs:
+  token:
+    description: 'GitHub token to use'
+    required: true
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

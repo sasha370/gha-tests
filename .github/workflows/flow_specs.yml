@@ -57,8 +57,13 @@ jobs:
 
       - name: Checkout platform
         uses: actions/checkout@v3
+
+      - name: Get merge commit SHA
+        if: github.event_name == 'issue_comment'
+        id: prData
+        uses: ./.github/actions/get_merge_commit/
         with:
-          ref: ${{ inputs.sha || github.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get changed files
         id: changed-files
