@@ -84,6 +84,7 @@ jobs:
       - name: Do something
         shell: bash
         run: |
+          exit 1
           echo "Provider Platform async contracts verification"
 
   run-can-i-deploy-check:
