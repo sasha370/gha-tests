@@ -41,6 +41,8 @@ jobs:
           )
         )
       )
+    outputs:
+      conclusion: ${{ steps.conclusion.outputs.conclusion }}
     steps:
       - name: JSON github
         run: |
@@ -56,13 +58,8 @@ jobs:
       - name: Checkout platform
         uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.sha || 'test-skip-3' || github.sha }}
+          ref: ${{ inputs.sha || github.sha }}
 
-#      - name: show info
-#        run: |
-#          `git diff --name-only --diff-filter=ACMR #{target_branch}`.split("\n")
-
-#IF it is a issue_comment then Actions tries to get diff for Master branch even if I check out a different branch.
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v37
@@ -77,21 +74,22 @@ jobs:
              **/*.jsx
 
       - name: Check if any files have changed
+        id: conclusion
         env:
           any_changed: ${{ steps.changed-files.outputs.any_changed }}
         run: |
           if [ $any_changed == 'true' ] ; then
             echo "Backend files have changed."
             echo "List all the files that have changed: ${{ steps.changed-files.outputs.all_changed_files }}"
+            echo "conclusion=continue" >> $GITHUB_OUTPUT
           else
             echo "No backend files have changed. Skip flows tests."
-            exit 0
           fi
 
   flows:
     name: ${{ matrix.mode }}
     needs: check_necessity
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && needs.check_necessity.outputs.conclusion == 'continue' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -100,8 +98,9 @@ jobs:
       - name: Checkout platform
         uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.sha || 'flow-test-1' || github.sha }}
+          ref: ${{ inputs.sha ||  github.sha }}
 
       - name: Run flows ${{ matrix.mode }}
         run: |
+          echo "${{ needs.check_necessity.outputs.conclusion }}"
           echo "Done"
