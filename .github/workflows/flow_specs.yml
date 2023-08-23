@@ -71,10 +71,10 @@ jobs:
              **/yarn.lock
              **/package.json
              docs/**
-             *.md
-             *.js
-             *.ejs
-             *.jsx
+             **/*.md
+             **/*.js
+             **/*.ejs
+             **/*.jsx
 
       - name: Check if any files have changed
         env:
