@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATUS_CHECK_NAME: Flows test / ${{ matrix.mode }}
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
     strategy:
       matrix:
         mode: [ explore, test ]
@@ -40,6 +40,11 @@ jobs:
           echo $context | jq --color-output .
         env:
           context: ${{ toJSON(github.event) }}
+      - name: JSON job
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(job) }}
       - name: JSON inputs
         run: |
           echo $context | jq --color-output .
@@ -79,10 +84,12 @@ jobs:
       - name: Run flows ${{ matrix.mode }}
         run: |
           echo "${{ needs.check_necessity.outputs.conclusion }}"
+          exit 1
           echo "Done"
 
       - name: Set status check - success / failure / error
         uses: actions/github-script@v6
+        if: ${{ always() && inputs.is_workflow_call != 'true'}}
         env:
           STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
         with:
