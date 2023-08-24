@@ -46,7 +46,7 @@ jobs:
         }}
     env:
       STATUS_CHECK_NAME: Contracts / Consumer
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
 
     steps:
       - name: Set status check - pending
@@ -66,6 +66,11 @@ jobs:
               state: process.env.STATUS_STATE,
               target_url: process.env.STATUS_TARGET_URL
             })
+      - name: JSON job
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(job) }}
 
       - name: Do something
         shell: bash
@@ -98,7 +103,7 @@ jobs:
           }}
     env:
       STATUS_CHECK_NAME: Provider / Platform GraphQL gateway
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
 
     steps:
       - name: Set status check - pending
@@ -118,6 +123,11 @@ jobs:
               state: process.env.STATUS_STATE,
               target_url: process.env.STATUS_TARGET_URL
             })
+      - name: JSON job
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(job) }}
 
       - name: Do something
         shell: bash
@@ -149,7 +159,7 @@ jobs:
         }}
     env:
       STATUS_CHECK_NAME: Provider / Platform
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
 
     steps:
       - name: Set status check - pending
@@ -169,6 +179,11 @@ jobs:
               state: process.env.STATUS_STATE,
               target_url: process.env.STATUS_TARGET_URL
             })
+      - name: JSON job
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(job) }}
 
       - name: Do something
         shell: bash
@@ -200,7 +215,7 @@ jobs:
        }}
     env:
       STATUS_CHECK_NAME: Provider / Platform async
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
 
     steps:
       - name: Set status check - pending
@@ -220,15 +235,18 @@ jobs:
               state: process.env.STATUS_STATE,
               target_url: process.env.STATUS_TARGET_URL
             })
+
+      - name: JSON job
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(job) }}
+
       - name: Do something
         shell: bash
         run: |
           exit 1
           echo "Provider Platform async contracts verification"
-
-      - name: Job status
-        run: |
-          echo ${{ job.status }}
 
       - name: Set status check - success / failure / error
         uses: actions/github-script@v6
@@ -259,7 +277,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATUS_CHECK_NAME: Can-I-Deploy
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
 
     steps:
       - name: Set status check - pending
@@ -279,6 +297,13 @@ jobs:
               state: process.env.STATUS_STATE,
               target_url: process.env.STATUS_TARGET_URL
             })
+
+      - name: JSON job
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(job) }}
+
       - name: Do something
         shell: bash
         run: |

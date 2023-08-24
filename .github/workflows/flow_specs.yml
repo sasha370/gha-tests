@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATUS_CHECK_NAME: Flows test / ${{ matrix.mode }}
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
     strategy:
       matrix:
         mode: [ explore, test ]
@@ -37,6 +37,11 @@ jobs:
           echo $context | jq --color-output .
         env:
           context: ${{ toJSON(github.event) }}
+      - name: JSON job
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(job) }}
       - name: JSON inputs
         run: |
           echo $context | jq --color-output .
