@@ -46,7 +46,7 @@ jobs:
         }}
     env:
       STATUS_CHECK_NAME: Contracts / Consumer
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/
 
     steps:
       - name: Set status check - pending
@@ -103,7 +103,7 @@ jobs:
           }}
     env:
       STATUS_CHECK_NAME: Provider / Platform GraphQL gateway
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/
 
     steps:
       - name: Set status check - pending
@@ -159,7 +159,7 @@ jobs:
         }}
     env:
       STATUS_CHECK_NAME: Provider / Platform
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/
 
     steps:
       - name: Set status check - pending
@@ -215,7 +215,7 @@ jobs:
        }}
     env:
       STATUS_CHECK_NAME: Provider / Platform async
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/
 
     steps:
       - name: Set status check - pending
@@ -277,7 +277,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATUS_CHECK_NAME: Can-I-Deploy
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/
 
     steps:
       - name: Set status check - pending
@@ -303,7 +303,7 @@ jobs:
           echo $context | jq --color-output .
         env:
           context: ${{ toJSON(job) }}
-          
+
       - name: Do something
         shell: bash
         run: |
