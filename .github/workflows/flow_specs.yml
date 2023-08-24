@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATUS_CHECK_NAME: Flows test / ${{ matrix.mode }}
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
     strategy:
       matrix:
         mode: [ explore, test ]
@@ -81,7 +81,7 @@ jobs:
 
       - name: Set status check - success / failure / error
         uses: actions/github-script@v6
-        if: ${{ !cancelled() && inputs.is_workflow_call != 'true' }}
+        if: ${{ always() && inputs.is_workflow_call != 'true'}}
         env:
           STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
         with:

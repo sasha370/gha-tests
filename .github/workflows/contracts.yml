@@ -46,7 +46,7 @@ jobs:
         }}
     env:
       STATUS_CHECK_NAME: Contracts / Consumer
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
 
     steps:
       - name: Set status check - pending
@@ -74,6 +74,7 @@ jobs:
 
       - name: Set status check - success / failure / error
         uses: actions/github-script@v6
+        if: always()
         env:
           STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
         with:
@@ -97,7 +98,7 @@ jobs:
           }}
     env:
       STATUS_CHECK_NAME: Provider / Platform GraphQL gateway
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
 
     steps:
       - name: Set status check - pending
@@ -125,6 +126,7 @@ jobs:
 
       - name: Set status check - success / failure / error
         uses: actions/github-script@v6
+        if: always()
         env:
           STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
         with:
@@ -147,7 +149,7 @@ jobs:
         }}
     env:
       STATUS_CHECK_NAME: Provider / Platform
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
 
     steps:
       - name: Set status check - pending
@@ -175,6 +177,7 @@ jobs:
 
       - name: Set status check - success / failure / error
         uses: actions/github-script@v6
+        if: always()
         env:
           STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
         with:
@@ -197,7 +200,7 @@ jobs:
        }}
     env:
       STATUS_CHECK_NAME: Provider / Platform async
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
 
     steps:
       - name: Set status check - pending
@@ -229,6 +232,7 @@ jobs:
 
       - name: Set status check - success / failure / error
         uses: actions/github-script@v6
+        if: always()
         env:
           STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
         with:
@@ -255,7 +259,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATUS_CHECK_NAME: Can-I-Deploy
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ github.job_id }}
 
     steps:
       - name: Set status check - pending
@@ -279,8 +283,10 @@ jobs:
         shell: bash
         run: |
           echo "Can-I-Deploy check"
+
       - name: Set status check - success / failure / error
         uses: actions/github-script@v6
+        if: always()
         env:
           STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
         with:
