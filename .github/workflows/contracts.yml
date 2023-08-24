@@ -71,7 +71,7 @@ jobs:
         shell: bash
         run: |
           echo "Consumer contracts verification"
-          
+
       - name: Set status check - success / failure / error
         uses: actions/github-script@v6
         env:
@@ -222,6 +222,11 @@ jobs:
         run: |
           exit 1
           echo "Provider Platform async contracts verification"
+
+      - name: Job status
+        run: |
+          echo ${{ job.status }}
+
       - name: Set status check - success / failure / error
         uses: actions/github-script@v6
         env:

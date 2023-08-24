@@ -76,10 +76,12 @@ jobs:
       - name: Run flows ${{ matrix.mode }}
         run: |
           echo "${{ needs.check_necessity.outputs.conclusion }}"
+          exit 1
           echo "Done"
 
       - name: Set status check - success / failure / error
         uses: actions/github-script@v6
+        if: ${{ !cancelled() && inputs.is_workflow_call != 'true' }}
         env:
           STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
         with:
