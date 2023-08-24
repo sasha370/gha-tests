@@ -46,7 +46,7 @@ jobs:
         }}
     env:
       STATUS_CHECK_NAME: Contracts / Consumer
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
+      BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
 
     steps:
       - name: Set status check - pending
@@ -64,7 +64,7 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
       - name: JSON job
         run: |
@@ -91,7 +91,7 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
 
 
@@ -103,7 +103,7 @@ jobs:
           }}
     env:
       STATUS_CHECK_NAME: Provider / Platform GraphQL gateway
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
+      BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
 
     steps:
       - name: Set status check - pending
@@ -121,7 +121,7 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
       - name: JSON job
         run: |
@@ -148,7 +148,7 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
 
   provider-contracts-platform-verify:
@@ -159,7 +159,7 @@ jobs:
         }}
     env:
       STATUS_CHECK_NAME: Provider / Platform
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
+      BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
 
     steps:
       - name: Set status check - pending
@@ -177,7 +177,7 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
       - name: JSON job
         run: |
@@ -204,7 +204,7 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
 
   provider-contracts-platform-async-verify:
@@ -215,7 +215,7 @@ jobs:
        }}
     env:
       STATUS_CHECK_NAME: Provider / Platform async
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
+      BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
 
     steps:
       - name: Set status check - pending
@@ -233,7 +233,7 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
 
       - name: JSON job
@@ -262,7 +262,7 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
 
 
@@ -277,7 +277,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATUS_CHECK_NAME: Can-I-Deploy
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
+      BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
 
     steps:
       - name: Set status check - pending
@@ -295,7 +295,7 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
 
       - name: JSON job
@@ -323,5 +323,5 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })

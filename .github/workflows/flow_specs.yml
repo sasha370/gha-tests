@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STATUS_CHECK_NAME: Flows test / ${{ matrix.mode }}
-      STATUS_TARGET_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ job.number }}
+      BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
     strategy:
       matrix:
         mode: [ explore, test ]
@@ -55,6 +55,7 @@ jobs:
 
       - name: Set status check - pending
         uses: actions/github-script@v6
+        if: ${{ !(inputs.is_workflow_call == 'true') }}
         env:
           STATUS_STATE: pending
         with:
@@ -68,7 +69,7 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
 
       - name: Checkout
@@ -98,5 +99,5 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
