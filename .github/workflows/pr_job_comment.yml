@@ -4,6 +4,9 @@ on:
   issue_comment:
     types: [created]
 
+env:
+  set_status: ${{ inputs.is_workflow_call != 'true' }}
+
 jobs:
   triggerPrWorkflow:
     name: Trigger PR Workflow
@@ -22,7 +25,9 @@ jobs:
       - name: Echo github event
         env:
           EVENT: '${{ toJson(github.event) }}'
-        run: echo $EVENT
+        run: |
+          echo "${{ env.set_status }}"
+          echo $EVENT
 
       - id: prData
         uses: actions/github-script@v6

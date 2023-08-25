@@ -62,7 +62,8 @@ jobs:
     with:
       sha: ${{ inputs.sha || github.sha }}
       ref_name: ${{ inputs.ref_name || github.ref_name }}
-      set_status: ${{ inputs.is_workflow_call != 'true' }}
+#      set_status: ${{ inputs.is_workflow_call != 'true' }}
+      set_status: ${{ env.SET_STATUS }}
 
   provider-contracts-platform-verify:
     name: Provider platform
@@ -75,7 +76,8 @@ jobs:
       sha: ${{ inputs.sha || github.sha }}
       ref_name: ${{ inputs.ref_name || github.ref_name }}
       run_with_wip: false
-      set_status: ${{ inputs.is_workflow_call != 'true' }}
+#      set_status: ${{ inputs.is_workflow_call != 'true' }}
+      set_status: ${{ env.SET_STATUS }}
 
   provider-contracts-platform-async-verify:
     name: Provider platform async
@@ -88,7 +90,8 @@ jobs:
       sha: ${{ inputs.sha || github.sha }}
       ref_name: ${{ inputs.ref_name || github.ref_name }}
       run_with_wip: false
-      set_status: ${{ inputs.is_workflow_call != 'true' }}
+#      set_status: ${{ inputs.is_workflow_call != 'true' }}
+      set_status: ${{ env.SET_STATUS }}
 
   run-can-i-deploy-check:
     needs:
@@ -100,4 +103,5 @@ jobs:
     with:
       sha: ${{ inputs.sha || github.sha }}
       job_type: ${{ inputs.is_workflow_call == 'true' && 'rc' || 'pr '}}
-      set_status: ${{ inputs.is_workflow_call != 'true' }}
+#      set_status: ${{ inputs.is_workflow_call != 'true' }}
+      set_status: ${{ env.SET_STATUS }}
