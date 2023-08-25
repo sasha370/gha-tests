@@ -37,6 +37,8 @@ on:
         required: false
         default: 'true'
 
+env:
+  SET_STATUS: ${{ inputs.is_workflow_call != 'true' }}
 
 jobs:
   consumer-contract-tests:
@@ -48,7 +50,7 @@ jobs:
     secrets: inherit
     with:
       sha: ${{ inputs.sha || github.sha }}
-      set_status: ${{ inputs.is_workflow_call != 'true' }}
+      set_status: ${{ env.SET_STATUS }}
 
   provider-contracts-graphql-gateway-verify:
     name: Provider graphql gateway
