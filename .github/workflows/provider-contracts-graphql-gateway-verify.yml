@@ -1,0 +1,79 @@
+name: Verify contracts for "Graphql Gateway" provider
+
+permissions:
+  contents: read
+  id-token: write
+  actions: write
+  statuses: write
+
+on:
+  workflow_call:
+    inputs:
+      sha:
+        description: Git reference commit.
+        type: string
+        required: true
+      ref_name:
+        description: Branch name.
+        type: string
+        required: true
+      set_status:
+        description: 'Set check status?'
+        type: string
+        required: false
+        default: 'false'
+
+jobs:
+  verify:
+    name: Graphql Gateway
+    timeout-minutes: 120
+    runs-on: ubuntu-latest
+    env:
+      STATUS_CHECK_NAME: Can-I-Deploy
+      BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
+
+    steps:
+      - name: Set status check - pending
+        uses: actions/github-script@v6
+        env:
+          STATUS_STATE: pending
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            console.log(context);
+            console.log(context.sha);
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              context: process.env.STATUS_CHECK_NAME,
+              state: process.env.STATUS_STATE,
+              target_url: process.env.STATUS_TARGET_URL
+            })
+      - name: JSON job
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(job) }}
+
+      - name: Do something
+        shell: bash
+        run: |
+          echo "Provider GraphQL gateway contracts verification"
+
+      - name: Set status check - success / failure / error
+        uses: actions/github-script@v6
+        if: always()
+        env:
+          STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              context: process.env.STATUS_CHECK_NAME,
+              state: process.env.STATUS_STATE,
+              target_url: process.env.STATUS_TARGET_URL
+            })
