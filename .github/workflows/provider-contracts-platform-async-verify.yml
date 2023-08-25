@@ -33,7 +33,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     env:
-      STATUS_CHECK_NAME: Can-I-Deploy
+      STATUS_CHECK_NAME: Provider / Platform (async)
       BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
 
     steps:
@@ -52,7 +52,7 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
 
       - name: JSON job
@@ -81,6 +81,6 @@ jobs:
               sha: context.sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.STATUS_TARGET_URL
+              target_url: process.env.BUILD_URL
             })
 
