@@ -77,10 +77,12 @@ jobs:
         with:
           workflow: Contracts
           ref: ${{ steps.prData.outputs.ref }}
-          inputs: '{ "sha": "${{ steps.prData.outputs.merge_commit_sha }}",
-            "ref_name": "${{ steps.prData.outputs.ref }}",
-            "contracts_set": "${{ steps.check_contracts_necessity.outputs.contracts_set }}"
-            }'
+          inputs: |
+            { 
+              "sha": "${{ steps.prData.outputs.merge_commit_sha }}",
+              "ref_name": "${{ steps.prData.outputs.ref }}",
+              "contracts_set": "${{ steps.check_contracts_necessity.outputs.contracts_set }}"
+            }
 
       - name: React to comment - success or failure
         if: ${{ always() }}
