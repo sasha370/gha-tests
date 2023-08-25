@@ -37,7 +37,6 @@ on:
         required: false
         default: 'true'
 
-
 jobs:
   consumer-contract-tests:
     name: Consumer
