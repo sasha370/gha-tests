@@ -4,8 +4,6 @@ on:
   issue_comment:
     types: [created]
 
-env:
-  set_status: ${{ inputs.is_workflow_call != 'true' }}
 
 jobs:
   triggerPrWorkflow:
@@ -86,7 +84,8 @@ jobs:
             { 
               "sha": "${{ steps.prData.outputs.merge_commit_sha }}",
               "ref_name": "${{ steps.prData.outputs.ref }}",
-              "contracts_set": "${{ steps.check_contracts_necessity.outputs.contracts_set }}"
+              "contracts_set": "${{ steps.check_contracts_necessity.outputs.contracts_set }}",
+              "set_status": "true"
             }
 
       - name: React to comment - success or failure
