@@ -15,6 +15,11 @@ on:
         description: Set of contract tests.
         type: string
         required: true
+      set_status:
+        description: 'Set check status?'
+        type: string
+        required: false
+        default: 'false'
 
   workflow_call:
     inputs:
@@ -36,6 +41,12 @@ on:
         type: string
         required: false
         default: 'true'
+      set_status:
+        description: 'Set check status?'
+        type: string
+        required: false
+        default: 'false'
+
 
 jobs:
   consumer-contract-tests:
@@ -47,7 +58,8 @@ jobs:
     secrets: inherit
     with:
       sha: ${{ inputs.sha || github.sha }}
-      set_status: ${{ inputs.is_workflow_call != 'true' }}
+      set_status: ${{ inputs.set_status }}
+
 
   provider-contracts-graphql-gateway-verify:
     name: Provider graphql gateway
@@ -59,8 +71,7 @@ jobs:
     with:
       sha: ${{ inputs.sha || github.sha }}
       ref_name: ${{ inputs.ref_name || github.ref_name }}
-#      set_status: ${{ inputs.is_workflow_call != 'true' }}
-      set_status: ${{ env.SET_STATUS }}
+      set_status: ${{ inputs.set_status }}
 
   provider-contracts-platform-verify:
     name: Provider platform
@@ -73,8 +84,7 @@ jobs:
       sha: ${{ inputs.sha || github.sha }}
       ref_name: ${{ inputs.ref_name || github.ref_name }}
       run_with_wip: false
-#      set_status: ${{ inputs.is_workflow_call != 'true' }}
-      set_status: ${{ env.SET_STATUS }}
+      set_status: ${{ inputs.set_status }}
 
   provider-contracts-platform-async-verify:
     name: Provider platform async
@@ -87,8 +97,7 @@ jobs:
       sha: ${{ inputs.sha || github.sha }}
       ref_name: ${{ inputs.ref_name || github.ref_name }}
       run_with_wip: false
-#      set_status: ${{ inputs.is_workflow_call != 'true' }}
-      set_status: ${{ env.SET_STATUS }}
+      set_status: ${{ inputs.set_status }}
 
   run-can-i-deploy-check:
     needs:
@@ -100,5 +109,4 @@ jobs:
     with:
       sha: ${{ inputs.sha || github.sha }}
       job_type: ${{ inputs.is_workflow_call == 'true' && 'rc' || 'pr '}}
-#      set_status: ${{ inputs.is_workflow_call != 'true' }}
-      set_status: ${{ env.SET_STATUS }}
+      set_status: ${{ inputs.set_status }}
