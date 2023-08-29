@@ -43,6 +43,22 @@ jobs:
           echo "merge_commit_sha: ${{ steps.prData.outputs.merge_commit_sha }}"
           echo "head_sha: ${{ steps.prData.outputs.head_sha}}"
 
+      - uses: actions/checkout@v3
+      - uses: AurorNZ/paths-filter@v3
+        id: filter
+        with:
+          ref: ${{ steps.prData.outputs.ref }}
+          filters: |
+            backend:
+              - '!README.md'
+              - '!gems/**/*'
+              - '!.github/**/*'
+            frontend:
+              - '.github/**/*.yml'
+            docs:
+              - 'docs/**/*'
+              - '**/*.md'
+
       - name: Trigger Flows
         if: ${{ contains(github.event.comment.body, 'required') ||
           contains(github.event.comment.body, 'default') }}
