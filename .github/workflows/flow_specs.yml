@@ -33,11 +33,37 @@ jobs:
     timeout-minutes: 3
     continue-on-error: true
     outputs:
-      skip_build: ${{ 'true' }}
+      skip_build: ${{ steps.skip-build.outputs.skip_build }}
     steps:
       - name: Register build in Anvil
+        id: skip-build
         shell: bash
-        run: echo "Register build in Anvil"
+        run: |
+          echo "Register build in Anvil"
+          echo "skip_build=true" >> $GITHUB_OUTPUT
+
+      - name: Set check status if build skipped
+        if: ${{ inputs.force_build != 'true' && steps.skip-build.outputs.skip_build == 'true' }}
+        uses: actions/github-script@v6
+        env:
+          STATUS_STATE: 'success'
+          STATUS_CHECK_NAMES: '["Flows test / explore", "Flows test / test"]'
+          BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            const checkNames = JSON.parse(process.env.STATUS_CHECK_NAMES);
+
+            for (const checkName of checkNames) {
+              await github.rest.repos.createCommitStatus({
+                owner,
+                repo,
+                sha: context.sha,
+                context: checkName,
+                state: process.env.STATUS_STATE,
+                target_url: process.env.BUILD_URL
+              });
+            }
 
   flows:
     name: ${{ matrix.mode }}
