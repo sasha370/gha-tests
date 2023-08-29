@@ -47,10 +47,16 @@ jobs:
         if: ${{ contains(github.event.comment.body, 'required') ||
           contains(github.event.comment.body, 'default') }}
         uses: benc-uk/workflow-dispatch@v1.2.2
+        env:
+          force_build: ${{ contains(fromJSON('["--force", "-f"]'), github.event.comment.body)}}
         with:
           workflow: Flows
           ref: ${{ steps.prData.outputs.ref }}
-          inputs: '{ "sha": "${{ steps.prData.outputs.merge_commit_sha }}" }'
+          inputs: |
+            {
+              "sha": "${{ steps.prData.outputs.merge_commit_sha }}",
+              "force_build": "${{ env.force_build }}"
+            }
 
       - name: Check contracts necessity
         id: check_contracts_necessity

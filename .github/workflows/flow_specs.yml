@@ -7,6 +7,11 @@ on:
         description: Git reference commit
         type: string
         required: true
+      force_build:
+        description: 'Force build execution?'
+        type: string
+        required: false
+        default: 'false'
 
   workflow_call:
     inputs:
@@ -20,12 +25,10 @@ on:
         required: false
         default: 'true'
 
-  issue_comment:
-    types: [ created ]
 jobs:
   flows:
     name: ${{ matrix.mode }}
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && inputs.force_build != 'true' }}
     runs-on: ubuntu-latest
     env:
       STATUS_CHECK_NAME: Flows test / ${{ matrix.mode }}

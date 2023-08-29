@@ -5,6 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="037253a5-cefe-47c0-baad-fdfa3cb45e75" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/contracts.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/contracts.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/pr_job_comment.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/pr_job_comment.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/rc.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/rc.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,7 +38,7 @@
     </excluded-from-favorite>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="flow-test-1" />
+        <entry key="$PROJECT_DIR$" value="test-skip-3" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -87,6 +90,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2408TeepjFycCgJ1eepbmrfruWc" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -101,6 +107,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/alex/TopTal/gha-tests&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
