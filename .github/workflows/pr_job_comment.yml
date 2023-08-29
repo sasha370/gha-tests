@@ -19,13 +19,21 @@ jobs:
         contains(github.event.comment.body, 'contracts pack') 
       )
     runs-on: ubuntu-latest
+    env:
+      force_build: ${{ contains(github.event.comment.body, '-f') || contains(github.event.comment.body, '--force') }}
+
     steps:
-      - name: Echo github event
-        env:
-          EVENT: '${{ toJson(github.event) }}'
+      - name: JSON event
         run: |
-          echo "${{ env.set_status }}"
-          echo $EVENT
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(github) }}
+
+      - name: JSON ENV
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(env) }}
 
       - id: prData
         uses: actions/github-script@v6
@@ -47,8 +55,6 @@ jobs:
         if: ${{ contains(github.event.comment.body, 'required') ||
           contains(github.event.comment.body, 'default') }}
         uses: benc-uk/workflow-dispatch@v1.2.2
-        env:
-          force_build: ${{ contains(fromJSON('["--force", "-f"]'), github.event.comment.body)}}
         with:
           workflow: Flows
           ref: ${{ steps.prData.outputs.ref }}
