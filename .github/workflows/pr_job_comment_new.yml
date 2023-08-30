@@ -5,6 +5,7 @@ on:
     types: [created]
 env:
   BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
+  SKIP_CHECK_DESCRIPTION: "Check skipped due to no relevant files changes."
 jobs:
   trigger_pr_workflow:
     name: Trigger PR Workflow
@@ -174,7 +175,8 @@ jobs:
                 sha,
                 context: checkName,
                 state: process.env.STATUS_STATE,
-                target_url: process.env.BUILD_URL
+                target_url: process.env.BUILD_URL,
+                description: process.env.SKIP_CHECK_DESCRIPTION
               });
             }
 
@@ -219,7 +221,8 @@ jobs:
                 sha,
                 context: checkName,
                 state: process.env.STATUS_STATE,
-                target_url: process.env.BUILD_URL
+                target_url: process.env.BUILD_URL,
+                description: process.env.SKIP_CHECK_DESCRIPTION
               });
             }
 
@@ -273,7 +276,8 @@ jobs:
               sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.BUILD_URL
+              target_url: process.env.BUILD_URL,
+              description: process.env.SKIP_CHECK_DESCRIPTION
             });
 
   trigger_docs_validation:
@@ -316,7 +320,8 @@ jobs:
               sha,
               context: process.env.STATUS_CHECK_NAME,
               state: process.env.STATUS_STATE,
-              target_url: process.env.BUILD_URL
+              target_url: process.env.BUILD_URL,
+              description: process.env.SKIP_CHECK_DESCRIPTION
             });
 
   trigger_contracts:
@@ -389,6 +394,7 @@ jobs:
                 sha,
                 context: checkName,
                 state: process.env.STATUS_STATE,
-                target_url: process.env.BUILD_URL
+                target_url: process.env.BUILD_URL,
+                description: process.env.SKIP_CHECK_DESCRIPTION
               });
             }
