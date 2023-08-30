@@ -34,6 +34,7 @@ jobs:
       - name: JSON event
         run: |
           echo $context | jq --color-output .
+          echo "Force?: ${{ contains(github.event.comment.body, '-f') || contains(github.event.comment.body, '--force')  }}"
         env:
           context: ${{ toJSON(github) }}
 
@@ -143,7 +144,7 @@ jobs:
       contains(github.event.comment.body, 'mergecheck')
     steps:
       - name: Trigger Flows test
-        if: needs.trigger_pr_workflow.outputs.flows_test == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
+        if: needs.changed_files.outputs.flows_test == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
         uses: benc-uk/workflow-dispatch@v1.2.2
         with:
           workflow: Flows test new
@@ -152,7 +153,7 @@ jobs:
             { "sha": "${{ needs.trigger_pr_workflow.outputs.merge_commit_sha }}" }
 
       - name: Set status if check skipped
-        if: needs.trigger_pr_workflow.outputs.flows_test != 'true' || needs.trigger_pr_workflow.outputs.force_build != 'true'
+        if: needs.changed_files.outputs.flows_test == 'false' && needs.trigger_pr_workflow.outputs.force_build == 'false'
         uses: actions/github-script@v6
         env:
           STATUS_STATE: 'success'
@@ -164,7 +165,7 @@ jobs:
           script: |
             const { owner, repo } = context.issue;
             const checkNames = JSON.parse(process.env.STATUS_CHECK_NAMES);
-            const sha = '${{ needs.trigger_pr_workflow.outputs.ref }}';
+            const sha = '${{ needs.trigger_pr_workflow.outputs.head_sha }}';
 
             for (const checkName of checkNames) {
               await github.rest.repos.createCommitStatus({
@@ -189,7 +190,7 @@ jobs:
     steps:
       - name: Trigger Frontend specs
         uses: benc-uk/workflow-dispatch@v1.2.2
-        if: needs.trigger_pr_workflow.outputs.frontend_specs == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
+        if: needs.changed_files.outputs.frontend_specs == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
         with:
           workflow: Frontend Specs
           ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
@@ -197,7 +198,7 @@ jobs:
             { "sha": "${{ needs.trigger_pr_workflow.outputs.merge_commit_sha }}" }
 
       - name: Set status if check skipped
-        if: needs.trigger_pr_workflow.outputs.frontend_specs != 'true' || needs.trigger_pr_workflow.outputs.force_build != 'true'
+        if: needs.changed_files.outputs.frontend_specs == 'false' && needs.trigger_pr_workflow.outputs.force_build == 'false'
         uses: actions/github-script@v6
         env:
           STATUS_STATE: 'success'
@@ -209,7 +210,7 @@ jobs:
           script: |
             const { owner, repo } = context.issue;
             const checkNames = JSON.parse(process.env.STATUS_CHECK_NAMES);
-            const sha = '${{ needs.trigger_pr_workflow.outputs.ref }}';
+            const sha = '${{ needs.trigger_pr_workflow.outputs.head_sha }}';
 
             for (const checkName of checkNames) {
               await github.rest.repos.createCommitStatus({
@@ -245,7 +246,7 @@ jobs:
 
       - name: Trigger Analytics consistency check
         uses: benc-uk/workflow-dispatch@v1.2.2
-        if: needs.trigger_pr_workflow.outputs.analytics_consistency == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
+        if: needs.changed_files.outputs.analytics_consistency == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
         with:
           workflow: Analytics consistency check
           ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
@@ -256,7 +257,7 @@ jobs:
             }
 
       - name: Set status if check skipped
-        if: needs.trigger_pr_workflow.outputs.analytics_consistency != 'true' || needs.trigger_pr_workflow.outputs.force_build != 'true'
+        if: needs.changed_files.outputs.analytics_consistency == 'false' && needs.trigger_pr_workflow.outputs.force_build == 'false'
         uses: actions/github-script@v6
         env:
           STATUS_STATE: 'success'
@@ -264,8 +265,7 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.issue;
-            const checkNames = JSON.parse(process.env.STATUS_CHECK_NAMES);
-            const sha = '${{ needs.trigger_pr_workflow.outputs.ref }}';
+            const sha = '${{ needs.trigger_pr_workflow.outputs.head_sha }}';
 
             await github.rest.repos.createCommitStatus({
               owner,
@@ -286,9 +286,13 @@ jobs:
       contains(github.event.comment.body, 'default') ||
       contains(github.event.comment.body, 'mergecheck')
     steps:
+      - name: Context
+        shell: bash
+        run: |
+          echo "Forced?: ${{  needs.trigger_pr_workflow.outputs.force_build }}"
       - name: Trigger Docs validation
         uses: benc-uk/workflow-dispatch@v1.2.2
-        if: needs.trigger_pr_workflow.outputs.docs_validation == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
+        if: needs.changed_files.outputs.docs_validation == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
         with:
           workflow: Docs validation
           ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
@@ -296,7 +300,7 @@ jobs:
             { "sha": "${{ needs.trigger_pr_workflow.outputs.merge_commit_sha }}" }
 
       - name: Set status if check skipped
-        if: needs.trigger_pr_workflow.outputs.docs_validation != 'true' || needs.trigger_pr_workflow.outputs.force_build != 'true'
+        if: needs.changed_files.outputs.docs_validation == 'false' && needs.trigger_pr_workflow.outputs.force_build == 'false'
         uses: actions/github-script@v6
         env:
           STATUS_STATE: 'success'
@@ -304,8 +308,7 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.issue;
-            const checkNames = JSON.parse(process.env.STATUS_CHECK_NAMES);
-            const sha = '${{ needs.trigger_pr_workflow.outputs.ref }}';
+            const sha = '${{ needs.trigger_pr_workflow.outputs.head_sha }}';
 
             await github.rest.repos.createCommitStatus({
               owner,
@@ -348,7 +351,7 @@ jobs:
           echo "Conclusion: $conclusion."
 
       - name: Trigger Contracts
-        if: needs.trigger_pr_workflow.outputs.contracts == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
+        if: needs.changed_files.outputs.contracts == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
         uses: benc-uk/workflow-dispatch@v1.2.2
         with:
           workflow: Contracts new
@@ -362,7 +365,7 @@ jobs:
             }
 
       - name: Set status if check skipped
-        if: needs.trigger_pr_workflow.outputs.contracts != 'true' || needs.trigger_pr_workflow.outputs.force_build != 'true'
+        if: needs.changed_files.outputs.contracts == 'false' && needs.trigger_pr_workflow.outputs.force_build == 'false'
         uses: actions/github-script@v6
         env:
           STATUS_STATE: 'success'
@@ -377,7 +380,7 @@ jobs:
           script: |
             const { owner, repo } = context.issue;
             const checkNames = JSON.parse(process.env.STATUS_CHECK_NAMES);
-            const sha = '${{ needs.trigger_pr_workflow.outputs.ref }}';
+            const sha = '${{ needs.trigger_pr_workflow.outputs.head_sha }}';
 
             for (const checkName of checkNames) {
               await github.rest.repos.createCommitStatus({
