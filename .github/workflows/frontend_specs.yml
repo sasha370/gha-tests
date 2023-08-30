@@ -43,7 +43,7 @@ jobs:
 
   frontend-specs:
     name: Karma
-    needs: register-build-in-anvil
+    needs: register_build
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     env:

@@ -34,7 +34,7 @@ jobs:
 
   analytics-consistency-check:
     name: Run analytics consistency check
-    needs: register-build-in-anvil
+    needs: register_build
     runs-on: ubuntu-latest
     env:
       STATUS_CHECK_NAME: Analytics consistency check

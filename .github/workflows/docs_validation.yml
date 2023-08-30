@@ -30,12 +30,11 @@ jobs:
 
   docs-validation:
     name: Run Docs validation
-    needs: register-build-in-anvil
+    needs: register_build
     runs-on: ubuntu-latest
     env:
       STATUS_CHECK_NAME: Docs validation
       BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
-
     steps:
       - name: JSON event
         run: |
