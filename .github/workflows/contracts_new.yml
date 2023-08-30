@@ -1,0 +1,110 @@
+name: Contracts new
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Git reference commit.
+        type: string
+        required: true
+      ref_name:
+        description: Git branch name.
+        type: string
+        required: true
+      contracts_set:
+        description: Set of contract tests.
+        type: string
+        required: true
+      set_status:
+        description: 'Set check status?'
+        type: string
+        required: false
+        default: 'false'
+
+  workflow_call:
+    inputs:
+      sha:
+        description: Git reference commit.
+        type: string
+        required: true
+      ref_name:
+        description: Git branch name.
+        type: string
+        required: true
+      contracts_set:
+        description: Set of contract tests.
+        type: string
+        required: false
+        default: 'all'
+      is_workflow_call:
+        description: 'Is workflow call?'
+        type: string
+        required: false
+        default: 'true'
+      set_status:
+        description: 'Set check status?'
+        type: string
+        required: false
+        default: 'false'
+
+jobs:
+  consumer-contract-tests:
+    name: Consumer
+    uses: ./.github/workflows/consumer-contract-tests.yml
+    if: ${{ !cancelled() &&
+      ( inputs.contracts_set == 'consumer' || inputs.contracts_set == 'all' )
+      }}
+    secrets: inherit
+    with:
+      sha: ${{ inputs.sha || github.sha }}
+      set_status: ${{ inputs.set_status }}
+
+  provider-contracts-graphql-gateway-verify:
+    name: Provider graphql gateway
+    uses: ./.github/workflows/provider-contracts-graphql-gateway-verify.yml
+    if: ${{ !cancelled() &&
+          ( inputs.contracts_set == 'provider' || inputs.contracts_set == 'all'  )
+          }}
+    secrets: inherit
+    with:
+      sha: ${{ inputs.sha || github.sha }}
+      ref_name: ${{ inputs.ref_name || github.ref_name }}
+      set_status: ${{ inputs.set_status }}
+
+  provider-contracts-platform-verify:
+    name: Provider platform
+    uses: ./.github/workflows/provider-contracts-platform-verify.yml
+    if: ${{ !cancelled() &&
+          ( inputs.contracts_set == 'provider' || inputs.contracts_set == 'all'  )
+        }}
+    secrets: inherit
+    with:
+      sha: ${{ inputs.sha || github.sha }}
+      ref_name: ${{ inputs.ref_name || github.ref_name }}
+      run_with_wip: false
+      set_status: ${{ inputs.set_status }}
+
+  provider-contracts-platform-async-verify:
+    name: Provider platform async
+    uses: ./.github/workflows/provider-contracts-platform-async-verify.yml
+    if: ${{ !cancelled() &&
+          ( inputs.contracts_set == 'provider' || inputs.contracts_set == 'all' )
+       }}
+    secrets: inherit
+    with:
+      sha: ${{ inputs.sha || github.sha }}
+      ref_name: ${{ inputs.ref_name || github.ref_name }}
+      run_with_wip: false
+      set_status: ${{ inputs.set_status }}
+
+  run-can-i-deploy-check:
+    needs:
+      - consumer-contract-tests
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && inputs.contracts_set == 'all' }}
+    name: Can-I-Deploy
+    uses: ./.github/workflows/contracts-consumer-verify.yml
+    secrets: inherit
+    with:
+      sha: ${{ inputs.sha || github.sha }}
+      job_type: ${{ inputs.is_workflow_call == 'true' && 'rc' || 'pr '}}
+      set_status: ${{ inputs.set_status }}

@@ -1,0 +1,91 @@
+name: Analytics consistency check
+
+permissions:
+  contents: read
+  id-token: write
+  actions: write
+  statuses: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Git reference commit.
+        type: string
+        required: true
+      analytics_branch:
+        description: Branch to compare local data schema against.
+        type: string
+        required: true
+
+jobs:
+  register_build:
+    name: Register build in Anvil
+    runs-on: ubuntu-latest
+    if: inputs.is_workflow_call != 'true'
+    timeout-minutes: 3
+    continue-on-error: true
+    steps:
+      - name: Register build in Anvil
+        id: skip-build
+        shell: bash
+        run: |
+          echo "Register build in Anvil"
+
+  analytics-consistency-check:
+    name: Run analytics consistency check
+    needs: register-build-in-anvil
+    runs-on: ubuntu-latest
+    env:
+      STATUS_CHECK_NAME: Analytics consistency check
+      BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
+    steps:
+      - name: JSON event
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(github) }}
+
+      - name: Set status check - pending
+        uses: actions/github-script@v6
+        env:
+          STATUS_STATE: pending
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              context: process.env.STATUS_CHECK_NAME,
+              state: process.env.STATUS_STATE,
+              target_url: process.env.BUILD_URL
+            })
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # This makes Actions fetch all Git history so lerna command --since origin/master can work properly
+          fetch-depth: 0
+          ref: ${{ inputs.sha || github.ref }}
+
+      - name: Run Analytics consistency check
+        run: |
+          echo "Done"
+
+      - name: Set final status check
+        uses: actions/github-script@v6
+        if: always()
+        env:
+          STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              context: process.env.STATUS_CHECK_NAME,
+              state: process.env.STATUS_STATE,
+              target_url: process.env.BUILD_URL
+            })

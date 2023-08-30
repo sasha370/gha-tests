@@ -1,0 +1,215 @@
+name: Frontend Specs
+
+permissions:
+  contents: read
+  id-token: write
+  actions: write
+  statuses: write
+
+on:
+  workflow_call:
+    inputs:
+      sha:
+        description: Git reference commit.
+        type: string
+        required: true
+      is_workflow_call:
+        description: 'Is workflow call?'
+        type: string
+        required: false
+        default: 'true'
+
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Git reference commit.
+        type: string
+        required: true
+
+
+jobs:
+  register_build:
+    name: Register build in Anvil
+    runs-on: ubuntu-latest
+    if: inputs.is_workflow_call != 'true'
+    timeout-minutes: 3
+    continue-on-error: true
+    steps:
+      - name: Register build in Anvil
+        id: skip-build
+        shell: bash
+        run: |
+          echo "Register build in Anvil"
+
+  frontend-specs:
+    name: Karma
+    needs: register-build-in-anvil
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    env:
+      STATUS_CHECK_NAME: Frontend specs / Karma
+    steps:
+      - name: JSON event
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(github) }}
+
+      - name: Set status check - pending
+        uses: actions/github-script@v6
+        if: inputs.is_workflow_call != 'true'
+        env:
+          STATUS_STATE: pending
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              context: process.env.STATUS_CHECK_NAME,
+              state: process.env.STATUS_STATE,
+              target_url: process.env.BUILD_URL
+            })
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # This makes Actions fetch all Git history so lerna command --since origin/master can work properly
+          fetch-depth: 0
+          ref: ${{ inputs.sha || github.ref }}
+
+      - name: Run Karma
+        run: |
+          echo "Done"
+
+      - name: Set final status check
+        uses: actions/github-script@v6
+        if: ${{ always() && inputs.is_workflow_call != 'true' }}
+        env:
+          STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              context: process.env.STATUS_CHECK_NAME,
+              state: process.env.STATUS_STATE,
+              target_url: process.env.BUILD_URL
+            })
+
+      - name: Fail fast
+        if: failure() && inputs.is_workflow_call == 'true'
+        uses: andymckay/cancel-action@0.3
+
+  jest:
+    name: Jest
+    needs: register-build-in-anvil
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    env:
+      STATUS_CHECK_NAME: Frontend specs / Jest
+    steps:
+      - name: JSON event
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(github) }}
+
+      - name: Set status check - pending
+        uses: actions/github-script@v6
+        if: inputs.is_workflow_call != 'true'
+        env:
+          STATUS_STATE: pending
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              context: process.env.STATUS_CHECK_NAME,
+              state: process.env.STATUS_STATE,
+              target_url: process.env.BUILD_URL
+            })
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # This makes Actions fetch all Git history so lerna command --since origin/master can work properly
+          fetch-depth: 0
+          ref: ${{ inputs.sha || github.ref }}
+
+      - name: Run Jest
+        run: |
+          echo "Done"
+
+      - name: Set final status check
+        uses: actions/github-script@v6
+        if: ${{ always() && inputs.is_workflow_call != 'true' }}
+        env:
+          STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              context: process.env.STATUS_CHECK_NAME,
+              state: process.env.STATUS_STATE,
+              target_url: process.env.BUILD_URL
+            })
+
+      - name: Fail fast
+        if: failure() && inputs.is_workflow_call == 'true'
+        uses: andymckay/cancel-action@0.3
+
+  digest-calculation:
+    name: Calculate assets digest and verify if it was already uploaded
+    needs: register-build-in-anvil
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+#    outputs:
+#      assets_digest: ${{ steps.assets_digest.outputs.assets_digest }}
+#      digest_exists: ${{ steps.digest_exists.outputs.digest_exists }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # This makes Actions fetch all Git history so lerna command --since origin/master can work properly
+          fetch-depth: 0
+          ref: ${{ inputs.sha || github.ref }}
+
+      - name: Run digest-calculation
+        run: |
+          echo "Done"
+
+  cache-assets:
+    # See: script/jenkins/specs_frontend_bundle_size.sh
+    name: Cache assets
+    needs: digest-calculation
+    if: needs.digest-calculation.outputs.digest_exists == 0
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout platform
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.sha }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # This makes Actions fetch all Git history so lerna command --since origin/master can work properly
+          fetch-depth: 0
+          ref: ${{ inputs.sha || github.ref }}
+
+      - name: Run cache-assets
+        run: |
+          echo "Done"
+
+      - name: Fail fast
+        if: failure() && inputs.is_workflow_call == 'true'
+        uses: andymckay/cancel-action@0.3

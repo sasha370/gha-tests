@@ -1,0 +1,391 @@
+name: PR Comments
+
+on:
+  issue_comment:
+    types: [created]
+env:
+  BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
+jobs:
+  trigger_pr_workflow:
+    name: Trigger PR Workflow
+    if: >
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, '@toptal-bot-gha run') &&
+      (
+        contains(github.event.comment.body, 'analytics') ||
+        contains(github.event.comment.body, 'docs') ||
+        contains(github.event.comment.body, 'flows tests') ||
+        contains(github.event.comment.body, 'frontend pack') ||
+        contains(github.event.comment.body, 'frontend specs') ||
+        contains(github.event.comment.body, 'contracts provider') ||
+        contains(github.event.comment.body, 'contracts consumer') ||
+        contains(github.event.comment.body, 'contracts pack') ||
+        contains(github.event.comment.body, 'backend pack') ||
+        contains(github.event.comment.body, 'default') ||
+        contains(github.event.comment.body, 'mergecheck')
+      )
+    runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.prData.outputs.ref }}
+      merge_commit_sha: ${{ steps.prData.outputs.merge_commit_sha }}
+      head_sha: ${{ steps.prData.outputs.head_sha }}
+      force_build: ${{ contains(github.event.comment.body, '-f') || contains(github.event.comment.body, '--force') }}
+    steps:
+      - name: JSON event
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(github) }}
+
+      - name: JSON ENV
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(env) }}
+
+
+      - id: prData
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo, number } = context.issue;
+            const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: number });
+            core.setOutput('ref', pr.head.ref)
+            core.setOutput('merge_commit_sha', pr.merge_commit_sha)
+            core.setOutput('head_sha', pr.head.sha)
+
+      - name: View prData
+        run: |
+          echo "ref: ${{ steps.prData.outputs.ref }}"
+          echo "merge_commit_sha: ${{ steps.prData.outputs.merge_commit_sha }}"
+          echo "head_sha: ${{ steps.prData.outputs.head_sha}}"
+
+      - name: React to comment - success or failure
+        if: ${{ always() }}
+        env:
+          JOB_STATUS: ${{ job.status }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            const content = process.env.JOB_STATUS === 'success' ? '+1' : '-1'
+            await github.rest.reactions.createForIssueComment({ owner, repo, comment_id: context.payload.comment.id, content });
+
+  changed_files:
+    name: Changed files
+    needs: trigger_pr_workflow
+    runs-on: ubuntu-latest
+    outputs:
+      flows_test: ${{ steps.changed_files.outputs.flows_test }}
+      frontend_specs: ${{ steps.changed_files.outputs.frontend_specs }}
+      analytics_consistency: ${{ steps.changed_files.outputs.analytics_consistency }}
+      docs_validation: ${{ steps.changed_files.outputs.docs_validation }}
+      contracts: ${{ steps.changed_files.outputs.contracts }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Changed files
+        uses: AurorNZ/paths-filter@v3
+        id: changed_files
+        with:
+          ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
+          filters: |
+            flows_test:
+              - 'tests/flows/**'
+              - '**/*.rb'
+              - 'testing/cassettes/**'
+              - 'testing/factories/**'
+              - 'app/flows/**'
+              - '!spec/**'
+              - '!**/spec/**'
+              - '!db/**'
+              - '!api/lib/graphql_api/staff/docs/staff_schema_view_docs_mappings.yaml'
+              - '!testing/support/contract_signing_helpers.rb'
+              - '!testing/support/factory_bot.rb'
+              - '!testing/support/factory_bot_stats_helper.rb'
+              - '!testing/support/language_helpers.rb'
+            frontend_specs:
+              - 'app/assets/**'
+              - 'front-guard.lock.yml'
+              - 'package.json'
+              - 'yarn.lock'
+              - '**/*.ejs'
+              - '**/*.js'
+              - '**/*.jsx'
+            analytics_consistency:
+              - '**/*.rb'
+            docs_validation:
+              - 'docs/**/*.md'
+            contracts:
+              - '.rspec_contracts'
+              - 'contracts/**'
+              - '**/*.rb'
+              - 'testing/factories/**'
+              - 'config/settings/**'
+              - 'config/initializers/**'
+              - '!spec/**'
+              - '!**/spec/**'
+              - '!tests/**'
+              - '!testing/support/contract_signing_helpers.rb'
+              - '!testing/support/factory_bot.rb'
+              - '!testing/support/factory_bot_stats_helper.rb'
+              - '!testing/support/language_helpers.rb'
+              - '!db/**'
+              - '!api/lib/graphql_api/staff/docs/staff_schema_view_docs_mappings.yaml'
+
+  trigger_flows_test:
+    name: Trigger Flows test
+    needs: [trigger_pr_workflow, changed_files]
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.comment.body, 'flows tests') ||
+      contains(github.event.comment.body, 'backend pack') ||
+      contains(github.event.comment.body, 'default') ||
+      contains(github.event.comment.body, 'mergecheck')
+    steps:
+      - name: Trigger Flows test
+        if: needs.trigger_pr_workflow.outputs.flows_test == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
+        uses: benc-uk/workflow-dispatch@v1.2.2
+        with:
+          workflow: Flows test new
+          ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
+          inputs: |
+            { "sha": "${{ needs.trigger_pr_workflow.outputs.merge_commit_sha }}" }
+
+      - name: Set status if check skipped
+        if: needs.trigger_pr_workflow.outputs.flows_test != 'true' || needs.trigger_pr_workflow.outputs.force_build != 'true'
+        uses: actions/github-script@v6
+        env:
+          STATUS_STATE: 'success'
+          STATUS_CHECK_NAMES: '[
+              "Flows test / explore",
+              "Flows test / test"
+            ]'
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            const checkNames = JSON.parse(process.env.STATUS_CHECK_NAMES);
+            const sha = '${{ needs.trigger_pr_workflow.outputs.ref }}';
+
+            for (const checkName of checkNames) {
+              await github.rest.repos.createCommitStatus({
+                owner,
+                repo,
+                sha,
+                context: checkName,
+                state: process.env.STATUS_STATE,
+                target_url: process.env.BUILD_URL
+              });
+            }
+
+  trigger_frontend_specs:
+    name: Trigger Frontend specs
+    needs: [trigger_pr_workflow, changed_files]
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.comment.body, 'frontend pack') ||
+      contains(github.event.comment.body, 'frontend specs') ||
+      contains(github.event.comment.body, 'default') ||
+      contains(github.event.comment.body, 'mergecheck')
+    steps:
+      - name: Trigger Frontend specs
+        uses: benc-uk/workflow-dispatch@v1.2.2
+        if: needs.trigger_pr_workflow.outputs.frontend_specs == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
+        with:
+          workflow: Frontend Specs
+          ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
+          inputs: |
+            { "sha": "${{ needs.trigger_pr_workflow.outputs.merge_commit_sha }}" }
+
+      - name: Set status if check skipped
+        if: needs.trigger_pr_workflow.outputs.frontend_specs != 'true' || needs.trigger_pr_workflow.outputs.force_build != 'true'
+        uses: actions/github-script@v6
+        env:
+          STATUS_STATE: 'success'
+          STATUS_CHECK_NAMES: '[
+              "Frontend specs / Karma",
+              "Frontend specs / Jest"
+            ]'
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            const checkNames = JSON.parse(process.env.STATUS_CHECK_NAMES);
+            const sha = '${{ needs.trigger_pr_workflow.outputs.ref }}';
+
+            for (const checkName of checkNames) {
+              await github.rest.repos.createCommitStatus({
+                owner,
+                repo,
+                sha,
+                context: checkName,
+                state: process.env.STATUS_STATE,
+                target_url: process.env.BUILD_URL
+              });
+            }
+
+  trigger_analytics_consistency_check:
+    name: Trigger Analytics consistency check
+    needs: [trigger_pr_workflow, changed_files]
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.comment.body, 'analytics') ||
+      contains(github.event.comment.body, 'backend pack') ||
+      contains(github.event.comment.body, 'default') ||
+      contains(github.event.comment.body, 'mergecheck')
+    steps:
+      - name: Get analytics branch
+        id: get-analytics-branch
+        if: contains(github.event.comment.body, 'analytics')
+        env:
+          TRIGGER_COMMENT: ${{ github.event.comment.body }}
+        run: |
+          regex=".*run analytics vs ([a-z0-9_\-]+).*"
+          if [[ $TRIGGER_COMMENT =~ $regex ]]; then
+            echo "analyticsBranch=${BASH_REMATCH[1]}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Trigger Analytics consistency check
+        uses: benc-uk/workflow-dispatch@v1.2.2
+        if: needs.trigger_pr_workflow.outputs.analytics_consistency == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
+        with:
+          workflow: Analytics consistency check
+          ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
+          inputs: |
+            {
+              "sha": "${{ needs.trigger_pr_workflow.outputs.merge_commit_sha }}",
+              "analytics_branch": "${{ steps.get-analytics-branch.outputs.analyticsBranch || 'master' }}"
+            }
+
+      - name: Set status if check skipped
+        if: needs.trigger_pr_workflow.outputs.analytics_consistency != 'true' || needs.trigger_pr_workflow.outputs.force_build != 'true'
+        uses: actions/github-script@v6
+        env:
+          STATUS_STATE: 'success'
+          STATUS_CHECK_NAME: 'Analytics consistency check'
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            const checkNames = JSON.parse(process.env.STATUS_CHECK_NAMES);
+            const sha = '${{ needs.trigger_pr_workflow.outputs.ref }}';
+
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha,
+              context: process.env.STATUS_CHECK_NAME,
+              state: process.env.STATUS_STATE,
+              target_url: process.env.BUILD_URL
+            });
+
+  trigger_docs_validation:
+    name: Trigger Docs validation
+    needs: [ trigger_pr_workflow, changed_files ]
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.comment.body, 'docs') ||
+      contains(github.event.comment.body, 'backend pack') ||
+      contains(github.event.comment.body, 'default') ||
+      contains(github.event.comment.body, 'mergecheck')
+    steps:
+      - name: Trigger Docs validation
+        uses: benc-uk/workflow-dispatch@v1.2.2
+        if: needs.trigger_pr_workflow.outputs.docs_validation == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
+        with:
+          workflow: Docs validation
+          ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
+          inputs: |
+            { "sha": "${{ needs.trigger_pr_workflow.outputs.merge_commit_sha }}" }
+
+      - name: Set status if check skipped
+        if: needs.trigger_pr_workflow.outputs.docs_validation != 'true' || needs.trigger_pr_workflow.outputs.force_build != 'true'
+        uses: actions/github-script@v6
+        env:
+          STATUS_STATE: 'success'
+          STATUS_CHECK_NAME: 'Docs validation'
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            const checkNames = JSON.parse(process.env.STATUS_CHECK_NAMES);
+            const sha = '${{ needs.trigger_pr_workflow.outputs.ref }}';
+
+            await github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha,
+              context: process.env.STATUS_CHECK_NAME,
+              state: process.env.STATUS_STATE,
+              target_url: process.env.BUILD_URL
+            });
+
+  trigger_contracts:
+    name: Trigger Contracts
+    needs: [ trigger_pr_workflow, changed_files ]
+    runs-on: ubuntu-latest
+    if: >
+      contains(github.event.comment.body, 'contracts provider') ||
+      contains(github.event.comment.body, 'contracts consumer') ||
+      contains(github.event.comment.body, 'contracts pack') ||
+      contains(github.event.comment.body, 'backend pack') ||
+      contains(github.event.comment.body, 'default') ||
+      contains(github.event.comment.body, 'mergecheck')
+    steps:
+      - name: Check contracts necessity
+        id: check_contracts_necessity
+        shell: bash
+        run: |
+          if [[ "${{ github.event.comment.body }}" == *"contracts provider"* && "${{ github.event.comment.body }}" == *"contracts consumer"* ]]; then
+            conclusion="Run both provider and consumer contracts"
+            echo "contracts_set=all" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.comment.body }}" == *"contracts provider"* ]]; then
+            conclusion="Run only provider contracts"
+            echo "contracts_set=provider" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.comment.body }}" == *"contracts consumer"* ]]; then
+            conclusion="Run only consumer contracts"
+            echo "contracts_set=consumer" >> $GITHUB_OUTPUT
+          else
+            conclusion="Run all contracts"
+            echo "contracts_set=all" >> $GITHUB_OUTPUT
+          fi
+          echo "Conclusion: $conclusion."
+
+      - name: Trigger Contracts
+        if: needs.trigger_pr_workflow.outputs.contracts == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
+        uses: benc-uk/workflow-dispatch@v1.2.2
+        with:
+          workflow: Contracts new
+          ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
+          inputs: |
+            {
+              "sha": "${{ needs.trigger_pr_workflow.outputs.merge_commit_sha }}",
+              "ref_name": "${{ needs.trigger_pr_workflow.outputs.ref }}",
+              "contracts_set": "${{ steps.check_contracts_necessity.outputs.contracts_set }}",
+              "set_status": "true"
+            }
+
+      - name: Set status if check skipped
+        if: needs.trigger_pr_workflow.outputs.contracts != 'true' || needs.trigger_pr_workflow.outputs.force_build != 'true'
+        uses: actions/github-script@v6
+        env:
+          STATUS_STATE: 'success'
+          STATUS_CHECK_NAMES: '[
+              "Contracts / Consumer",
+              "Contracts / Provider / Graphql Gateway",
+              "Contracts / Provider / Platform",
+              "Contracts / Provider / Platform async",
+              "Can-I-Deploy"
+            ]'
+        with:
+          script: |
+            const { owner, repo } = context.issue;
+            const checkNames = JSON.parse(process.env.STATUS_CHECK_NAMES);
+            const sha = '${{ needs.trigger_pr_workflow.outputs.ref }}';
+
+            for (const checkName of checkNames) {
+              await github.rest.repos.createCommitStatus({
+                owner,
+                repo,
+                sha,
+                context: checkName,
+                state: process.env.STATUS_STATE,
+                target_url: process.env.BUILD_URL
+              });
+            }
