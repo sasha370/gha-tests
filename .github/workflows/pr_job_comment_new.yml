@@ -77,12 +77,6 @@ jobs:
     name: Changed files
     needs: trigger_pr_workflow
     runs-on: ubuntu-latest
-    outputs:
-      flows_test: ${{ steps.changed_files.outputs.flows_test }}
-      frontend_specs: ${{ steps.changed_files.outputs.frontend_specs }}
-      analytics_consistency: ${{ steps.changed_files.outputs.analytics_consistency }}
-      docs_validation: ${{ steps.changed_files.outputs.docs_validation }}
-      contracts: ${{ steps.changed_files.outputs.contracts }}
     steps:
       - uses: actions/checkout@v3
       - name: Changed files
