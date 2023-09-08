@@ -85,8 +85,8 @@ jobs:
       - name: Github workflow directory updated
         shell: bash
         env:
-          base_branch: 'master'
-          ref_branch: ${{ needs.trigger_pr_workflow.outputs.ref }}
+          base_branch: 'refs/remotes/origin/master'
+          ref_branch: "refs/remotes/origin/${{ needs.trigger_pr_workflow.outputs.ref }}"
         run: |
           CHANGED_FILES=$(git diff --name-only $base_branch $ref_branch -- .github/workflows .github/actions)
           echo $CHANGED_FILES
