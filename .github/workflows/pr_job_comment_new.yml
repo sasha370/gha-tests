@@ -79,36 +79,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      
+        with:
+          fetch-depth: shallow
       - name: Github workflow directory updated
         id: ci_files_changed
         shell: bash
         env:
           base_branch: 'refs/remotes/origin/master'
           ref_branch: "refs/remotes/origin/${{ needs.trigger_pr_workflow.outputs.ref }}"
-          # ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
         run: |
-          # echo "MASTER: $(git show-ref master)"
-          # echo "REF: $(git show-ref $ref)"
+          echo "MASTER: $(git show-ref master)"
+          echo "REF: $(git show-ref $ref)"
 
-          EXIT_CODE=$(git diff --color --exit-code .github/workflows .github/actions)
-          echo "EXIT_CODE: $EXIT_CODE"
-          echo "ci_files_changed=$EXIT_CODE" >> $GITHUB_OUTPUT
+          # EXIT_CODE=$(git diff --color --exit-code .github/workflows .github/actions)
+          # echo "EXIT_CODE: $EXIT_CODE"
+          # echo "ci_files_changed=$EXIT_CODE" >> $GITHUB_OUTPUT
   
           
-          if [ $EXIT_CODE -eq 1 ]; then
-            echo "There have been changes in '.github' directory related to CI checks. Please do 'rebase' to update your PR checks."
-          fi
-          
-          # CHANGED_FILES=$(git diff --name-only $base_branch $ref_branch -- .github/workflows .github/actions)
-          # echo $CHANGED_FILES
-          # if [ -n "$CHANGED_FILES" ]; then
-          #   echo "There have been changes in 'master' branch related to CI checks. Please do 'rebase' to update your PR checks."
+          # if [ $EXIT_CODE -eq 1 ]; then
+          #   echo "There have been changes in '.github' directory related to CI checks. Please do 'rebase' to update your PR checks."
           # fi
+          
+          CHANGED_FILES=$(git diff --name-only $base_branch $ref_branch -- .github/workflows .github/actions)
+          echo $CHANGED_FILES
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "There have been changes in 'master' branch related to CI checks. Please do 'rebase' to update your PR checks."
+            echo "ci_files_changed=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Post a comment
-        if: ${{steps.ci_files_changed.outputs.ci_files_changed == 1 }}
+        if: ${{steps.ci_files_changed.outputs.ci_files_changed == 'true' }}
         uses: actions/github-script@v4
         with:
           script: |
