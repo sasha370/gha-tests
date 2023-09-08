@@ -79,9 +79,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/checkout@v3
         with:
-          ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
+          fetch-depth: 0
       
       - name: Github workflow directory updated
         shell: bash
