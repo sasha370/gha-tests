@@ -79,15 +79,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+
       
       - name: Github workflow directory updated
         shell: bash
         env:
           base_branch: 'refs/remotes/origin/master'
           ref_branch: "refs/remotes/origin/${{ needs.trigger_pr_workflow.outputs.ref }}"
+          ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
         run: |
+          echo "MASTER: $(git show-ref master)"
+          echo "REF: $(git show-ref $ref)"
+
+        
           CHANGED_FILES=$(git diff --name-only $base_branch $ref_branch -- .github/workflows .github/actions)
           echo $CHANGED_FILES
           if [ -n "$CHANGED_FILES" ]; then
