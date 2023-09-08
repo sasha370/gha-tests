@@ -79,6 +79,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Github workflow directory updated
+        shell: bash
+        env:
+          base_branch: 'master'
+          ref_branch: ${{ needs.trigger_pr_workflow.outputs.ref }}
+        run: |
+          CHANGED_FILES=$(git diff --name-only $base_branch $ref_branch -- .github/workflows .github/actions)
+          echo $CHANGED_FILES
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "There are changes in the .github directory."
+          else
+            echo "No changes in the .github directory."
+          fi
+      
       - name: Changed files
         uses: AurorNZ/paths-filter@v3
         id: changed_files
