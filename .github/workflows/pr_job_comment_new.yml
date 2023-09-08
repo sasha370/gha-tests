@@ -91,12 +91,18 @@ jobs:
           echo "MASTER: $(git show-ref master)"
           echo "REF: $(git show-ref $ref)"
 
-        
-          CHANGED_FILES=$(git diff --name-only $base_branch $ref_branch -- .github/workflows .github/actions)
-          echo $CHANGED_FILES
-          if [ -n "$CHANGED_FILES" ]; then
-            echo "There have been changes in 'master' branch related to CI checks. Please do 'rebase' to update your PR checks."
+          git diff --color --exit-code .github/workflows .github/actions
+          EXIT_CODE=$?
+          
+          if [ $EXIT_CODE -eq 1 ]; then
+            echo "There have been changes in '.github' directory related to CI checks. Please do 'rebase' to update your PR checks."
           fi
+          
+          # CHANGED_FILES=$(git diff --name-only $base_branch $ref_branch -- .github/workflows .github/actions)
+          # echo $CHANGED_FILES
+          # if [ -n "$CHANGED_FILES" ]; then
+          #   echo "There have been changes in 'master' branch related to CI checks. Please do 'rebase' to update your PR checks."
+          # fi
 
       - name: Post a comment
         uses: actions/github-script@v4
