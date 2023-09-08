@@ -91,7 +91,7 @@ jobs:
           CHANGED_FILES=$(git diff --name-only $base_branch $ref_branch -- .github/workflows .github/actions)
           echo $CHANGED_FILES
           if [ -n "$CHANGED_FILES" ]; then
-            echo "Here we can post a comment to PR"
+            echo "There have been changes in 'master' branch related to CI checks. Please do 'rebase' to update your PR checks."
           fi
 
       - name: Post a comment
