@@ -31,6 +31,7 @@ jobs:
       merge_commit_sha: ${{ steps.prData.outputs.merge_commit_sha }}
       head_sha: ${{ steps.prData.outputs.head_sha }}
       base_ref: ${{ steps.prData.outputs.base_ref }}
+      base_sha: ${{ steps.prData.outputs.base_sha }}
       force_build: ${{ contains(github.event.comment.body, '--force') }}
     steps:
       - name: JSON event
@@ -56,8 +57,9 @@ jobs:
             core.setOutput('ref', pr.head.ref)
             core.setOutput('merge_commit_sha', pr.merge_commit_sha)
             core.setOutput('head_sha', pr.head.sha)
-            // target branch name (e.g. "master")
+            // target branch name (e.g. "master") and sha
             core.setOutput('base_ref', pr.base.ref)
+            core.setOutput('base_sha', pr.base.sha)
 
       - name: View prData
         run: |
@@ -91,11 +93,16 @@ jobs:
         env:
           base_branch: ${{ needs.trigger_pr_workflow.outputs.base_ref }}
           ref_branch: ${{ needs.trigger_pr_workflow.outputs.ref }}
+          base_sha: ${{ needs.trigger_pr_workflow.outputs.base_sha }}
         run: |
-          git fetch --no-tags --depth=100 origin $base_branch $ref_branch
-          echo "Base branch refs: $(git show-ref $base_branch)"
-          echo "Current branch refs: $(git show-ref $ref_branch)"
-          CHANGED_FILES=$(git diff --name-only refs/remotes/origin/$base_branch refs/remotes/origin/$ref_branch -- .github/workflows .github/actions)
+          # git fetch --no-tags --depth=100 origin $base_branch $ref_branch
+          # echo "Base branch refs: $(git show-ref $base_branch)"
+          # echo "Current branch refs: $(git show-ref $ref_branch)"
+          # CHANGED_FILES=$(git diff --name-only refs/remotes/origin/$base_branch refs/remotes/origin/$ref_branch -- .github/workflows .github/actions)
+
+          git fetch --no-tags --depth=100 origin $base_branch
+          CHANGED_FILES=$(git diff --name-only $base_sha..refs/remotes/origin/$base_branch -- .github/workflows .github/actions)
+          
           echo "Changed files: $CHANGED_FILES"
           if [ -n "$CHANGED_FILES" ]; then
             echo "The changes in the branch related to CI checks have been found!"
