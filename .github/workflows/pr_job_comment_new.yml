@@ -91,6 +91,7 @@ jobs:
       - name: Github workflow directory updated
         id: ci_files_changed
         shell: bash
+        continue-on-error: true
         env:
           base_branch: 'master'
           ref_branch: ${{ needs.trigger_pr_workflow.outputs.ref }}
@@ -112,7 +113,7 @@ jobs:
           # fi
 
           echo "****************************"
-          CHANGED_FILES=$(git diff --name-only $base_branch $ref_branch -- .github/workflows .github/actions)
+          CHANGED_FILES=$(git diff --name-only refs/remotes/origin/$base_branch refs/remotes/origin/$ref_branch -- .github/workflows .github/actions)
           echo $CHANGED_FILES
           echo "****************************"
           if [ -n "$CHANGED_FILES" ]; then
@@ -128,6 +129,7 @@ jobs:
       - name: Post a comment
         if: ${{steps.ci_files_changed.outputs.ci_files_changed == 'true' }}
         uses: actions/github-script@v4
+        continue-on-error: true
         with:
           script: |
             const { owner, repo, number } = context.issue;
