@@ -111,7 +111,7 @@ jobs:
           script: |
             const { owner, repo, number } = context.issue;
             const commentBody = " - [ ] There have been changes in the base branch related to CI checks. Please do 'rebase' to update your PR checks.";
-            await github.issues.createComment({
+            await github.rest.issues.createComment({
               owner,
               repo,
               issue_number: number,
