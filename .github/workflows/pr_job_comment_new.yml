@@ -100,6 +100,10 @@ jobs:
           # echo "Current branch refs: $(git show-ref $ref_branch)"
           # CHANGED_FILES=$(git diff --name-only refs/remotes/origin/$base_branch refs/remotes/origin/$ref_branch -- .github/workflows .github/actions)
 
+
+          echo "Base branch: $base_branch"
+          echo "Base branch refs: $(git show-ref $base_branch)"
+          echo "Base branch SHA: $base_sha"
           git fetch --no-tags --depth=100 origin $base_branch
           CHANGED_FILES=$(git diff --name-only $base_sha..refs/remotes/origin/$base_branch -- .github/workflows .github/actions)
           
