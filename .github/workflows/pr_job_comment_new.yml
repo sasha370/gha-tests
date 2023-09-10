@@ -31,7 +31,7 @@ jobs:
       merge_commit_sha: ${{ steps.prData.outputs.merge_commit_sha }}
       head_sha: ${{ steps.prData.outputs.head_sha }}
       base_ref: ${{ steps.prData.outputs.base_ref }}
-      pr_base_sha: ${{ steps.prData.outputs.pr_base_sha }}
+      base_sha: ${{ steps.prData.outputs.base_sha }}
       force_build: ${{ contains(github.event.comment.body, '--force') }}
     steps:
       - name: JSON event
@@ -59,7 +59,7 @@ jobs:
             core.setOutput('head_sha', pr.head.sha)
             // target branch name (e.g. "master") and sha
             core.setOutput('base_ref', pr.base.ref)
-            core.setOutput('pr_base_sha', pr.base.sha)
+            core.setOutput('base_sha', pr.base.sha)
 
       - name: View prData
         run: |
@@ -86,14 +86,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         
-      - name: GitHub CI directory updated?
+      - name: Check if CI files changed in base branch
         id: ci_files_changed
         shell: bash
         continue-on-error: true
         env:
           base_branch: ${{ needs.trigger_pr_workflow.outputs.base_ref }}
           ref_branch: ${{ needs.trigger_pr_workflow.outputs.ref }}
-          pr_base_sha: ${{ needs.trigger_pr_workflow.outputs.pr_base_sha }}
+          base_sha: ${{ needs.trigger_pr_workflow.outputs.base_sha }}
         run: |
           # git fetch --no-tags --depth=100 origin $base_branch $ref_branch
           # echo "Base branch refs: $(git show-ref $base_branch)"
@@ -101,17 +101,17 @@ jobs:
           # CHANGED_FILES=$(git diff --name-only refs/remotes/origin/$base_branch refs/remotes/origin/$ref_branch -- .github/workflows .github/actions)
 
 
-          echo "Base branch: $base_branch"
-          echo "Base branch refs: $(git show-ref $base_branch)"
-          echo "Base branch SHA: $pr_base_sha"
           git fetch --no-tags --depth=100 origin $base_branch
-          CHANGED_FILES=$(git diff --name-only $pr_base_sha..refs/remotes/origin/$base_branch -- .github/workflows .github/actions)
-          
+          echo "Base branch last SHA: $(git show-ref $base_branch)"
+          echo "PR base branch SHA: $base_sha"
+          CHANGED_FILES=$(git diff --name-only $base_sha..refs/remotes/origin/$base_branch -- .github/workflows .github/actions)
+
           echo "Changed files: $CHANGED_FILES"
           if [ -n "$CHANGED_FILES" ]; then
-            echo "The changes in the branch related to CI checks have been found!"
+            echo "The changes in the base branch related to CI checks have been found!"
             echo "ci_files_changed=true" >> $GITHUB_OUTPUT
           fi
+
 
 
 
