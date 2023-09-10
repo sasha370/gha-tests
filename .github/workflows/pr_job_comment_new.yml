@@ -61,9 +61,10 @@ jobs:
 
       - name: View prData
         run: |
-          echo "ref: ${{ steps.prData.outputs.ref }}"
-          echo "merge_commit_sha: ${{ steps.prData.outputs.merge_commit_sha }}"
-          echo "head_sha: ${{ steps.prData.outputs.head_sha}}"
+          # PR Data outputs
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(steps.prData.outputs) }}
 
       - name: React to comment - success or failure
         if: ${{ always() }}
