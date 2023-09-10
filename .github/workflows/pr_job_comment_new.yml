@@ -30,12 +30,13 @@ jobs:
       ref: ${{ steps.prData.outputs.ref }}
       merge_commit_sha: ${{ steps.prData.outputs.merge_commit_sha }}
       head_sha: ${{ steps.prData.outputs.head_sha }}
-      force_build: ${{ contains(github.event.comment.body, '-f') || contains(github.event.comment.body, '--force') }}
+      base_ref: ${{ steps.prData.outputs.base_ref }}
+      force_build: ${{ contains(github.event.comment.body, '--force') }}
     steps:
       - name: JSON event
         run: |
           echo $context | jq --color-output .
-          echo "Force?: ${{ contains(github.event.comment.body, '-f') || contains(github.event.comment.body, '--force')  }}"
+          echo "Force?: ${{ contains(github.event.comment.body, '--force')  }}"
         env:
           context: ${{ toJSON(github) }}
 
@@ -55,6 +56,8 @@ jobs:
             core.setOutput('ref', pr.head.ref)
             core.setOutput('merge_commit_sha', pr.merge_commit_sha)
             core.setOutput('head_sha', pr.head.sha)
+            // target branch name (e.g. "master")
+            core.setOutput('base_ref', pr.base.ref)
 
       - name: View prData
         run: |
@@ -91,9 +94,9 @@ jobs:
           base_branch: 'refs/remotes/origin/master'
           ref_branch: "refs/remotes/origin/${{ needs.trigger_pr_workflow.outputs.ref }}"
         run: |
-          git fetch process.env.ref_branch 
+          git fetch $(process.env.ref_branch)
           echo "MASTER: $(git show-ref master)"
-          echo "REF: $(git show-ref $ref_branch)"
+          # echo "REF: $(git show-ref $ref_branch)"
 
           # EXIT_CODE=$(git diff --color --exit-code .github/workflows .github/actions)
           # echo "EXIT_CODE: $EXIT_CODE"
