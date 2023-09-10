@@ -31,7 +31,7 @@ jobs:
       merge_commit_sha: ${{ steps.prData.outputs.merge_commit_sha }}
       head_sha: ${{ steps.prData.outputs.head_sha }}
       base_ref: ${{ steps.prData.outputs.base_ref }}
-      base_sha: ${{ steps.prData.outputs.base_sha }}
+      pr_base_sha: ${{ steps.prData.outputs.pr_base_sha }}
       force_build: ${{ contains(github.event.comment.body, '--force') }}
     steps:
       - name: JSON event
@@ -59,7 +59,7 @@ jobs:
             core.setOutput('head_sha', pr.head.sha)
             // target branch name (e.g. "master") and sha
             core.setOutput('base_ref', pr.base.ref)
-            core.setOutput('base_sha', pr.base.sha)
+            core.setOutput('pr_base_sha', pr.base.sha)
 
       - name: View prData
         run: |
@@ -93,7 +93,7 @@ jobs:
         env:
           base_branch: ${{ needs.trigger_pr_workflow.outputs.base_ref }}
           ref_branch: ${{ needs.trigger_pr_workflow.outputs.ref }}
-          base_sha: ${{ needs.trigger_pr_workflow.outputs.base_sha }}
+          pr_base_sha: ${{ needs.trigger_pr_workflow.outputs.pr_base_sha }}
         run: |
           # git fetch --no-tags --depth=100 origin $base_branch $ref_branch
           # echo "Base branch refs: $(git show-ref $base_branch)"
@@ -103,9 +103,9 @@ jobs:
 
           echo "Base branch: $base_branch"
           echo "Base branch refs: $(git show-ref $base_branch)"
-          echo "Base branch SHA: $base_sha"
+          echo "Base branch SHA: $pr_base_sha"
           git fetch --no-tags --depth=100 origin $base_branch
-          CHANGED_FILES=$(git diff --name-only $base_sha..refs/remotes/origin/$base_branch -- .github/workflows .github/actions)
+          CHANGED_FILES=$(git diff --name-only $pr_base_sha..refs/remotes/origin/$base_branch -- .github/workflows .github/actions)
           
           echo "Changed files: $CHANGED_FILES"
           if [ -n "$CHANGED_FILES" ]; then
