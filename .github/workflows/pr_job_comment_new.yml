@@ -86,7 +86,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         
-      - name: Github workflow directory updated
+      - name: GitHub CI directory updated?
         id: ci_files_changed
         shell: bash
         continue-on-error: true
@@ -115,7 +115,7 @@ jobs:
 
 
 
-      - name: Post a comment
+      - name: Post a comment if CI files changed
         if: ${{steps.ci_files_changed.outputs.ci_files_changed == 'true' }}
         uses: actions/github-script@v6
         continue-on-error: true
