@@ -79,8 +79,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: shallow
+        # with:
+        #   fetch-depth: shallow
       - name: Github workflow directory updated
         id: ci_files_changed
         shell: bash
@@ -88,8 +88,9 @@ jobs:
           base_branch: 'refs/remotes/origin/master'
           ref_branch: "refs/remotes/origin/${{ needs.trigger_pr_workflow.outputs.ref }}"
         run: |
+          git fetch $procecc.env.ref_branch 
           echo "MASTER: $(git show-ref master)"
-          echo "REF: $(git show-ref $ref)"
+          echo "REF: $(git show-ref $ref_branch)"
 
           # EXIT_CODE=$(git diff --color --exit-code .github/workflows .github/actions)
           # echo "EXIT_CODE: $EXIT_CODE"
