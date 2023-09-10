@@ -81,12 +81,7 @@ jobs:
     needs: trigger_pr_workflow
     runs-on: ubuntu-latest
     steps:
-
-
-    
       - uses: actions/checkout@v3
-        # with:
-        #   fetch-depth: shallow
         
       - name: Github workflow directory updated
         id: ci_files_changed
@@ -100,7 +95,7 @@ jobs:
           echo "Base branch refs: $(git show-ref $base_branch)"
           echo "Current branch refs: $(git show-ref $ref_branch)"
           CHANGED_FILES=$(git diff --name-only refs/remotes/origin/$base_branch refs/remotes/origin/$ref_branch -- .github/workflows .github/actions)
-          echo $CHANGED_FILES
+          echo "Changed files: $CHANGED_FILES"
           if [ -n "$CHANGED_FILES" ]; then
             echo "The changes in the branch related to CI checks have been found!"
             echo "ci_files_changed=true" >> $GITHUB_OUTPUT
@@ -110,7 +105,7 @@ jobs:
 
       - name: Post a comment
         if: ${{steps.ci_files_changed.outputs.ci_files_changed == 'true' }}
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         continue-on-error: true
         with:
           script: |
