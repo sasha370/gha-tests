@@ -78,6 +78,9 @@ jobs:
     needs: trigger_pr_workflow
     runs-on: ubuntu-latest
     steps:
+
+
+    
       - uses: actions/checkout@v3
         # with:
         #   fetch-depth: shallow
@@ -88,7 +91,7 @@ jobs:
           base_branch: 'refs/remotes/origin/master'
           ref_branch: "refs/remotes/origin/${{ needs.trigger_pr_workflow.outputs.ref }}"
         run: |
-          git fetch $procecc.env.ref_branch 
+          git fetch process.env.ref_branch 
           echo "MASTER: $(git show-ref master)"
           echo "REF: $(git show-ref $ref_branch)"
 
@@ -107,6 +110,11 @@ jobs:
             echo "There have been changes in 'master' branch related to CI checks. Please do 'rebase' to update your PR checks."
             echo "ci_files_changed=true" >> $GITHUB_OUTPUT
           fi
+
+
+
+
+
 
       - name: Post a comment
         if: ${{steps.ci_files_changed.outputs.ci_files_changed == 'true' }}
