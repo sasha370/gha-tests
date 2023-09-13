@@ -43,6 +43,7 @@ jobs:
       - name: JSON inputs
         run: |
           echo $context | jq --color-output .
+          echo "DISTRIB_LOG_LEVEL: ${{inputs.distrib_log_level}}"
         env:
           context: ${{ toJSON(inputs) }}
       
