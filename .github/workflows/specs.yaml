@@ -6,6 +6,9 @@ on:
         description: 'Platform branch'
         required: false
         default: 'master'
+      distrib_log_level:
+        required: false
+        type: number
 
   issue_comment:
     types: [ created ]
@@ -37,6 +40,12 @@ jobs:
       group: ${{ github.repository }}-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.issue.number || github.ref }}-${{ github.triggering_actor }}
       cancel-in-progress: true
     steps:
+      - name: JSON inputs
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(inputs) }}
+      
       - uses: actions/checkout@v3
         with:
           repository: toptal/actions
