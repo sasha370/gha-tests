@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        
+
       - name: Check if CI files changed in base branch
         id: ci_files_changed
         shell: bash
@@ -129,7 +129,7 @@ jobs:
               issue_number: number,
               body: commentBody
             });
-      
+
       - name: Changed files
         uses: AurorNZ/paths-filter@v3
         id: changed_files
@@ -193,7 +193,7 @@ jobs:
         if: needs.changed_files.outputs.flows_test == 'true' || needs.trigger_pr_workflow.outputs.force_build == 'true'
         uses: benc-uk/workflow-dispatch@v1.2.2
         with:
-          workflow: Flows test new
+          workflow: flow_specs_new.yml
           ref: ${{ needs.trigger_pr_workflow.outputs.ref }}
           inputs: |
             { "sha": "${{ needs.trigger_pr_workflow.outputs.merge_commit_sha }}" }
