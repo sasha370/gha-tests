@@ -47,6 +47,7 @@ on:
         required: false
         default: 'false'
 
+
 jobs:
   consumer-contract-tests:
     name: Consumer
@@ -58,6 +59,7 @@ jobs:
     with:
       sha: ${{ inputs.sha || github.sha }}
       set_status: ${{ inputs.set_status }}
+
 
   provider-contracts-graphql-gateway-verify:
     name: Provider graphql gateway

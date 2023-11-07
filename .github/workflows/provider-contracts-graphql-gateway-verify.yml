@@ -19,9 +19,9 @@ on:
         required: true
       set_status:
         description: 'Set check status?'
-        type: string
+        type: boolean
         required: false
-        default: 'false'
+        default: false
 
 jobs:
   verify:
@@ -35,6 +35,7 @@ jobs:
     steps:
       - name: Set status check - pending
         uses: actions/github-script@v6
+        if: inputs.set_status == true
         env:
           STATUS_STATE: pending
         with:
@@ -63,7 +64,7 @@ jobs:
 
       - name: Set status check - success / failure / error
         uses: actions/github-script@v6
-        if: always()
+        if: always() && inputs.set_status == true
         env:
           STATUS_STATE: ${{ job.status != 'cancelled' && job.status || 'error' }}
         with:

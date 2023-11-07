@@ -73,7 +73,6 @@ jobs:
     env:
       STATUS_CHECK_NAME: Flows test / ${{ matrix.mode }}
       BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
-      SKIP_BUILD: ${{ needs.register_build.outputs.skip_build }}
     strategy:
       matrix:
         mode: [ explore, test ]
