@@ -5,3 +5,4 @@
 Some tests for GHA 
 asd
 asdasd
+test
