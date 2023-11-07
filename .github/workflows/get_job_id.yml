@@ -1,0 +1,81 @@
+name:  Get JOB ID
+
+on:
+  push:
+    branches:
+      - 'master'
+
+  workflow_dispatch:
+
+
+jobs:
+  my-tested-job:
+    name:  My tested job
+    runs-on: ubuntu-latest
+    steps:
+      - name:  Checkout Actions
+        uses: actions/checkout@v2
+      - name: JSON env
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(env) }}
+
+      - name: Get Job ID
+        run: |
+          echo "Job ID: ${{ github.job }}"
+
+      - name: GET ID
+        id: get_job_id
+        uses: actions/github-script@v6
+
+
+        #            const job_id = process.env.GITHUB_JOB
+        #            const jobID = await github.rest.actions.getJobForWorkflowRun({
+        #              owner: owner,
+        #              repo: repo,
+        #              job_id: job_id,
+        #            })
+        #            console.log(`jobID: ${JSON.stringify(jobID, null, 5)}`)
+        #            
+        with:
+          script: |
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
+
+            const jobs = await github.rest.actions.listJobsForWorkflowRunAttempt({
+              owner: owner,
+              repo: repo,
+              run_id: process.env.GITHUB_RUN_ID,
+              attempt_number: process.env.GITHUB_RUN_ATTEMPT
+            })
+            console.log(`JOBS: ${JSON.stringify(jobs.data.jobs, null, 5)}`)
+
+
+
+            const currentJobName = "My tested job"
+            const currentJob = jobs.data.jobs.find(job => job.name === currentJobName)
+            if (currentJob) {
+              const currentJobId = currentJob.id
+              console.log(`Current job ID: ${currentJobId}`)
+              core.setOutput('current_job_id', currentJobId)
+            } else {
+              console.log(`Job with "${currentJobName}" name did not found in the list of jobs`)
+              core.summary.addRaw(`:warning: The build was not registered in Anvil properly. Cannot find a JOB_ID for "${currentJobName}".`).write()
+            }
+
+      - name:  JSON job
+        run: |
+          echo $context | jq --color-output .
+        env:
+          context: ${{ toJSON(job) }}
+
+  second-job:
+    name: Empty job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Actions
+        uses: actions/checkout@v2
+
+      - name: Echo
+        run: |
+          echo "Second job"
