@@ -1,0 +1,33 @@
+name: Count failures
+
+inputs:
+  repository:
+    required: true
+
+  branch:
+    required: true
+
+  workflow_id:
+    required: true
+
+outputs:
+  consecutive_failures:
+    value: ${{ steps.count_failures.outputs.consecutive_failures }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Count failures
+      id: count_failures
+      uses: actions/github-script@v6
+      with:
+        result-encoding: string
+        script: |
+          const runs = await github.rest.actions.listWorkflowRuns({
+            owner: "toptal",
+            repo: "${{ inputs.repository }}",
+            branch: "${{ inputs.branch }}",
+            workflow_id: "${{ inputs.workflow_id }}"
+          })
+          const consecutive_failures = runs.data.workflow_runs.findIndex(run => run.conclusion === "success");
+          core.setOutput('consecutive_failures', consecutive_failures);

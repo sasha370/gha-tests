@@ -37,7 +37,7 @@ jobs:
         #              job_id: job_id,
         #            })
         #            console.log(`jobID: ${JSON.stringify(jobID, null, 5)}`)
-        #            
+        #
         with:
           script: |
             const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/')
