@@ -24,7 +24,7 @@ runs:
         result-encoding: string
         script: |
           const runs = await github.rest.actions.listWorkflowRuns({
-            owner: "toptal",
+            owner: "sasha370",
             repo: "${{ inputs.repository }}",
             branch: "${{ inputs.branch }}",
             workflow_id: "${{ inputs.workflow_id }}"
