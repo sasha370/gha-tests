@@ -17,7 +17,7 @@ jobs:
         shell: bash
         run: |
           echo ${{ github.ref }}
-          exit 1
+         
 
       - name: Count failures
         id: count_failures
@@ -25,7 +25,7 @@ jobs:
         uses: ./.github/actions/count-failures
         with:
           repository: gha-tests
-          branch: test-consecutive-failure
+          branch: master
           workflow_id: consecutive_failures.yml
 
       - name: Report failure to Slack
