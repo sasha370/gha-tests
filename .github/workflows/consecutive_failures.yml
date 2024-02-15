@@ -1,8 +1,7 @@
 name: Consecutive failure
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/consecutive_failures.yml'
+  schedule:
+    - cron: '*/3 * * * *'
 
 jobs:
   first_job:
