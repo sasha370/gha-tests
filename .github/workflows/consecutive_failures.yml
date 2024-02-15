@@ -35,7 +35,7 @@ jobs:
           echo "Counter: ${{ steps.count_failures.outputs.consecutive_failures}}"
 
       - name: Report failure to Slack
-        if: failure() && contains(github.ref, 'master') && steps.count_failures.outputs.consecutive_failures > 5 && steps.count_failures.outputs.consecutive_failures < 7
+        if: failure() && contains(github.ref, 'master') && steps.count_failures.outputs.consecutive_failures > 5 && steps.count_failures.outputs.consecutive_failures < 6
         shell: bash
         run: |
           echo "Bull eye"
