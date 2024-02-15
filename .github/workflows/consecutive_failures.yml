@@ -14,17 +14,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Failure
+        shell: bash
+        run: |
+          exit 1
+
       - name: Count failures
         id: count_failures
-        if: failure() && contains(github.ref, 'master')
-        uses: .github/actions/count-failures
+        if: failure() && contains(github.ref, 'test-consecutive-failure')
+        uses: ./.github/actions/count-failures
         with:
           repository: gha-tests
           branch: test-consecutive-failure
           workflow_id: consecutive_failures.yml
 
       - name: Report failure to Slack
-        if: failure() && contains(github.ref, 'master') && steps.count_failures.outputs.consecutive_failures > 3
+        if: failure() && contains(github.ref, 'test-consecutive-failure') && steps.count_failures.outputs.consecutive_failures > 3
         shell: bash
         run: |
           echo "Bull eye"
+
+
