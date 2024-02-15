@@ -21,7 +21,7 @@ jobs:
 
       - name: Count failures
         id: count_failures
-        if: failure() && contains(github.ref, 'test-consecutive-failure')
+        if: failure() && contains(github.ref, 'master')
         uses: ./.github/actions/count-failures
         with:
           repository: gha-tests
@@ -29,7 +29,7 @@ jobs:
           workflow_id: consecutive_failures.yml
 
       - name: Report failure to Slack
-        if: failure() && contains(github.ref, 'test-consecutive-failure') && steps.count_failures.outputs.consecutive_failures > 3
+        if: failure() && contains(github.ref, 'master') && steps.count_failures.outputs.consecutive_failures > 3
         shell: bash
         run: |
           echo "Bull eye"
