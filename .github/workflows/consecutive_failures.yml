@@ -39,4 +39,3 @@ jobs:
         shell: bash
         run: |
           echo "Bull eye"
-
