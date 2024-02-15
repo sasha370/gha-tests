@@ -28,7 +28,8 @@ jobs:
           branch: master
           workflow_id: consecutive_failures.yml
 
-      - name: Counter
+      - name: Print
+        if: failure()
         shell: bash
         run: |
           echo "Counter: ${{ steps.count_failures.outputs.consecutive_failures}}"
