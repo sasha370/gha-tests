@@ -1,7 +1,7 @@
 name: Consecutive failure
 on:
   schedule:
-    - cron: '*/3 * * * *'
+    - cron: '*/1 * * * *'
 
 jobs:
   first_job:
