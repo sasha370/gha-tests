@@ -28,6 +28,11 @@ jobs:
           branch: master
           workflow_id: consecutive_failures.yml
 
+      - name: Counter
+        shell: bash
+        run: |
+          echo "Counter: ${{ steps.count_failures.outputs.consecutive_failures}}"
+
       - name: Report failure to Slack
         if: failure() && contains(github.ref, 'master') && steps.count_failures.outputs.consecutive_failures > 3
         shell: bash

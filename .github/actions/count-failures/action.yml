@@ -31,3 +31,4 @@ runs:
           })
           const consecutive_failures = runs.data.workflow_runs.findIndex(run => run.conclusion === "success");
           core.setOutput('consecutive_failures', consecutive_failures);
+
