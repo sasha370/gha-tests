@@ -1,7 +1,7 @@
 name: Consecutive failure
 on:
-  schedule:
-    - cron: '* * * * *'
+  push:
+    branches: [ master ]
 
 jobs:
   first_job:
