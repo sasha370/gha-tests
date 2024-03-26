@@ -1,0 +1,22 @@
+name: Cron test
+
+on:
+  schedule:
+    - cron: '*/1 * * * *'
+  workflow_dispatch:
+
+
+jobs:
+  first_job:
+    if: >
+      (github.event_name == 'workflow_dispatch') ||
+      (github.event_name == 'schedule' && vars.RUN_CRON == 1 )
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do something
+        shell: bash
+        run: |
+          echo ${{ github.ref }}
+
+
+
