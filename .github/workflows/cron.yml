@@ -10,7 +10,7 @@ jobs:
   first_job:
     if: >
       (github.event_name == 'workflow_dispatch') ||
-      (github.event_name == 'schedule' && vars.RUN_CRON == true )
+      (github.event_name == 'schedule' && vars.RUN_CRON == 'true' )
     runs-on: ubuntu-latest
     steps:
       - name: Do something
