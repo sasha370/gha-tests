@@ -1,8 +1,8 @@
 name: Cron test
 
 on:
-  schedule:
-    - cron: '*/1 * * * *'
+#  schedule:
+#    - cron: '*/1 * * * *'
   workflow_dispatch:
 
 
