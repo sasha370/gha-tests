@@ -1,0 +1,30 @@
+name: Deploy by SHA
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch or SHA to deploy'
+        required: true
+        default: 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
+
+      - name: Set the environment variable
+        run: |
+          echo REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d '/' -f 2) >> $GITHUB_ENV
+          echo GITHUB_SHA=$(git rev-parse HEAD) >> $GITHUB_ENV
+
+      - name: Display environment variables
+        run: |
+          echo "REPO_NAME=${{ env.REPO_NAME }}"
+          echo "GITHUB_SHA=${{ env.GITHUB_SHA }}"
